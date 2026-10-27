@@ -1,0 +1,6 @@
+{
+  "_about": "The Cloudflare Access application that guards the /control page. Fill in your own Access team domain and application AUD tag.",
+  "team_domain": "https://<your-team>.cloudflareaccess.com",
+  "aud": "<your-access-application-aud>",
+  "origin": "https://pinr.io"
+}

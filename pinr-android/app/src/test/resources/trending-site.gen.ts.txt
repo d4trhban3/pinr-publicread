@@ -1,0 +1,16 @@
+// Generator for trending-site.json: the site's own selectAndRank("trending") over coins seen or scored at different times.
+import { selectAndRank } from "../../pinr-live/src/world/filters";
+const NOW = 1_800_000_000_000;
+const H = 3600_000;
+// [seenAtMs or scoredAtMs offset from now in ms (null = none), trades5m]
+const spec: [string | null, number | null, number][] = [
+  ["seen", -3 * H, 0], ["scored", -1 * H, 50], ["seen", -30 * 60_000, 0], ["scored", -25 * H, 400], [null, null, 5], ["seen", -23 * H, 0],
+  ["scored", 5 * 60_000, 900], [null, null, 200], ["seen", -3 * H, 0], ["scored", -2 * H, 0], [null, null, 20], ["seen", -24 * H - 1, 0],
+];
+const items = spec.map(([kind, off, n], id) => ({
+  id, base: 0.5, spike: 0, hist: [], histAge: 0, lastTradeMs: undefined, trades5m: n,
+  seenAtMs: kind === "seen" ? NOW + off! : undefined, scoredAtMs: kind === "scored" ? NOW + off! : undefined,
+  flagKind: undefined, possibleCopy: undefined, serial: false, moved: 0, ageMin: 0, value: "1", coverage: kind === "seen" ? 0 : 10,
+})) as any[];
+const order = selectAndRank("trending", items, 100, NOW, "default").map((r) => r.id);
+console.log(JSON.stringify({ now: NOW, coins: spec.map(([k, o, n], i) => ({ id: "c" + i, kind: k, offsetMs: o, trades5m: n })), order: order.map((i) => "c" + i) }, null, 1));

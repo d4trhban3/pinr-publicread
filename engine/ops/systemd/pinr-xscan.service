@@ -1,0 +1,15 @@
+# PINRsocialscan, the X API reader, once a day on the server. A user unit of `pinr` (lingering, so it runs
+# with nobody logged in). It searches the coins scored since the last daily run, biggest 24-hour volume first, and stops
+# at `x_api_daily_dollar_cap` in scanner/settings.json; the token is read by the reader from the engine's .env and never
+# appears here. A run waits out X's 15-minute request window and carries on until the cap (up to 12 waits), so it may
+# take an hour or more. Installed only on the operator's typed yes (a paid call): ops/systemd/install-xscan-timer.sh.
+[Unit]
+Description=PINR social scan: the X API reader, daily
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/pinr/engine
+ExecStart=/usr/bin/python3 stage3/x_api.py daily
+StandardOutput=append:%h/pinr/engine/scanner/xscan.log
+StandardError=append:%h/pinr/engine/scanner/xscan.log
+TimeoutStartSec=4h

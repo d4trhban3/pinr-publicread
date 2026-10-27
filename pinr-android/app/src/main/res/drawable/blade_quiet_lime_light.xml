@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The light guide button: blade_quiet_lime.xml in the light look's colours (pinr-live/public/art/12-quiet-lime-light.svg; do not edit by hand). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="76dp" android:height="76dp" android:viewportWidth="1080.0" android:viewportHeight="1080.0">
+  <path android:fillColor="#EBE4F7" android:pathData="M0,0H1080V1080H0Z" />
+  <group android:translateX="395.5" android:translateY="370" android:scaleX="1.328125" android:scaleY="1.328125">
+    <path android:fillColor="#D8CEEE" android:pathData="M182.75,7.01c6.93-8.26,19.39-9.34,27.63-2.38,8.24,6.96,9.29,19.5,2.37,27.78C141.79,106.89,70.86,181.39-.1,255.86,60.86,172.91,121.8,89.97,182.75,7.01Z" />
+    <path android:fillColor="#7FA800" android:pathData="M182.75,7.01c6.97-8.33,19.34-9.39,27.63-2.38h0c8.29,7.01,9.34,19.45,2.37,27.78l-38.14,14.94h0l8.16-40.34h-.02Z" />
+    <path android:fillColor="#CBBDEE" android:pathData="M183.63,92.04h0l-108.17,157.94c-5.26,6.51-14.86,7.57-21.44,2.36h0c-6.57-5.2-7.63-14.7-2.37-21.21L183.63,92.04Z" />
+    <path android:fillColor="#7FA800" android:pathData="M75.49,250.04c-5.26,6.43-14.88,7.48-21.45,2.35h0c-6.59-5.14-7.65-14.51-2.36-20.94l29.42-12.04h0l-5.58,30.64h-.02Z" />
+  </group>
+</vector>

@@ -1,0 +1,175 @@
+/* The live layer of the blueprint page: node state from the engine's /api/control/status, controls, change log. */
+.node .lv{margin:0 10px 8px;padding:4px 7px;border-radius:6px;font-size:11px;line-height:1.35;border:1px solid var(--line);background:var(--head);color:var(--mute)}
+.node.lv-ok{border-color:var(--lime)}.node.lv-ok .lv{color:var(--lime);border-color:var(--lime)}
+.node.lv-warn{border-color:var(--warn)}.node.lv-warn .lv{color:var(--warn);border-color:var(--warn)}
+.node.lv-red{border-color:var(--bad);box-shadow:0 0 0 2px var(--bad),0 4px 16px rgba(0,0,0,.25)}.node.lv-red .lv{color:var(--bad);border-color:var(--bad);font-weight:600}
+.node.lv-off{border-style:dashed;border-color:var(--vio)}.node.lv-off .lv{color:var(--vio);border-color:var(--vio)}
+#livebar{position:fixed;right:14px;bottom:14px;z-index:8;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--mute);font-size:11px;max-width:60vw}
+#livebar.bad{border-color:var(--bad);color:var(--bad)}#livebar.ok{border-color:var(--lime);color:var(--lime)}
+.lvbox{margin-top:14px;padding-top:10px;border-top:1px solid var(--line)}
+.lvbox h3{margin:0 0 6px;font-size:12px;color:var(--ink)}
+.lvrow{display:flex;align-items:center;gap:6px;margin:5px 0;font-size:12px;color:var(--ink)}
+.lvrow b{min-width:96px;font-weight:600}
+.lvrow button,.lvlog button{border:1px solid var(--line);background:var(--head);color:var(--ink);border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer}
+.lvrow button.on{border-color:var(--lime);color:var(--lime)}.lvrow button.off{border-color:var(--vio);color:var(--vio)}
+.lvrow input{width:84px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;padding:3px 6px;font-size:12px}
+.lvlog{font-size:11px;color:var(--mute)}.lvlog div{display:flex;gap:6px;align-items:baseline;margin:4px 0;flex-wrap:wrap}.lvlog span{color:var(--ink)}
+.lvnote{font-size:11px;color:var(--mute);margin:4px 0}
+
+#livenote{position:fixed;left:14px;bottom:14px;z-index:8;padding:6px 10px;border-radius:8px;border:1px solid var(--warn);background:var(--card);color:var(--warn);font-size:11px;max-width:46vw}
+.lvmode{margin:0 0 12px;padding:8px 10px;border-radius:8px;border:1px solid var(--warn);color:var(--warn);font-size:11.5px;line-height:1.4}
+
+/* The gate on /control */
+.node .lg{margin:0 10px 8px;padding:4px 7px;border-radius:6px;font-size:11px;line-height:1.35;border:1px solid var(--warn);background:var(--head);color:var(--warn)}
+.node.lg-off{border-style:dashed;border-color:var(--vio)}.node.lg-off .lg{color:var(--vio);border-color:var(--vio)}
+text.lgw{fill:var(--warn);font-size:12px;font-weight:600;paint-order:stroke;stroke:var(--bg);stroke-width:3px}
+.lvbox{margin-top:14px;padding-top:10px;border-top:1px solid var(--line)}
+.lvbox h3{margin:0 0 6px;font-size:12px;color:var(--ink)}
+.lvrow label{display:flex;align-items:center;gap:4px;margin-right:8px}
+#gatebar{position:fixed;left:50%;transform:translateX(-50%);bottom:56px;z-index:9;width:min(560px,92vw);padding:10px 12px;border-radius:10px;border:2px solid var(--warn);background:var(--card);color:var(--ink);font-size:12px;box-shadow:0 8px 28px rgba(0,0,0,.4)}
+#gatebar[hidden]{display:none}
+#gatebar .gl{margin:3px 0;color:var(--ink)}#gatebar .gl.bad{color:var(--bad)}
+#gatebar .gbtn{display:flex;gap:8px;margin-top:8px}
+#gatebar button{border:1px solid var(--line);background:var(--head);color:var(--ink);border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer}
+#gatebar button.go{border-color:var(--lime);color:var(--lime);font-weight:600}
+#gatebar button:disabled{opacity:.5;cursor:default}
+
+/* Ask PINRai */
+#askpanel{position:fixed;right:14px;top:56px;bottom:56px;z-index:9;width:min(430px,94vw);display:flex;flex-direction:column;gap:8px;padding:10px 12px;border-radius:10px;border:2px solid var(--lav);background:var(--card);color:var(--ink);font-size:12px;box-shadow:0 8px 28px rgba(0,0,0,.4);overflow:auto}
+#askpanel[hidden]{display:none}
+#askpanel .askhead{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+#askpanel input,#askpanel textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:6px 8px}
+#askpanel textarea{resize:vertical}
+#askpanel button{border:1px solid var(--line);background:var(--head);color:var(--ink);border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer}
+#askpanel button.go{border-color:var(--lime);color:var(--lime);font-weight:600}
+#askpanel button:disabled{opacity:.5;cursor:default}
+#askpanel .askhits{display:flex;flex-direction:column;gap:3px;margin-top:4px}
+#askpanel .askhits button{text-align:left}
+#askpanel .askchosen,#askpanel .asknote{font-size:11px;color:var(--mute);margin:3px 0}
+#askpanel .asklog{flex:1;min-height:120px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+#askpanel .askturn{padding:7px 9px;border-radius:8px;border:1px solid var(--line);background:var(--head)}
+#askpanel .askturn.pinrai{border-color:var(--lav)}
+#askpanel .askwho{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute);margin-bottom:2px}
+#askpanel .asktext{white-space:pre-wrap;word-break:break-word;color:var(--ink)}
+#askpanel .askev{margin-top:6px;padding-top:5px;border-top:1px solid var(--line)}
+#askpanel .askevline{font-size:11px;color:var(--ink);margin:2px 0;word-break:break-word}
+#askpanel .askevline a,#askpanel .askturn a{color:var(--lav)}
+#askpanel .askteach h3{margin:4px 0;font-size:12px}
+#askpanel .askteachrow{padding:6px 0;border-top:1px solid var(--line)}
+#askpanel .askturn button,#askpanel .askteachrow button{margin-top:5px}
+
+/* Routes */
+#routespanel{position:fixed;left:14px;top:56px;bottom:56px;z-index:9;width:min(430px,94vw);display:flex;flex-direction:column;gap:8px;padding:10px 12px;border-radius:10px;border:2px solid var(--cyan);background:var(--card);color:var(--ink);font-size:12px;box-shadow:0 8px 28px rgba(0,0,0,.4);overflow:auto}
+#routespanel[hidden]{display:none}
+#routespanel .askhead{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+#routespanel button,#routebar button{border:1px solid var(--line);background:var(--head);color:var(--ink);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer}
+#routespanel button:disabled,#routebar button:disabled{opacity:.45;cursor:default}
+#routespanel select{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:3px 6px;font-size:12px}
+#routespanel .asknote{font-size:11px;color:var(--mute)}
+.rtfield{padding:7px 0;border-top:1px solid var(--line)}
+.rtrow{display:flex;align-items:center;gap:6px;margin:4px 0}.rtrow>span:first-child{flex:1}
+#routebar{position:fixed;left:50%;transform:translateX(-50%);bottom:56px;z-index:9;width:min(560px,92vw);padding:10px 12px;border-radius:10px;border:2px solid var(--cyan);background:var(--card);color:var(--ink);font-size:12px;box-shadow:0 8px 28px rgba(0,0,0,.4)}
+#routebar[hidden]{display:none}
+#routebar .gl{margin:3px 0}#routebar .gl.bad{color:var(--bad)}
+#routebar .gbtn{display:flex;gap:8px;margin-top:8px}#routebar button.go{border-color:var(--lime);color:var(--lime);font-weight:600}
+text.rtw{font-size:11px;font-weight:700;paint-order:stroke;stroke:var(--bg);stroke-width:3px}
+text.rtw.live{fill:var(--lime)}text.rtw.saved{fill:var(--warn)}text.rtw.off{fill:var(--mute)}
+#wires path.rtlive{stroke-width:3.2}
+.rtgrey{opacity:.5}
+#wires path.rtgrey{opacity:.28}
+text.rtw.unfollowed{fill:var(--mute)}
+#routespanel .rtfallback{color:var(--bad);font-size:11.5px;margin:4px 0}
+
+/* The Change log tab */
+#logpanel{position:fixed;left:14px;top:56px;bottom:56px;z-index:9;width:min(430px,94vw);display:flex;flex-direction:column;gap:8px;padding:10px 12px;border-radius:10px;border:2px solid var(--lav);background:var(--card);color:var(--ink);font-size:12px;box-shadow:0 8px 28px rgba(0,0,0,.4);overflow:auto}
+#logpanel[hidden]{display:none}
+#logpanel .askhead{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+#logpanel .askhead button{border:1px solid var(--line);background:var(--head);color:var(--ink);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer}
+#logpanel .lvbox{margin-top:6px}
+
+/* The operator: the note says only "Read only" or "Live control"; the explanation is the help text at the panel's foot */
+.lvmode{font-weight:700;font-size:12.5px;text-align:center}
+.lvmode.on,#livenote.on{border-color:var(--lime);color:var(--lime)}
+#livenote{font-weight:700}
+.lvhelp{margin-top:14px;padding-top:10px;border-top:1px solid var(--line);line-height:1.45}
+
+/* The key: line styles and status pills that read without colour too */
+#wires path.dash{stroke-dasharray:8 6;opacity:.75}
+#wires path.rtlive{stroke-width:3.2;stroke-dasharray:none;opacity:1}
+#wires path.rtgrey{opacity:.28}
+#wires path.fromoff{stroke-dasharray:2 5;opacity:.4}
+#wires path.sel{stroke-width:4.5;opacity:1}
+.st[data-s="live"]{background:color-mix(in srgb,var(--st-live) 18%,transparent)}
+.st[data-s="building"]{border-style:solid}
+.st[data-s="blocked"]{background:color-mix(in srgb,var(--st-blocked) 16%,transparent);font-weight:800}
+.st[data-s="hidden"]{border-style:dotted}
+.st[data-s="planned"]{border-style:dashed;opacity:.85}
+#keypanel{position:fixed;left:14px;top:56px;bottom:56px;z-index:9;width:min(430px,94vw);display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:10px;border:2px solid var(--ink);background:var(--card);color:var(--ink);font-size:12px;box-shadow:0 8px 28px rgba(0,0,0,.4);overflow:auto}
+#keypanel[hidden]{display:none}
+#keypanel .askhead{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+#keypanel .askhead button{border:1px solid var(--line);background:var(--head);color:var(--ink);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer}
+.keyrow{display:flex;align-items:center;gap:8px;margin:4px 0}
+.keyrow>span:last-child{flex:1;line-height:1.35}
+.keyline{width:64px;height:16px;flex:none;overflow:visible}
+.keyline path{fill:none;stroke-width:2.4}
+.keyline path.dash{stroke-dasharray:8 6;opacity:.75}
+.keyline path.rtlive{stroke-width:3.2}
+.keyline path.rtgrey{opacity:.28}
+.keyline path.fromoff{stroke-dasharray:2 5;opacity:.4}
+.keyline path.sel{stroke-width:4.5;filter:drop-shadow(0 0 4px var(--sel))}
+.keytext{fill:var(--mute);font-size:7px;font-weight:700}
+.keykind{display:inline-block;width:28px;height:12px;border-radius:3px;flex:none}
+#keycorner{position:fixed;left:14px;bottom:52px;z-index:8;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:11.5px;cursor:pointer}
+#keycorner .keyrow{margin:1px 0}
+#keycorner .keyline{width:40px}
+.keytext.live{fill:var(--lime)}
+#adspanel{position:fixed;left:14px;top:56px;bottom:56px;z-index:9;width:min(460px,94vw);display:flex;flex-direction:column;gap:8px;padding:10px 12px;border-radius:10px;border:2px solid var(--lav);background:var(--card);color:var(--ink);font-size:12px;box-shadow:0 8px 28px rgba(0,0,0,.4);overflow:auto}
+#adspanel[hidden]{display:none}
+#adspanel .askhead{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+#adspanel .askhead button{border:1px solid var(--line);background:var(--head);color:var(--ink);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer}
+#adspanel .adlist{display:flex;flex-direction:column;gap:8px}
+#adspanel .adrow{display:flex;gap:10px;align-items:flex-start;padding:8px;border:1px solid var(--line);border-radius:8px}
+#adspanel .adpic{width:64px;height:64px;border-radius:8px;object-fit:cover;flex:none}
+#adspanel .adnopic{display:grid;place-items:center;border:1px dashed var(--line);font-size:10px;opacity:.7}
+#adspanel .adbody{display:flex;flex-direction:column;gap:3px;min-width:0}
+#adspanel .adbody b{font-size:13px}
+#adspanel .admeta{opacity:.75}
+#adspanel .adlink{color:var(--lav);word-break:break-all}
+
+/* every wire in one of three measured states (livewires.js); these come last so they win over the route styles above */
+#wires path.lwlive{stroke-width:3.2;stroke-dasharray:none;opacity:1}
+#wires path.lwbuild{stroke-dasharray:8 6;stroke-width:2.2;opacity:.5}
+#wires path.lwnot{stroke-dasharray:2 5;stroke-width:2.4;opacity:.75}
+#wires path.lwlive.sel,#wires path.lwbuild.sel,#wires path.lwnot.sel{stroke-width:4.5;opacity:1}
+body.lwon #wires text.rtw{display:none}
+text.lw{font-size:11px;font-weight:800;paint-order:stroke;stroke:var(--bg);stroke-width:3px;letter-spacing:.03em}
+text.lw.live{fill:var(--st-live)}text.lw.notlive{fill:var(--bad)}text.lw.building{fill:var(--mute)}
+.keyline path.lwlive{stroke-width:3.2}.keyline path.lwbuild{stroke-dasharray:8 6;opacity:.5}.keyline path.lwnot{stroke-dasharray:2 5;opacity:.75}
+.keytext.bad{fill:var(--bad)}
+.node .hb{padding:2px 10px 0;font-size:10.5px;font-weight:600;color:var(--mute)}
+.node .hb.live{color:var(--st-live)}.node .hb.notlive{color:var(--bad)}
+.st[data-s="notlive"]{background:color-mix(in srgb,var(--st-blocked) 12%,transparent);border-style:dotted}
+#wirestate .lwstate{display:inline-block;font-size:12px;padding:2px 8px;border-radius:20px;border:1.5px solid currentColor;margin:2px 0 4px}
+#wirestate .lwstate.live{color:var(--st-live)}#wirestate .lwstate.building{color:var(--mute);border-style:dashed}#wirestate .lwstate.notlive{color:var(--bad);border-style:dotted}
+#wirestate .lwfacts{display:flex;flex-direction:column;gap:2px;font-size:11.5px;margin:4px 0}
+#wirestate .lwsample{display:block;font-size:11.5px;word-break:break-all;color:var(--lav);margin:4px 0}
+/* A narrow window puts the side panel along the bottom: the corner key would sit over it, so it steps aside (the Key button still opens the whole key). */
+@media (max-width:760px){#keycorner{display:none}}
+/* The Submit and Submissions panels, in the PINRads panel's look. */
+.subpanel{position:fixed;left:14px;top:56px;bottom:56px;z-index:9;width:min(460px,94vw);display:flex;flex-direction:column;gap:8px;padding:10px 12px;border-radius:10px;border:2px solid var(--lav);background:var(--card);color:var(--ink);font-size:12px;box-shadow:0 8px 28px rgba(0,0,0,.4);overflow:auto}
+.subpanel[hidden]{display:none}
+.subpanel .askhead{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.subpanel .askhead button{border:1px solid var(--line);background:var(--head);color:var(--ink);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer}
+.subpanel .admeta{color:var(--mute);font-size:11px;margin:0}
+.subpanel .adlist{display:flex;flex-direction:column;gap:8px}
+.subpanel .subdiff{margin:0;white-space:pre-wrap;word-break:break-word;font:inherit;font-size:12px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+.subpanel .subnote{width:100%;min-height:80px;resize:vertical;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:7px;padding:6px 8px;box-sizing:border-box}
+.subpanel .subgo{align-self:flex-start;border:1px solid var(--lime);background:var(--head);color:var(--ink);border-radius:7px;padding:6px 16px;font-weight:700;cursor:pointer}
+.subpanel .subgo:disabled{opacity:.45;cursor:default}
+.subpanel .subrow{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line);border-radius:8px}
+.subpanel .subhead{display:flex;gap:8px;align-items:center}
+.subpanel .substatus{font-size:11px;font-weight:700;padding:1px 8px;border-radius:20px;border:1px solid var(--mute);color:var(--mute)}
+.subpanel .substatus.s-under-evaluation{border-color:var(--warn);color:var(--warn)}
+.subpanel .substatus.s-accepted{border-color:var(--st-live,var(--lime));color:var(--st-live,var(--lime))}
+.subpanel .substatus.s-declined{border-color:var(--bad);color:var(--bad)}
+.subpanel .subreason,.subpanel .subnotetext{margin:0}

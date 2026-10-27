@@ -1,0 +1,51 @@
+{
+  "_about": "Example scanner settings for the public copy. Operational values are examples only; the trigger figures and gate figures PINR uses in production are withheld (null here).",
+  "score_chains": [
+    "solana"
+  ],
+  "solana_providers": [
+    "shyft",
+    "chainstack",
+    "helius",
+    "helius_official",
+    "alchemy_official"
+  ],
+  "helius_monthly_credit_cap": 9500000,
+  "solana_workers": 6,
+  "scanner_workers": 6,
+  "solana_batch_gap_seconds": 1.5,
+  "solana_rescores": "follow-ups",
+  "solana_trigger": "on",
+  "solana_queue_order": "biggest",
+  "solana_error_retries": 3,
+  "solana_provider_rest_seconds": 600,
+  "solana_trigger_volume_usd": null,
+  "solana_trigger_min_buys": null,
+  "x_api": "off",
+  "x_api_daily_dollar_cap": 0.66,
+  "x_api_posts_per_coin": 10,
+  "x_api_rescan_hours": 24,
+  "x_demand": "off",
+  "x_demand_daily_dollar_cap": 0,
+  "stonkfun_launches": "off",
+  "pinrbot": "off",
+  "pinrbot_daily_dollar_cap": 0,
+  "pinrbot_model": "claude-haiku-5-5",
+  "pinrbot_review_model": "claude-opus-5-5",
+  "pinrbot_effort": "medium",
+  "pinrbot_review_effort": "high",
+  "pinrbot_prices_per_mtok": {
+    "claude-haiku-5-5": [
+      0.1,
+      0.5
+    ],
+    "claude-opus-5-5": [
+      4.0,
+      20.0
+    ]
+  },
+  "gate_fast_launch_coins": null,
+  "gate_fast_launch_minutes": null,
+  "bnb_live": "on",
+  "base_live": "on"
+}

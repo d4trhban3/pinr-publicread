@@ -1,0 +1,68 @@
+[
+ {
+  "token": "0xe8883d348b210de87931510633ffa9e0eb18647c",
+  "admin": "0x7f041ef466030b02eb1c7ce7f41bef2e31520b96",
+  "name": "Dolphin Base",
+  "symbol": "POD",
+  "poolHook": "0xb429d62f8f3bffb98cdb9569533ea23bf0ba28cc",
+  "poolId": "0xc65fa0c64d8f6aee3b7d08a3c15a04afd53ff0d1408bb93f004d0c18d4e47aad",
+  "paired": "0x4200000000000000000000000000000000000006",
+  "locker": "0xffa37784d619f228d8b379d287a4d7282e500762",
+  "block": 52182493
+ },
+ {
+  "token": "0x01758167f62f5c8743268fdc77ed420be320e05e",
+  "admin": "0x0b864645e13c2ddd47cba46fdd918a9f85d11065",
+  "name": "Rugyousomuch",
+  "symbol": "RYSM",
+  "poolHook": "0xb429d62f8f3bffb98cdb9569533ea23bf0ba28cc",
+  "poolId": "0xb098d725f3a3d1260e48cf91c55736652778e5bc1a326a3da92c30316f62b894",
+  "paired": "0x4200000000000000000000000000000000000006",
+  "locker": "0xffa37784d619f228d8b379d287a4d7282e500762",
+  "block": 52182625
+ },
+ {
+  "token": "0xe4454844da984cd55bc6c55c5cd4cd8cb58c0ad0",
+  "admin": "0x1afab1f6b0d565544effb26fca7d6b5e9cb46c81",
+  "name": "FluxSwap",
+  "symbol": "FLXS",
+  "poolHook": "0xb429d62f8f3bffb98cdb9569533ea23bf0ba28cc",
+  "poolId": "0xd07da162a046a1447d245aa63d4973f3324e1d46f7ba4d3836002d8644a76c27",
+  "paired": "0x4200000000000000000000000000000000000006",
+  "locker": "0xffa37784d619f228d8b379d287a4d7282e500762",
+  "block": 52182741
+ },
+ {
+  "token": "0x0f3d5f8d0b2718ecff1b76ce5f2c880f7a675b07",
+  "admin": "0xa590d240784c050878e61957606a6bc0c178b735",
+  "name": "BaseBario",
+  "symbol": "BAES",
+  "poolHook": "0xb429d62f8f3bffb98cdb9569533ea23bf0ba28cc",
+  "poolId": "0x68266addd48b1aaa360f0f40c36c4130d0af5e85493666689fb27b1ae4b165fa",
+  "paired": "0x4200000000000000000000000000000000000006",
+  "locker": "0xffa37784d619f228d8b379d287a4d7282e500762",
+  "block": 52182889
+ },
+ {
+  "token": "0x2b56f8a12d12c7653b4a8a23ed6addc32b025a79",
+  "admin": "0x7f041ef466030b02eb1c7ce7f41bef2e31520b96",
+  "name": "LayerZero",
+  "symbol": "ZRO",
+  "poolHook": "0xb429d62f8f3bffb98cdb9569533ea23bf0ba28cc",
+  "poolId": "0x4b1fa82ab6e23759d67d93454b6fcb158f418d1dda72cd87498a4e2364bef250",
+  "paired": "0x4200000000000000000000000000000000000006",
+  "locker": "0xffa37784d619f228d8b379d287a4d7282e500762",
+  "block": 52183396
+ },
+ {
+  "token": "0x78f66d68b69edcde4602d551958408f74fc4f05f",
+  "admin": "0x1afab1f6b0d565544effb26fca7d6b5e9cb46c81",
+  "name": "Aether Base",
+  "symbol": "AEB",
+  "poolHook": "0xb429d62f8f3bffb98cdb9569533ea23bf0ba28cc",
+  "poolId": "0xa76fce7892a6c7d1f103abc7bd2ded3454a186f1f203272e00ed2d58e68708b3",
+  "paired": "0x4200000000000000000000000000000000000006",
+  "locker": "0xffa37784d619f228d8b379d287a4d7282e500762",
+  "block": 52183836
+ }
+]

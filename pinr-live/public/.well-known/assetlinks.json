@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.pinr.app",
+      "sha256_cert_fingerprints": ["F9:F5:68:F5:51:39:8D:29:05:3D:A6:DA:F1:A2:E3:E8:EF:06:C0:0A:74:6E:BB:50:A6:75:F6:6D:74:60:11:43"]
+    }
+  }
+]

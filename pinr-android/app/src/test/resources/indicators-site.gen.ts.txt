@@ -1,0 +1,42 @@
+import * as D from "../../pinr-live/src/world/drawmath";
+import * as P from "../../pinr-live/src/world/indicatorspecs";
+import * as I from "../../pinr-live/src/world/indicators";
+// A fixed wandering series (no randomness): 90 candles, 15 minutes apart.
+const c: [number, number, number, number, number, number][] = [];
+let p = 0.0021;
+for (let i = 0; i < 90; i++) {
+  const o = p;
+  const cl = o * (1 + 0.04 * Math.sin(i * 0.7) + 0.015 * Math.cos(i * 1.9));
+  const h = Math.max(o, cl) * (1 + 0.01 + 0.005 * ((i * 7) % 5));
+  const l = Math.min(o, cl) * (1 - 0.008 - 0.004 * ((i * 3) % 4));
+  const v = 1000 + 400 * ((i * 13) % 11) + (i % 4 === 0 ? 0 : 250);
+  c.push([1_760_000_000 + i * 900, o, h, l, cl, v]);
+  p = cl;
+}
+const z = (a: number[]) => a.map((x) => (Number.isFinite(x) ? x : null));
+const ha = I.heikinAshi(c);
+const bb = I.bollinger(c, 20, 2), m = I.macd(c, 12, 26, 9), st = I.stochastic(c, 14, 3, 3), sp = I.supertrend(c, 10, 3), ic = I.ichimoku(c, 9, 26, 52);
+const raws: unknown[] = [null, "x", {}, { sma: { on: true, params: { n: 9999 }, color: "orange" } }, { bb: { on: true, params: { n: 1.6, k: "3" }, color: "pink" }, rsi: { on: "yes", params: { n: 7.4 } } }, { macd: { on: true, params: { f: -5, s: 900, g: 9 } } }, ["sma", "rsi", "nope", 3], { bb: { on: 1, params: { n: "", k: true } }, atr: { on: true, params: { n: null }, color: "Lime" }, obv: [] }];
+const parsed = raws.map((r) => P.parseStates(r));
+const specs = P.SPECS.map((s) => ({ id: s.id, label: P.labelOf(s, P.defaultStates()[s.id]) }));
+const pts = [[{ t: 1000, p: 2 }, { t: 1000 + 5400, p: 3 }], [{ t: 0, p: 0 }, { t: 90000, p: 5 }], [{ t: 500, p: 4 }, { t: 100, p: 1 }]];
+const meas = pts.map(([a, b]) => D.measure(a, b, 900));
+const durs = [0, 59, 60, 3600, 3660, 86400, 90000, 93720, -1].map((x) => D.durationText(x));
+const shifts = [D.channelShift({ t: 0, p: 1 }, { t: 10, p: 2 }, { t: 5, p: 3 }), D.channelShift({ t: 4, p: 1 }, { t: 4, p: 2 }, { t: 9, p: 7 })];
+const c2 = c.map((k, i) => [1_760_000_000 + i * 1800, k[1], k[2], k[3], k[4], k[5]] as [number, number, number, number, number, number]);
+const ch = [I.change24h(c)?.pct ?? null, I.change24h(c2)?.pct ?? null, I.change24h(c.slice(0, 1))?.pct ?? null];
+console.log(JSON.stringify({
+  ch,
+  raws, parsed, specs, pts, meas, durs, shifts, fib: D.FIB_LEVELS,
+  candles: c,
+  ha: ha.map((k) => [k[1], k[2], k[3], k[4]]),
+  sma20: z(I.sma(c, 20)), ema9: z(I.ema(c, 9)), vwap: z(I.vwap(c)),
+  bbMid: z(bb.mid), bbUp: z(bb.upper), bbLo: z(bb.lower),
+  rsi14: z(I.rsi(c, 14)),
+  macdLine: z(m.line), macdSignal: z(m.signal), macdHist: z(m.hist),
+  volAvg20: z(I.volumeAverage(c, 20)),
+  stochK: z(st.k), stochD: z(st.d),
+  atr14: z(I.atr(c, 14)), obv: z(I.obv(c)),
+  superLine: z(sp.line), superUp: sp.up,
+  tenkan: z(ic.tenkan), kijun: z(ic.kijun), spanA: z(ic.spanA), spanB: z(ic.spanB),
+}));

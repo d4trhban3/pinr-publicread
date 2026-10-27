@@ -1,0 +1,54 @@
+{
+ "read_at": "2026-10-17",
+ "accounts": {
+  "4E876qZTE9FJMrBzgVtBrSrzz2TLivB5Y5QXPjB4gZL7": {
+   "listed": "Stonk.fun standard mode",
+   "name_at_112": "StonkFun",
+   "web": "https://www.stonkfun.xyz",
+   "printable": [
+    "StonkFun",
+    "https://www.stonkfun.xyz",
+    "https://www.stonkfun.xyz/stonkfun-logo.png"
+   ],
+   "size": 944,
+   "slot": 458141977
+  },
+  "6BwHHDg3u1854jC8PDLXvR4spTcLNaoBxLJNGC4nTESt": {
+   "listed": "Stonk.fun reward mode",
+   "name_at_112": "StonkFun",
+   "web": "https://www.stonkfun.xyz",
+   "printable": [
+    "StonkFun",
+    "https://www.stonkfun.xyz",
+    "https://www.stonkfun.xyz/stonkfun-logo.png"
+   ],
+   "size": 944,
+   "slot": 458141979
+  },
+  "CUqSiwPs6C4WyntMgaFazLp7wYQfaLp5URbjUP9V7SNi": {
+   "listed": "Stonk.fun community mode",
+   "name_at_112": "StonkFun",
+   "web": "https://www.stonkfun.xyz",
+   "printable": [
+    "StonkFun",
+    "https://www.stonkfun.xyz",
+    "https://www.stonkfun.xyz/stonkfun-logo.png"
+   ],
+   "size": 944,
+   "slot": 458141981
+  },
+  "FfYek5vEz23cMkWsdJwG2oa6EphsvXSHrGpdALN4g6W1": {
+   "listed": "bonk.fun",
+   "name_at_112": "letsbonk.fun",
+   "web": "https://letsbonk.fun/",
+   "printable": [
+    "\\Z/V",
+    "letsbonk.fun",
+    "https://letsbonk.fun/",
+    "https://sapphire-working-koi-276.mypinata.cloud/ipfs/bafkreicgnuyebtmnyhmjbwd32t5w2hcwbtwqlrxsc5eedpgtjy7q4remfa"
+   ],
+   "size": 944,
+   "slot": 458141984
+  }
+ }
+}

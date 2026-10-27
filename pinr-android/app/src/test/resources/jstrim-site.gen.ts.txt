@@ -1,0 +1,25 @@
+import { decodeChoices, encodeChoices, CODE_PREFIX } from "../../pinr-live/src/world/choicescode";
+import { cleanAddress } from "../../pinr-live/src/world/wallet";
+// Every UTF-16 code unit JavaScript's trim() strips.
+const spaces: number[] = [];
+for (let c = 0; c <= 0xffff; c++) { const ch = String.fromCharCode(c); if ((ch + "a" + ch).trim() === "a") spaces.push(c); }
+// The site's own code fed each of them, plus near misses Kotlin or Java treat as space.
+const near = [0x1c, 0x1d, 0x1e, 0x1f, 0x85, 0x180e, 0x200b, 0x2060, 0xfffe];
+const sol = "So11111111111111111111111111111111111111112", evm = "0xAbC0000000000000000000000000000000000001";
+const code = encodeChoices({ wallets: [sol], hidden: ["abc"], filter: false });
+const b64 = (t: string) => Buffer.from(t, "utf8").toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const cases = [...spaces, ...near].map((c) => {
+  const ch = String.fromCharCode(c);
+  const pasted = ch + code + ch;
+  const inner = CODE_PREFIX + b64(JSON.stringify({ v: 1, w: [ch + sol + ch, ch + evm], h: [ch + "AbC" + ch, ch] }));
+  const out = decodeChoices(pasted), inn = decodeChoices(inner);
+  return {
+    c, pasted, inner,
+    pastedOk: out.ok, innerWallets: inn.ok ? inn.choices.wallets : null, innerHidden: inn.ok ? inn.choices.hidden : null,
+    sol: cleanAddress(ch + sol + ch)?.address ?? null, evm: cleanAddress(ch + evm)?.address ?? null,
+    num: Number(ch + "7" + ch),
+  };
+});
+const texts = ["", " ", "7", "7.", ".5", ".", "1e3", "1E-2", "+3", "-3", "-.5e1", "0x10", "0X1f", "0b101", "0o17", "-0x10", "+0x10", "0x", "0x1.8p1", "Infinity", "-Infinity", "+Infinity", "infinity", "7d", "7f", "1_000", "1e", "e3", "..5", "NaN", "\u001c7", "07", "0.0000001", "1e400", "\ufeff12\u2029", "1 2", "0b2", "0o8"];
+const numbers = texts.map((t) => ({ t, n: String(Number(t)) }));
+console.log(JSON.stringify({ spaces, cases, numbers }));

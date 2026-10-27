@@ -1,0 +1,10 @@
+{
+  "name": "pinr-imagehash",
+  "private": true,
+  "description": "a picture's perceptual hash for the gate's look-alike check, from open-source libraries (sharp, sharp-phash).",
+  "type": "module",
+  "dependencies": {
+    "sharp": "0.35.5",
+    "sharp-phash": "2.2.0"
+  }
+}

@@ -1,0 +1,238 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#080a0f;overflow:hidden}svg{display:block;width:100vw;height:100vh}</style></head><body><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 2600" fill="none">
+  <!-- PINR System Teaser — Pure Profile (Portrait) Edition
+       Reoriented for smartphone screens: 
+       - Vertical conduit architecture: Purple Intent cluster at TOP flowing DOWN into the Blade.
+       - Electric Lime Verification cluster at BOTTOM flowing UP into the Blade.
+       - 100% of original animations, particle feeds, orbital counters, and pulse waves preserved.
+       - Perfectly balanced around the central Blade engine at (600, 1300). -->
+  <defs>
+    <!-- Deep void background with radial purple/abyss glow centered on the engine -->
+    <radialGradient id="bg" cx="50%" cy="50%" r="62%">
+      <stop offset="0%" stop-color="#231C3D"/>
+      <stop offset="22%" stop-color="#18152A"/>
+      <stop offset="50%" stop-color="#0E1018"/>
+      <stop offset="100%" stop-color="#05060A"/>
+    </radialGradient>
+
+    <!-- Core energy bloom -->
+    <radialGradient id="core" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#CDB6FE" stop-opacity=".30"/>
+      <stop offset="48%" stop-color="#8A5CFF" stop-opacity=".14"/>
+      <stop offset="100%" stop-color="#8A5CFF" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Top particle data flow gradient (Lilac/Purple flowing DOWN to center) -->
+    <linearGradient id="topFlow" x1="600" y1="526" x2="600" y2="1273" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D042FF" stop-opacity="0"/>
+      <stop offset=".45" stop-color="#B783FF" stop-opacity=".84"/>
+      <stop offset="1" stop-color="#E9DBFF"/>
+    </linearGradient>
+
+    <!-- Bottom particle data flow gradient (Neon Lime flowing UP to center) -->
+    <linearGradient id="bottomFlow" x1="600" y1="2074" x2="600" y2="1327" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D6FF3C" stop-opacity="0"/>
+      <stop offset=".45" stop-color="#D6FF3C" stop-opacity=".82"/>
+      <stop offset="1" stop-color="#F4EEFF"/>
+    </linearGradient>
+
+    <!-- Orbital ring gradient -->
+    <linearGradient id="orbit" x1="252" y1="988" x2="948" y2="1612" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D042FF" stop-opacity=".18"/>
+      <stop offset=".5" stop-color="#CDB6FE" stop-opacity=".65"/>
+      <stop offset="1" stop-color="#D6FF3C" stop-opacity=".20"/>
+    </linearGradient>
+
+    <!-- Glow filters -->
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="32"/>
+    </filter>
+
+    <!-- Cosmic micro-grain texture -->
+    <pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse">
+      <circle cx="7" cy="13" r="1" fill="#E6DDFB" opacity=".24"/>
+      <circle cx="61" cy="42" r=".8" fill="#D6FF3C" opacity=".2"/>
+      <circle cx="31" cy="83" r=".7" fill="#CDB6FE" opacity=".22"/>
+      <circle cx="84" cy="91" r=".6" fill="#F4EEFF" opacity=".18"/>
+    </pattern>
+
+    <!-- Profile Track Paths: Reoriented Vertically -->
+    <!-- Top Conduit: S-curve sweeping from top main node down to the top of the Blade -->
+    <path id="topTrack" d="M600 526.5 C600 747.5 397 790 436.2 1000.8 C458.6 1118.1 546.8 1170.8 600 1272.8"/>
+    <!-- Bottom Conduit: S-curve sweeping from bottom main node up to the bottom of the Blade -->
+    <path id="bottomTrack" d="M600 2073.5 C600 1852.5 803 1810 763.8 1599.2 C741.4 1481.9 653.2 1429.2 600 1327.2"/>
+
+    <style>
+      .slow { animation: drift 240.0000s linear infinite; transform-origin: 600px 1300px; }
+      .counter { animation: drift 240.0000s linear infinite reverse; transform-origin: 600px 1300px; }
+      .breathe { animation: breathe 34.2858s ease-in-out infinite; transform-origin: 600px 1300px; }
+      .pulse { animation: pulse 30.0000s ease-out infinite; transform-origin: 600px 1300px; }
+      .twinkle { animation: twinkle 21.8182s ease-in-out infinite; }
+      .flowA { animation: dash 48.0000s linear infinite; }
+      .flowB { animation: dash 48.0000s linear infinite reverse; }
+
+      @keyframes drift { to { transform: rotate(360deg); } }
+      @keyframes breathe { 0%,100% { opacity:.56; transform:scale(.96); } 50% { opacity:1; transform:scale(1.045); } }
+      @keyframes pulse { 0% { opacity:0; transform:scale(.68); } 18% { opacity:.72; } 100% { opacity:0; transform:scale(1.55); } }
+      @keyframes twinkle { 0%,100% { opacity:.28; } 50% { opacity:.95; } }
+      @keyframes dash { to { stroke-dashoffset:-160; } }
+
+      @media (prefers-reduced-motion: reduce) {
+        .slow,.counter,.breathe,.pulse,.twinkle,.flowA,.flowB { animation:none !important; }
+        .moving-particles { display:none; }
+      }
+    </style>
+  </defs>
+
+  <!-- Canvas Deep Space Background -->
+  <rect width="1200" height="2600" fill="url(#bg)"/>
+  <rect width="1200" height="2600" fill="url(#grain)" opacity=".36"/>
+
+  <!-- Core Ambient Glow & Expansion Waves -->
+  <circle cx="600" cy="1300" r="398" fill="url(#core)" filter="url(#softGlow)"/>
+  <circle class="pulse" cx="600" cy="1300" r="176" stroke="#CDB6FE" stroke-width="1.5" opacity="0"/>
+  <circle class="pulse" cx="600" cy="1300" r="176" stroke="#D6FF3C" stroke-width="1" opacity="0" style="animation-delay:2.4s"/>
+
+  <!-- Elongated Profile Resonance Guides (Subtle Vertical Orbits) -->
+  <ellipse cx="600" cy="1300" rx="460" ry="780" fill="none" stroke="#CDB6FE" stroke-width="0.8" opacity=".10" stroke-dasharray="4 16"/>
+  <ellipse cx="600" cy="1300" rx="380" ry="640" fill="none" stroke="#D6FF3C" stroke-width="0.8" opacity=".08" stroke-dasharray="3 20"/>
+
+  <!-- Rotating Circular Geometries (Clockwise) -->
+  <g class="slow" opacity=".88">
+    <circle cx="600" cy="1300" r="446" stroke="url(#orbit)" stroke-width="1.2" stroke-dasharray="2 12"/>
+    <circle cx="600" cy="1300" r="382" stroke="#CDB6FE" stroke-opacity=".11" stroke-width="1"/>
+    <path d="M600 854A446 446 0 0 1 986 1077" stroke="#D6FF3C" stroke-opacity=".52" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="986" cy="1077" r="5" fill="#D6FF3C" filter="url(#glow)"/>
+  </g>
+
+  <!-- Counter-Rotating Inner Geometries (Counter-Clockwise) -->
+  <g class="counter" opacity=".68">
+    <path d="M600 1746A446 446 0 0 1 214 1523" stroke="#D042FF" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="214" cy="1523" r="4" fill="#D042FF" filter="url(#glow)"/>
+    <circle cx="600" cy="1300" r="332" stroke="#F4EEFF" stroke-opacity=".08" stroke-width="1" stroke-dasharray="1 9"/>
+  </g>
+
+  <!-- Ambient Starfield Across Full Vertical Reach -->
+  <g opacity=".48" fill="#CDB6FE">
+    <!-- Upper Phone Sky -->
+    <circle class="twinkle" cx="190" cy="220" r="1.8" style="animation-delay:.4s"/>
+    <circle class="twinkle" cx="600" cy="130" r="2.2" style="animation-delay:1.1s"/>
+    <circle class="twinkle" cx="1020" cy="260" r="1.7" style="animation-delay:.7s"/>
+    <circle class="twinkle" cx="320" cy="390" r="1.5" style="animation-delay:1.8s"/>
+    <circle class="twinkle" cx="880" cy="420" r="2.0" style="animation-delay:2.3s"/>
+    
+    <!-- Mid System Stars -->
+    <circle class="twinkle" cx="210" cy="980" r="1.8"/>
+    <circle class="twinkle" cx="990" cy="920" r="1.7" style="animation-delay:1.2s"/>
+    <circle class="twinkle" cx="180" cy="1620" r="1.8" style="animation-delay:.5s"/>
+    <circle class="twinkle" cx="1030" cy="1660" r="1.6" style="animation-delay:1.4s"/>
+    <circle class="twinkle" cx="290" cy="1300" r="1.6" style="animation-delay:.8s"/>
+    <circle class="twinkle" cx="910" cy="1300" r="1.6" style="animation-delay:1.7s"/>
+
+    <!-- Lower Phone Floor -->
+    <circle class="twinkle" cx="220" cy="2260" r="1.6" style="animation-delay:.9s"/>
+    <circle class="twinkle" cx="600" cy="2450" r="2.0" style="animation-delay:1.5s"/>
+    <circle class="twinkle" cx="970" cy="2310" r="1.7" style="animation-delay:.2s"/>
+    <circle class="twinkle" cx="340" cy="2480" r="1.5" style="animation-delay:1.9s"/>
+    <circle class="twinkle" cx="860" cy="2460" r="1.8" style="animation-delay:2.6s"/>
+  </g>
+
+  <!-- Flow Conduits: Reoriented Vertically (Top & Bottom) -->
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- Top Flow Conduit (Purple/Lilac) -->
+    <use href="#topTrack" stroke="#D042FF" stroke-opacity=".12" stroke-width="26" filter="url(#softGlow)"/>
+    <use href="#topTrack" stroke="url(#topFlow)" stroke-width="2.4"/>
+    <use class="flowA" href="#topTrack" stroke="#F4EEFF" stroke-opacity=".55" stroke-width="1.3" stroke-dasharray="2 18"/>
+
+    <!-- Bottom Flow Conduit (Electric Lime) -->
+    <use href="#bottomTrack" stroke="#D6FF3C" stroke-opacity=".13" stroke-width="26" filter="url(#softGlow)"/>
+    <use href="#bottomTrack" stroke="url(#bottomFlow)" stroke-width="2.4"/>
+    <use class="flowB" href="#bottomTrack" stroke="#F4EEFF" stroke-opacity=".52" stroke-width="1.3" stroke-dasharray="2 18"/>
+  </g>
+
+  <!-- Top Node Cluster (Purple/Lilac Intent Network — Oriented at Top) -->
+  <g stroke-linecap="round" opacity=".35">
+    <line x1="600" y1="526" x2="417" y2="754" stroke="#B783FF" stroke-width="1"/>
+    <line x1="600" y1="526" x2="783" y2="754" stroke="#B783FF" stroke-width="1"/>
+    <line x1="417" y1="754" x2="436" y2="1001" stroke="#CDB6FE" stroke-width="0.8" stroke-dasharray="2 6"/>
+    <line x1="783" y1="754" x2="764" y2="1001" stroke="#CDB6FE" stroke-width="0.8" stroke-dasharray="2 6"/>
+  </g>
+  <g fill="#11121B" stroke="#CDB6FE" stroke-width="1.5">
+    <circle cx="600" cy="526" r="26"/>
+    <circle cx="417" cy="754" r="14"/><circle cx="783" cy="754" r="14"/>
+    <circle cx="436" cy="1001" r="10"/><circle cx="764" cy="1001" r="10"/>
+  </g>
+  <g fill="#D042FF" filter="url(#glow)">
+    <circle cx="600" cy="526" r="5.5"/>
+    <circle cx="417" cy="754" r="3.5"/><circle cx="783" cy="754" r="3.5"/>
+    <circle cx="436" cy="1001" r="2.5"/><circle cx="764" cy="1001" r="2.5"/>
+  </g>
+
+  <!-- Bottom Node Cluster (Electric Lime Verification Network — Oriented at Bottom) -->
+  <g stroke-linecap="round" opacity=".35">
+    <line x1="600" y1="2074" x2="417" y2="1846" stroke="#D6FF3C" stroke-width="1"/>
+    <line x1="600" y1="2074" x2="783" y2="1846" stroke="#D6FF3C" stroke-width="1"/>
+    <line x1="417" y1="1846" x2="436" y2="1599" stroke="#D6FF3C" stroke-width="0.8" stroke-dasharray="2 6"/>
+    <line x1="783" y1="1846" x2="764" y2="1599" stroke="#D6FF3C" stroke-width="0.8" stroke-dasharray="2 6"/>
+  </g>
+  <g fill="#11121B" stroke="#D6FF3C" stroke-width="1.5">
+    <circle cx="600" cy="2074" r="26"/>
+    <circle cx="417" cy="1846" r="14"/><circle cx="783" cy="1846" r="14"/>
+    <circle cx="436" cy="1599" r="10"/><circle cx="764" cy="1599" r="10"/>
+  </g>
+  <g fill="#D6FF3C" filter="url(#glow)">
+    <circle cx="600" cy="2074" r="5.5"/>
+    <circle cx="417" cy="1846" r="3.5"/><circle cx="783" cy="1846" r="3.5"/>
+    <circle cx="436" cy="1599" r="2.5"/><circle cx="764" cy="1599" r="2.5"/>
+  </g>
+
+  <!-- Moving High-Frequency Data Packets Along Vertical Conduits -->
+  <g class="moving-particles" fill="#F4EEFF" filter="url(#glow)">
+    <!-- Data streaming DOWN from top cluster into Blade -->
+    <circle r="4.2"><animateMotion dur="40.0000s" repeatCount="indefinite"><mpath href="#topTrack"/></animateMotion></circle>
+    <circle r="2.6"><animateMotion dur="40.0000s" begin="-13.2000s" repeatCount="indefinite"><mpath href="#topTrack"/></animateMotion></circle>
+    <!-- Data streaming UP from bottom cluster into Blade -->
+    <circle r="4.2"><animateMotion dur="40.0000s" repeatCount="indefinite"><mpath href="#bottomTrack"/></animateMotion></circle>
+    <circle r="2.6"><animateMotion dur="40.0000s" begin="-20.0000s" repeatCount="indefinite"><mpath href="#bottomTrack"/></animateMotion></circle>
+  </g>
+
+  <!-- Central Reticle & Engine Aura -->
+  <circle class="breathe" cx="600" cy="1300" r="170" fill="url(#core)"/>
+  <circle cx="600" cy="1300" r="154" stroke="#DAD0F6" stroke-opacity=".18" stroke-width="1"/>
+  <circle cx="600" cy="1300" r="141" stroke="#D6FF3C" stroke-opacity=".2" stroke-width="1" stroke-dasharray="1 8"/>
+
+  <!-- Center Hero: PINR Blade Mark (Living Engine) -->
+  <g transform="translate(453.525 1127.2) scale(1.35)">
+    <g class="breathe" style="transform-box:fill-box;transform-origin:center">
+      <!-- Lilac Spine -->
+      <path fill="#F4EEFF" d="M182.75 7.01c6.93-8.26 19.39-9.34 27.63-2.38 8.24 6.96 9.29 19.5 2.37 27.78C141.79 106.89 70.86 181.39-.1 255.86 60.86 172.91 121.8 89.97 182.75 7.01Z"/>
+      <!-- Neon Lime Top Tip -->
+      <path fill="#D6FF3C" d="M182.75 7.01c6.97-8.33 19.34-9.39 27.63-2.38h0c8.29,7.01,9.34,19.45,2.37,27.78l-38.14 14.94h0l8.16-40.34h-.02Z"/>
+      <!-- Violet Sweep -->
+      <path fill="#CDB6FE" d="M183.63 92.04h0L75.46 249.98c-5.26 6.51-14.86 7.57-21.44 2.36h0c-6.57-5.2-7.63-14.7-2.37-21.21L183.63 92.04Z"/>
+      <!-- Neon Lime Bottom Tip -->
+      <path fill="#D6FF3C" d="M75.49 250.04c-5.26 6.43-14.88,7.48-21.45,2.35h0c-6.59-5.14-7.65-14.51-2.36-20.94l29.42-12.04h0l-5.58 30.64h-.02Z"/>
+    </g>
+  </g>
+
+  <!-- Orbital Quadrant Beacons (4 Points Rotating With .slow) -->
+  <g class="slow" fill="#D6FF3C">
+    <circle cx="600" cy="854" r="3" opacity=".8"/>
+    <circle cx="1046" cy="1300" r="2.4" opacity=".55"/>
+    <circle cx="600" cy="1746" r="3" opacity=".8"/>
+    <circle cx="154" cy="1300" r="2.4" opacity=".55"/>
+  </g>
+</svg>
+<script>
+const svg=document.querySelector('svg');
+// A delayed animation has a start-up phase a looping video must not have: shift positive delays back by whole cycles.
+document.getAnimations().forEach(a=>{const tm=a.effect.getTiming(); if(tm.delay>0 && tm.duration>0){ a.effect.updateTiming({delay: tm.delay - tm.duration*Math.ceil(tm.delay/tm.duration)}); }});
+window.seek=async function(t){
+  svg.pauseAnimations(); svg.setCurrentTime(t);
+  document.getAnimations().forEach(a=>{a.pause(); a.currentTime=t*1000;});
+  return document.getAnimations().length;
+};
+</script></body></html>

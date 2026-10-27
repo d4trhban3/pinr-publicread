@@ -1,0 +1,16 @@
+# the busiest listed coins' trades from websocket logs (livews/logs.mjs), about 0.7 s before SQD.
+# A user unit of `pinr` (lingering), like pinr-trades: restarted by `pinr` without sudo. Off unless `trades_logs` is "on"
+# in scanner/settings.json. The node's key is read from the engine's .env by the service and never appears here.
+[Unit]
+Description=PINR busiest coins' trades from websocket logs
+
+[Service]
+WorkingDirectory=%h/pinr/engine
+ExecStart=/usr/local/bin/node livews/logs.mjs
+Restart=always
+RestartSec=10
+StandardOutput=append:%h/pinr/engine/scanner/wslogs.log
+StandardError=append:%h/pinr/engine/scanner/wslogs.log
+
+[Install]
+WantedBy=default.target

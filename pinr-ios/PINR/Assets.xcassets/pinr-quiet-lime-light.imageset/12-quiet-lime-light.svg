@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" role="img" aria-label="PINR">
+  <!-- PINR site copy, LIGHT counterpart of the operator's asset 12 (quiet lime), for the header's guide button in light mode: a soft lavender field, the blade pale, only its lime tips strong. Original: --><!-- Asset 12 — Quiet lime. Easter egg: nearly black field. Only the lime tip reads on OLED. -->
+  <!-- Background is #0A0C0E — deeper than brand dark. On OLED: almost invisible. Lime glows. -->
+  <rect width="1080" height="1080" fill="#EBE4F7"/>
+
+  <!-- Blade body and purple sweep: color so close to black they vanish on standard displays -->
+  <g transform="translate(395.5, 370) scale(1.328125)">
+    <!-- Body: near-black. Visible only on high-contrast OLED. -->
+    <path fill="#D8CEEE" d="M182.75,7.01c6.93-8.26,19.39-9.34,27.63-2.38,8.24,6.96,9.29,19.5,2.37,27.78C141.79,106.89,70.86,181.39-.1,255.86,60.86,172.91,121.8,89.97,182.75,7.01Z"/>
+    <!-- Lime tips: fully visible — the ONLY thing you see on standard screens -->
+    <path fill="#7FA800" d="M182.75,7.01c6.97-8.33,19.34-9.39,27.63-2.38h0c8.29,7.01,9.34,19.45,2.37,27.78l-38.14,14.94h0l8.16-40.34h-.02Z"/>
+    <!-- Purple sweep: near-invisible on non-OLED -->
+    <path fill="#CBBDEE" d="M183.63,92.04h0l-108.17,157.94c-5.26,6.51-14.86,7.57-21.44,2.36h0c-6.57-5.2-7.63-14.7-2.37-21.21L183.63,92.04Z"/>
+    <!-- Lime tip bottom: clearly visible -->
+    <path fill="#7FA800" d="M75.49,250.04c-5.26,6.43-14.88,7.48-21.45,2.35h0c-6.59-5.14-7.65-14.51-2.36-20.94l29.42-12.04h0l-5.58,30.64h-.02Z"/>
+  </g>
+</svg>

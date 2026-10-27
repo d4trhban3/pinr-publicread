@@ -1,0 +1,91 @@
+{
+ "now": 1800000000000,
+ "coins": [
+  {
+   "id": "c0",
+   "kind": "seen",
+   "offsetMs": -10800000,
+   "trades5m": 0
+  },
+  {
+   "id": "c1",
+   "kind": "scored",
+   "offsetMs": -3600000,
+   "trades5m": 50
+  },
+  {
+   "id": "c2",
+   "kind": "seen",
+   "offsetMs": -1800000,
+   "trades5m": 0
+  },
+  {
+   "id": "c3",
+   "kind": "scored",
+   "offsetMs": -90000000,
+   "trades5m": 400
+  },
+  {
+   "id": "c4",
+   "kind": null,
+   "offsetMs": null,
+   "trades5m": 5
+  },
+  {
+   "id": "c5",
+   "kind": "seen",
+   "offsetMs": -82800000,
+   "trades5m": 0
+  },
+  {
+   "id": "c6",
+   "kind": "scored",
+   "offsetMs": 300000,
+   "trades5m": 900
+  },
+  {
+   "id": "c7",
+   "kind": null,
+   "offsetMs": null,
+   "trades5m": 200
+  },
+  {
+   "id": "c8",
+   "kind": "seen",
+   "offsetMs": -10800000,
+   "trades5m": 0
+  },
+  {
+   "id": "c9",
+   "kind": "scored",
+   "offsetMs": -7200000,
+   "trades5m": 0
+  },
+  {
+   "id": "c10",
+   "kind": null,
+   "offsetMs": null,
+   "trades5m": 20
+  },
+  {
+   "id": "c11",
+   "kind": "seen",
+   "offsetMs": -86400001,
+   "trades5m": 0
+  }
+ ],
+ "order": [
+  "c1",
+  "c9",
+  "c2",
+  "c0",
+  "c8",
+  "c5",
+  "c3",
+  "c6",
+  "c7",
+  "c10",
+  "c4",
+  "c11"
+ ]
+}

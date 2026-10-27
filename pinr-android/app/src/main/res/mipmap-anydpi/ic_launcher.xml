@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The app icon: the site's lime-blade art (public/art/11-blade-lime.svg), the same art the footer's centre button and the iPhone app's icon use. -->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/lime" />
+    <foreground>
+        <inset android:drawable="@drawable/blade_lime" android:inset="8%" />
+    </foreground>
+    <monochrome>
+        <inset android:drawable="@drawable/blade_lime" android:inset="8%" />
+    </monochrome>
+</adaptive-icon>

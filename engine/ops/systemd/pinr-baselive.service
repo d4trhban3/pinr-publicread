@@ -1,0 +1,19 @@
+# The operator's order, 26 Oct: Base (the listed coins' Uniswap v4 pools) trades at Solana's speed, from SQD Portal's head
+# (chains/live_evm.py), into the feed's tick files and the live stream. A user unit of `pinr` (lingering), like
+# pinr-sqdlive: restarted by `pinr` without sudo. No key: the Portal is free and keyless. Off unless `base_live` is
+# "on" in scanner/settings.json (the service then stops by itself). Runs at nice 10, below the site's feed server.
+[Unit]
+Description=PINR live Base trades from SQD Portal
+
+[Service]
+WorkingDirectory=%h/pinr/engine
+ExecStart=/usr/bin/python3 chains/live_evm.py run base
+Environment=PYTHONUNBUFFERED=1
+Nice=10
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:%h/pinr/engine/chains/baselive.log
+StandardError=append:%h/pinr/engine/chains/baselive.log
+
+[Install]
+WantedBy=default.target

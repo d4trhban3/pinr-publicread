@@ -1,0 +1,9 @@
+{
+  "name": "pinr-control",
+  "private": true,
+  "description": "pinr.io/control's service on the server (127.0.0.1 only). Every request is refused unless Cloudflare Access's signed token verifies (jose).",
+  "type": "module",
+  "dependencies": {
+    "jose": "6.2.12"
+  }
+}

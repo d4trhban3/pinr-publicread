@@ -1,0 +1,218 @@
+[
+ {
+  "wire": {
+   "pct": 0,
+   "kind": "none"
+  },
+  "valid": true,
+  "short": "",
+  "long": "None"
+ },
+ {
+  "wire": {
+   "pct": 1,
+   "kind": "rewards_standard",
+   "program": "Stonk.fun reward mode",
+   "standardPct": 1,
+   "standardBasis": "settings"
+  },
+  "valid": true,
+  "short": "1% rewards",
+  "long": "1% · Stonk.fun reward mode, at its standard rate"
+ },
+ {
+  "wire": {
+   "pct": 0.5,
+   "kind": "rewards_standard",
+   "program": "Stonk.fun reward mode",
+   "standardPct": 1,
+   "standardBasis": "settings"
+  },
+  "valid": true,
+  "short": "0.5% rewards",
+  "long": "0.5% · Stonk.fun reward mode, below its standard 1%"
+ },
+ {
+  "wire": {
+   "pct": 3,
+   "kind": "rewards_standard",
+   "program": "X",
+   "standardPct": 3,
+   "standardBasis": "observed",
+   "standardLinks": [
+    "https://solscan.io/token/a"
+   ]
+  },
+  "valid": true,
+  "short": "3% rewards",
+  "long": "3% · X, at its observed standard rate"
+ },
+ {
+  "wire": {
+   "pct": 5,
+   "kind": "standard_unknown",
+   "program": "Some Pad"
+  },
+  "valid": true,
+  "short": "5% rewards",
+  "long": "5% · Some Pad; its standard rate was not read"
+ },
+ {
+  "wire": {
+   "pct": 8,
+   "kind": "outside_norm",
+   "program": "Stonk.fun reward mode",
+   "standardPct": 1,
+   "standardBasis": "settings"
+  },
+  "valid": true,
+  "short": "8% above rate",
+  "long": "8% · above Stonk.fun reward mode's standard 1%"
+ },
+ {
+  "wire": {
+   "pct": 12.5,
+   "kind": "outside_norm"
+  },
+  "valid": true,
+  "short": "12.5% not rewards",
+  "long": "12.5% · not a launchpad rewards fee"
+ },
+ {
+  "wire": {
+   "pct": 0.005,
+   "kind": "outside_norm"
+  },
+  "valid": true,
+  "short": "0.01% not rewards",
+  "long": "0.01% · not a launchpad rewards fee"
+ },
+ {
+  "wire": {
+   "pct": 1.005,
+   "kind": "outside_norm"
+  },
+  "valid": true,
+  "short": "1% not rewards",
+  "long": "1% · not a launchpad rewards fee"
+ },
+ {
+  "wire": {
+   "pct": 33.333,
+   "kind": "outside_norm"
+  },
+  "valid": true,
+  "short": "33.33% not rewards",
+  "long": "33.33% · not a launchpad rewards fee"
+ },
+ {
+  "wire": {
+   "pct": 2,
+   "kind": "rewards_standard",
+   "program": "X",
+   "standardPct": 1,
+   "standardBasis": "settings"
+  },
+  "valid": false,
+  "short": null,
+  "long": null
+ },
+ {
+  "wire": {
+   "pct": 0,
+   "kind": "outside_norm"
+  },
+  "valid": false,
+  "short": null,
+  "long": null
+ },
+ {
+  "wire": {
+   "pct": 5,
+   "kind": "none"
+  },
+  "valid": false,
+  "short": null,
+  "long": null
+ },
+ {
+  "wire": {
+   "pct": 101,
+   "kind": "outside_norm"
+  },
+  "valid": false,
+  "short": null,
+  "long": null
+ },
+ {
+  "wire": {
+   "pct": 5,
+   "kind": "standard_unknown",
+   "program": "P",
+   "standardPct": 5,
+   "standardBasis": "settings"
+  },
+  "valid": false,
+  "short": null,
+  "long": null
+ },
+ {
+  "wire": {
+   "pct": 3,
+   "kind": "rewards_standard",
+   "program": "bad$name",
+   "standardPct": 3,
+   "standardBasis": "settings"
+  },
+  "valid": false,
+  "short": null,
+  "long": null
+ },
+ {
+  "wire": {
+   "pct": 3,
+   "kind": "rewards_standard",
+   "program": "X",
+   "standardPct": 3,
+   "standardBasis": "observed"
+  },
+  "valid": false,
+  "short": null,
+  "long": null
+ },
+ {
+  "wire": {
+   "pct": 3,
+   "kind": "rewards_standard",
+   "program": "X",
+   "standardPct": 3,
+   "standardBasis": "settings",
+   "standardLinks": [
+    "https://a.b"
+   ]
+  },
+  "valid": false,
+  "short": null,
+  "long": null
+ },
+ {
+  "wire": {
+   "pct": 3,
+   "kind": "outside_norm",
+   "standardPct": 1,
+   "standardBasis": "settings"
+  },
+  "valid": false,
+  "short": null,
+  "long": null
+ },
+ {
+  "wire": {
+   "pct": 3,
+   "kind": "weird"
+  },
+  "valid": false,
+  "short": null,
+  "long": null
+ }
+]

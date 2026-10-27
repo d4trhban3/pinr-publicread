@@ -1,0 +1,12 @@
+node_modules/
+control.json
+changes.jsonl
+status-engine.json
+gate.json
+gate-versions/
+status-gate.json
+.preview-*.json
+routing.json
+routing-versions/
+.routing-preview-*.json
+wires/
