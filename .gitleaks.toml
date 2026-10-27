@@ -1,0 +1,11 @@
+# gitleaks config for this repository: the default rules, plus an allowlist for public blockchain addresses
+# (token contracts, mints and wallets), which the generic-api-key rule mistakes for keys.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "public blockchain addresses and launchpad names, not secrets"
+regexTarget = "match"
+regexes = [
+  '''(?i)(token|address|impl|auth|v4)[a-z_"]*\s*[:=]\s*"(0x[0-9a-f]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9.-]+\.near|DopplerERC20V1)"''',
+]

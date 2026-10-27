@@ -1,0 +1,12 @@
+# once a day at 12:00 UTC (8:00 in New York). Persistent: a run missed while the server was off runs at the
+# next start. One run a day; the dollar cap is per UTC day in the reader's ledger.
+[Unit]
+Description=PINR social scan, daily
+
+[Timer]
+OnCalendar=*-*-* 12:00:00 UTC
+Persistent=true
+Unit=pinr-xscan.service
+
+[Install]
+WantedBy=timers.target

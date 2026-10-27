@@ -1,0 +1,31 @@
+// Generator for transferfee-site.json: run with node --experimental-strip-types beside pinr-live/server/transferfee.ts (builder/app-feecase).
+import { feeFromFact, feeShort, feeLong } from "./transferfee.ts";
+const base = { unit: "percent", source: "Solana chain" };
+const facts: Record<string, unknown>[] = [
+  { value: 0, fee_kind: "none" },
+  { value: 1, fee_kind: "rewards_standard", program: "Stonk.fun reward mode", standard_pct: 1, standard_basis: "settings" },
+  { value: 0.5, fee_kind: "rewards_standard", program: "Stonk.fun reward mode", standard_pct: 1, standard_basis: "settings" },
+  { value: 3, fee_kind: "rewards_standard", program: "X", standard_pct: 3, standard_basis: "observed", standard_links: ["https://solscan.io/token/a"] },
+  { value: 5, fee_kind: "standard_unknown", program: "Some Pad" },
+  { value: 8, fee_kind: "outside_norm", program: "Stonk.fun reward mode", standard_pct: 1, standard_basis: "settings" },
+  { value: 12.5, fee_kind: "outside_norm" },
+  { value: 0.005, fee_kind: "outside_norm" },
+  { value: 1.005, fee_kind: "outside_norm" },
+  { value: 33.333, fee_kind: "outside_norm" },
+  { value: 2, fee_kind: "rewards_standard", program: "X", standard_pct: 1, standard_basis: "settings" },
+  { value: 0, fee_kind: "outside_norm" },
+  { value: 5, fee_kind: "none" },
+  { value: 101, fee_kind: "outside_norm" },
+  { value: 5, fee_kind: "standard_unknown", program: "P", standard_pct: 5, standard_basis: "settings" },
+  { value: 3, fee_kind: "rewards_standard", program: "bad$name", standard_pct: 3, standard_basis: "settings" },
+  { value: 3, fee_kind: "rewards_standard", program: "X", standard_pct: 3, standard_basis: "observed" },
+  { value: 3, fee_kind: "rewards_standard", program: "X", standard_pct: 3, standard_basis: "settings", standard_links: ["https://a.b"] },
+  { value: 3, fee_kind: "outside_norm", standard_pct: 1, standard_basis: "settings" },
+  { value: 3, fee_kind: "weird" },
+];
+const rows = facts.map((f) => {
+  const fee = feeFromFact({ ...base, ...f });
+  // the wire object, as the server sends the TransferFee (camel case, undefined dropped)
+  return { wire: fee ? JSON.parse(JSON.stringify(fee)) : fee === null ? JSON.parse(JSON.stringify({ pct: f.value, kind: f.fee_kind, program: f.program, standardPct: f.standard_pct, standardBasis: f.standard_basis, standardLinks: f.standard_links })) : null, valid: !!fee, short: fee ? feeShort(fee) : null, long: fee ? feeLong(fee) : null };
+});
+console.log(JSON.stringify(rows, null, 1));

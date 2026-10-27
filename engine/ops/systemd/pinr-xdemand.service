@@ -1,0 +1,15 @@
+# a design decision, launch item 6: the X check on demand, one pass every 15 minutes (the timer). A user unit of `pinr`.
+# It searches the coins in demand (PINRbot's wanted list, then the site's first page) not checked in the reader's cache
+# time, and stops at `x_demand_daily_dollar_cap` in scanner/settings.json; off unless `x_demand` is "on". The token is
+# read by the reader from the engine's .env and never appears here. Installed only on the operator's typed yes (a
+# recurring paid call): ops/systemd/install-xdemand-timer.sh. It replaces the daily timer (pinr-xscan), which stays off.
+[Unit]
+Description=PINR X check on demand
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/pinr/engine
+ExecStart=/usr/bin/python3 stage3/x_api.py demand
+StandardOutput=append:%h/pinr/engine/scanner/xdemand.log
+StandardError=append:%h/pinr/engine/scanner/xdemand.log
+TimeoutStartSec=14min

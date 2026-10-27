@@ -1,0 +1,10 @@
+{
+ "note": "PumpPortal's free data socket, the first messages of one short test connection (2026-10-18, no key, subscribeNewToken + subscribeMigration only), saved as received: two notices, two creates, one graduation.",
+ "messages": [
+  "{\"message\":\"Successfully subscribed to token creation events.\"}",
+  "{\"message\":\"Subscribed to 'migration' events.\"}",
+  "{\"signature\":\"3912uzt51pjtu5H6CZzgekfvYckj29hPzfx2WcmKWJb3mt4f9CMiFm6q79gBrXCW2SVotLPavPa5MsxBoT4KFYP6\",\"mint\":\"3d8oTTPbcBwDLreWcvwmvsFhdNkB3Qxz7K9qbjLQpump\",\"traderPublicKey\":\"FKjkiW8VNzgWEaaW4UYTFMdLn9i71ePMmkPDgKgRJBYV\",\"txType\":\"create\",\"initialBuy\":3520918.746848,\"solAmount\":0.098765431,\"bondingCurveKey\":\"D66JC9Z1txzEsUSYYykoFNWfu8scuMMNTcupTH69jTdX\",\"vTokensInBondingCurve\":1069479081.253152,\"vSolInBondingCurve\":30.09876543099999,\"marketCapSol\":28.14338864462131,\"name\":\"GOLD BROKE\",\"symbol\":\"$GOAT\",\"uri\":\"https://ipfs.io/ipfs/bafkreicwbjlhj7r4ssnnfxmzh2m2rzx25sewru5tzba3l2icotdidu5554\",\"is_mayhem_mode\":true,\"pool\":\"pump\"}",
+  "{\"signature\":\"XNx6JtKe3VNEjWrAhEAxPCy9HRexc7eKaWx4xF8VECmLr6MfNrnnr7F3jLHCgQx1hnK3CDoe93R6zYe2PjC4Fji\",\"mint\":\"HC7HK652xB2DPEQ9L95UMniqyF3Ph9LNmXLgRJfEaJiz\",\"traderPublicKey\":\"6aQ9F5sm8kjVKbWYBXBkF9jxpUxEN3759vmFfQkURdKj\",\"txType\":\"create\",\"initialBuy\":0,\"solAmount\":0,\"bondingCurveKey\":\"7ooMMVVHuCxuUgLeQKn1cUoApGiofkhBUF74FivA7Uwg\",\"vTokensInBondingCurve\":1073000000,\"vSolInBondingCurve\":30,\"marketCapSol\":27.958993476234856,\"name\":\"ASTRONOMY TEK STILL AT 4K\",\"symbol\":\"ASTRA\",\"uri\":\"https://ipfs.io/ipfs/bafkreieh2r622v7obovykx4k5qbxaj2ld6mev3jmjkd5jg3ihl5cvrarny\",\"is_mayhem_mode\":false,\"pool\":\"pump\"}",
+  "{\"signature\":\"22uvoviCgTm24EJnNsuiGAsjkYEhbjCHja4MxkyByzk9XKvLEkM4yhJhhT53SrQyBRXampSyvSoNbh1ZAXqZ9bgp\",\"mint\":\"Hj2GbSyYHsQXfriRb5cwNBf9Bs9AaLptQu3MgTSHpump\",\"txType\":\"migrate\",\"pool\":\"pump-amm\"}"
+ ]
+}

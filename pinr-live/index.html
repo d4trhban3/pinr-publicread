@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0A0C0E" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>PINR</title>
+    <script src="/theme-init.js"></script>
+  </head>
+  <body>
+    <div id="wip-notice" role="status" style="position:fixed;top:0;left:0;right:0;z-index:2147483647;padding:4px 10px;background:#f5c518;color:#111;font:600 12px/1.4 system-ui,sans-serif;text-align:center;pointer-events:none">Work in progress: readings may be incomplete or wrong while PINR runs on free nodes</div>
+    <div id="bg">
+      <!-- Live background. At desktop width the animated PINR system teaser; at phone width
+           (under 600 px, the site's own phone line) the creep video, as in the iPhone and Android apps. The video's source is
+           set from the page's code only at phone width, so a desktop never downloads it, and only once the first tiles are up and
+           the phone has not asked to save data; its poster too is set only at phone width. Muted + playsinline are
+           required for phones to autoplay. If a phone refuses (Low Power Mode), the poster still frame stays up instead. -->
+      <img id="bgsvg" src="/art/pinr-system-teaser.svg" alt="" aria-hidden="true" decoding="async" />
+      <video
+        id="bgvid"
+        data-src="/art/pinr-bg-creep240.mp4"
+        data-poster="/art/pinr-system-teaser-mobile-poster.jpg"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        disablepictureinpicture
+        aria-hidden="true"
+      ></video>
+    </div>
+    <canvas id="grid"></canvas>
+    <!-- The band between the header and the footer. Everything inside is cut cleanly at its edges with a plain
+         rectangular crop (cheap on a phone), and #inner keeps the layers' coordinates the same as the screen's. -->
+    <div id="clipper">
+      <div id="inner">
+        <div id="pages"></div>
+        <div id="glassLayer"></div>
+        <canvas id="streams"></canvas>
+        <div id="stage"></div>
+      </div>
+    </div>
+    <div id="hud" aria-hidden="true"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

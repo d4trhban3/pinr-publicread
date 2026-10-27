@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PINR Blueprint</title>
+<style>
+:root{--bg:#0f1316;--grid:#1b2228;--grid2:#232c33;--card:#1a2026;--head:#222a31;--ink:#F4EEFF;--mute:#9aa3ad;--line:#2a323a;
+--lime:#D6FF3C;--lav:#CDB6FE;--vio:#6C4DFB;--warn:#ffb547;--bad:#ff6b6b;--cyan:#5fd3e6;--pink:#ff8fc8;--sel:#D6FF3C;--panel:#151a1f;--pin-coins:#EE8866;--pin-token:#77AADD;--pin-media:#EEDD88;--pin-trades:#44BB99;--pin-social:#FFAABB;--pin-evidence:#BBCC33;--pin-ai:#C9A0F2;--pin-chart:#D9B38C;--st-live:#4ADE80;--st-building:#94A3B8;--st-blocked:#F87171;--st-hidden:#A1A1AA;--st-planned:#A1A1AA;}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--bg:#eee8f8;--grid:#e2dbef;--grid2:#d6cde8;--card:#ffffff;--head:#f4eeff;--ink:#12161A;--mute:#5b6470;--line:#d9d1ea;--lime:#4d6b00;--lav:#6a4fc4;--warn:#a85f00;--bad:#c62828;--cyan:#00788a;--pink:#b0287a;--sel:#6C4DFB;--panel:#faf8ff;--pin-coins:#C2571A;--pin-token:#2F6DB5;--pin-media:#8A6D00;--pin-trades:#1E8C6E;--pin-social:#C2456B;--pin-evidence:#5E6B00;--pin-ai:#7B3FB8;--pin-chart:#8B5A2B;--st-live:#15803D;--st-building:#475569;--st-blocked:#B91C1C;--st-hidden:#52525B;--st-planned:#71717A;}}
+:root[data-theme="light"]{--bg:#eee8f8;--grid:#e2dbef;--grid2:#d6cde8;--card:#ffffff;--head:#f4eeff;--ink:#12161A;--mute:#5b6470;--line:#d9d1ea;--lime:#4d6b00;--lav:#6a4fc4;--warn:#a85f00;--bad:#c62828;--cyan:#00788a;--pink:#b0287a;--sel:#6C4DFB;--panel:#faf8ff;--pin-coins:#C2571A;--pin-token:#2F6DB5;--pin-media:#8A6D00;--pin-trades:#1E8C6E;--pin-social:#C2456B;--pin-evidence:#5E6B00;--pin-ai:#7B3FB8;--pin-chart:#8B5A2B;--st-live:#15803D;--st-building:#475569;--st-blocked:#B91C1C;--st-hidden:#52525B;--st-planned:#71717A;}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:13px/1.35 Inter,system-ui,sans-serif;overflow:hidden;display:flex;flex-direction:column}
+header{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--panel);z-index:5}
+header h1{font-size:16px;margin:0 8px 0 0}header h1 span{color:var(--lime)}
+button,select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:7px;padding:5px 9px;cursor:pointer}
+button:hover{border-color:var(--lav)}.sp{flex:1}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--mute)}.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+main{flex:1;display:flex;min-height:0}
+#view{flex:1;position:relative;overflow:hidden;touch-action:none;cursor:grab;
+ background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),linear-gradient(var(--grid2) 1px,transparent 1px),linear-gradient(90deg,var(--grid2) 1px,transparent 1px);}
+#view.panning{cursor:grabbing}
+#world{position:absolute;left:0;top:0;transform-origin:0 0}
+#wires{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+#wires path{fill:none;stroke-width:2.4;pointer-events:stroke;cursor:pointer}
+#wires path.sel{stroke-width:4.5;filter:drop-shadow(0 0 4px var(--sel))}
+#wires path.dash{stroke-dasharray:7 6;opacity:.55}
+.comment{position:absolute;border:1.5px solid var(--c,var(--lav));border-radius:10px;background:color-mix(in srgb,var(--c,var(--lav)) 7%,transparent)}
+.comment .ct{padding:6px 10px;font-weight:700;font-size:14px;color:var(--c,var(--lav));cursor:move;border-bottom:1px solid color-mix(in srgb,var(--c,var(--lav)) 30%,transparent)}
+.comment .rz{position:absolute;right:0;bottom:0;width:16px;height:16px;cursor:nwse-resize;border-right:3px solid var(--c,var(--lav));border-bottom:3px solid var(--c,var(--lav));border-radius:0 0 8px 0}
+.comment.sel{outline:2px solid var(--sel)}
+.node{position:absolute;width:230px;background:var(--card);border:1px solid var(--line);border-radius:9px;box-shadow:0 4px 16px rgba(0,0,0,.25);user-select:none}
+.node.sel{outline:2px solid var(--sel);outline-offset:1px}
+.nh{padding:6px 9px 6px 10px;border-radius:9px 9px 0 0;background:linear-gradient(90deg,color-mix(in srgb,var(--k) 45%,var(--head)),var(--head));cursor:move;display:flex;gap:6px;align-items:center}
+.nh b{flex:1;font-size:12.5px}.st{font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;border:1px solid var(--s);color:var(--s);white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+.nb{display:flex;justify-content:space-between;gap:6px;padding:6px 0}
+.col{display:flex;flex-direction:column;gap:5px;min-width:0}
+.pin{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--mute);white-space:nowrap}
+.col.in .pin{padding-left:0}.col.out .pin{justify-content:flex-end}
+.dotp{position:relative;width:11px;height:11px;border-radius:50%;border:2px solid var(--p);background:transparent;flex:none;cursor:crosshair}
+.dotp::after{content:"";position:absolute;inset:-8px}
+.dotp.on{background:var(--p)}.dotp.exec{border:none;border-radius:0;background:none;width:11px;height:12px}
+.dotp.exec::before{content:"";position:absolute;left:1px;top:0;border-left:10px solid var(--p);border-top:6px solid transparent;border-bottom:6px solid transparent}
+.col.in .dotp{margin-left:-6px}.col.out .dotp{margin-right:-6px}
+.note{padding:0 10px 7px;color:var(--mute);font-size:11px;max-height:62px;overflow:hidden}
+aside{width:310px;border-left:1px solid var(--line);background:var(--panel);padding:12px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+aside label{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
+aside input,aside textarea,aside select{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:7px;padding:6px 8px}
+aside textarea{min-height:70px;resize:vertical}aside .hint{font-size:11px;color:var(--mute)}
+aside h2{font-size:14px;margin:0}.row2{display:flex;gap:6px}.row2>*{flex:1}
+.toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--lav);padding:7px 12px;border-radius:8px;opacity:0;transition:opacity .3s;z-index:9}
+.toast.on{opacity:1}
+@media (max-width:760px){main{flex-direction:column}aside{width:auto;max-height:42%;border-left:none;border-top:1px solid var(--line);padding-bottom:72px}.legend{display:none}}
+</style>
+<link rel="stylesheet" href="/control/live.css"></head>
+<body>
+<header>
+  <h1>PINR <span>Blueprint</span></h1>
+  <button id="bAdd" title="Add a node at the centre of the view">+ Node</button>
+  <button id="bAddC" title="Add a comment box (a zone)">+ Zone</button>
+  <button id="bFit">Fit</button>
+  <button id="bZin">+</button><button id="bZout">−</button>
+  <span class="sp"></span>
+  <div class="legend" id="legend"></div>
+  <button id="bTheme" title="Light / dark">◐</button>
+  <button id="bExport">Save file</button>
+  <button id="bImport">Open file</button>
+  <button id="bReset" title="Back to the team's current map">Reset</button>
+  <input type="file" id="fImport" accept=".json,application/json" hidden>
+</header>
+<main>
+  <div id="view"><div id="world"><svg id="wires"></svg></div></div>
+  <aside id="panel"></aside>
+</main>
+<div class="toast" id="toast"></div>
+<script src="/control/blueprint.js"></script>
+<script src="/control/live.js"></script>
+<script src="/control/gate.js"></script>
+<script src="/control/ask.js"></script>
+<script src="/control/badges.js"></script>
+<script src="/control/routes.js"></script>
+<script src="/control/logtab.js"></script>
+<script src="/control/keytab.js"></script>
+<script src="/control/adstab.js"></script>
+<script src="/control/submit.js"></script>
+<script src="/control/livewires.js"></script>
+</body></html>

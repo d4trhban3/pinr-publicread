@@ -1,0 +1,11 @@
+# one on-demand pass every 15 minutes; a pass with nothing in demand, or the cap reached, sends nothing.
+[Unit]
+Description=PINR X check on demand, every 15 minutes
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=15min
+Unit=pinr-xdemand.service
+
+[Install]
+WantedBy=timers.target

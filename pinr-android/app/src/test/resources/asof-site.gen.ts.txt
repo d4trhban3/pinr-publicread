@@ -1,0 +1,5 @@
+import { formatAsOf } from "./world/format";
+// Run with TZ=UTC: the site's formatAsOf for every 7th minute of a day and the clock's edges.
+const base = Date.UTC(2026, 9, 16, 0, 0);
+const mins = [...Array.from({ length: 206 }, (_, i) => i * 7), 0, 59, 60, 719, 720, 721, 779, 780, 1439];
+console.log(JSON.stringify(mins.map((m) => ({ ms: base + m * 60_000 + 37_000, text: formatAsOf(base + m * 60_000 + 37_000) }))));

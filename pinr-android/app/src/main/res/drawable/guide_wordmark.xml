@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Converted from pinr-live/public/art/guide-wordmark-dark.svg (the site's GUIDE wordmark drawn to match the PINR one; do not edit by hand). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="42dp" android:height="13dp" android:viewportWidth="1660.0" android:viewportHeight="529.007">
+  <path android:fillColor="#F4EEFF" android:pathData="M340,29H110A110,110 0 0 0 0,139V380A110,110 0 0 0 110,490H230A110,110 0 0 0 340,380V240H180V320H250V375A25,25 0 0 1 225,400H115A25,25 0 0 1 90,375V144A25,25 0 0 1 115,119H340Z" />
+  <path android:fillColor="#F4EEFF" android:pathData="M400,29H490V375A25,25 0 0 0 515,400H625A25,25 0 0 0 650,375V29H740V380A110,110 0 0 1 630,490H510A110,110 0 0 1 400,380Z" />
+  <path android:fillColor="#F4EEFF" android:pathData="M800,29H890V490H800Z" />
+  <path android:fillColor="#F4EEFF" android:pathData="M950,29H1180A110,110 0 0 1 1290,139V380A110,110 0 0 1 1180,490H950ZM1040,119V400H1175A25,25 0 0 0 1200,375V144A25,25 0 0 0 1175,119Z" />
+  <path android:fillColor="#F4EEFF" android:pathData="M1350,29H1660V119H1440V215H1630V300H1440V400H1660V490H1350Z" />
+</vector>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Release builds read the server over HTTPS only: calls go to https://pinr.io/api/…, and the app refuses any other scheme. -->
+	<key>PINRFeedURL</key>
+	<string>https://pinr.io</string>
+	<!-- A link `pinr://coin/<address>` opens that coin in the app. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>io.pinr.app</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>pinr</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

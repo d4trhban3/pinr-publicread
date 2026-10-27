@@ -1,0 +1,17 @@
+# Base and BNB launchpads into PINR (chains/service.py). A user unit of `pinr` (lingering),
+# like pinr-trades: restarted by `pinr` without sudo. No key is read: every source is free and keyless.
+# Off for one launchpad: PINR_CHAINS_OFF=clanker,zora,virtuals,fourmeme,flap.
+[Unit]
+Description=PINR Base and BNB launchpads
+
+[Service]
+WorkingDirectory=%h/pinr/engine
+ExecStart=/usr/bin/python3 chains/service.py run
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=10
+StandardOutput=append:%h/pinr/engine/chains/chains.log
+StandardError=append:%h/pinr/engine/chains/chains.log
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,46 @@
+# Secrets and local settings
+.env
+*.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+local.properties
+
+# Dependencies and build output
+node_modules/
+dist/
+dist-server/
+build/
+.gradle/
+.kotlin/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Data, caches and logs (never committed)
+.cache/
+.data/
+.sample-drop/
+results/
+frontend-feed/
+*.db
+*.sqlite
+*.sqlite3
+*.log
+
+# Editors and OS
+.DS_Store
+.idea/
+*.iml
+.vscode/

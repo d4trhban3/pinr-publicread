@@ -1,0 +1,17 @@
+# curve coins' trades over one standard Solana websocket (livews/trades.mjs; plan ops/PLAN-206-WEBSOCKET.md).
+# A user unit of `pinr` (lingering): restarted by `pinr` without sudo. Off unless `trades_ws` is "on" in
+# scanner/settings.json. The node's key is read from the engine's .env by the service and never appears here.
+# Node: /usr/local/bin/node, where the server keeps it (pinr-feed runs /usr/local/bin/npx); not the Mac's ~/.local/node.
+[Unit]
+Description=PINR curve trades over the Solana websocket
+
+[Service]
+WorkingDirectory=%h/pinr/engine
+ExecStart=/usr/local/bin/node livews/trades.mjs
+Restart=always
+RestartSec=10
+StandardOutput=append:%h/pinr/engine/scanner/trades_ws.log
+StandardError=append:%h/pinr/engine/scanner/trades_ws.log
+
+[Install]
+WantedBy=default.target

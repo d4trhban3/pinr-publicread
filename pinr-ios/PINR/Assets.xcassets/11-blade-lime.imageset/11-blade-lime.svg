@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" role="img" aria-label="PINR">
+  <!-- Asset 11 — Blade on lime accent field. High-contrast. Assertive. -->
+  <!-- Dark blade on lime: very few brands own this contrast pair. Memorable. -->
+  <rect width="1080" height="1080" fill="#D6FF3C"/>
+
+  <!-- Blade — dark body on lime; use dark mark variant -->
+  <g transform="translate(395.5, 370) scale(1.328125)">
+    <!-- Body: pure dark on lime -->
+    <path fill="#12161A" d="M182.75,7.01c6.93-8.26,19.39-9.34,27.63-2.38,8.24,6.96,9.29,19.5,2.37,27.78C141.79,106.89,70.86,181.39-.1,255.86,60.86,172.91,121.8,89.97,182.75,7.01Z"/>
+    <!-- Lime-on-lime tip at top: invisible on lime — creates mystery of the missing tip -->
+    <!-- Use deep purple for the top tip on lime so something stays readable -->
+    <path fill="#6C4DFB" d="M182.75,7.01c6.97-8.33,19.34-9.39,27.63-2.38h0c8.29,7.01,9.34,19.45,2.37,27.78l-38.14,14.94h0l8.16-40.34h-.02Z"/>
+    <!-- Purple sweep — dark purple on lime, strong contrast -->
+    <path fill="#6C4DFB" d="M183.63,92.04h0l-108.17,157.94c-5.26,6.51-14.86,7.57-21.44,2.36h0c-6.57-5.2-7.63-14.7-2.37-21.21L183.63,92.04Z"/>
+    <!-- Bottom tip: dark -->
+    <path fill="#12161A" d="M75.49,250.04c-5.26,6.43-14.88,7.48-21.45,2.35h0c-6.59-5.14-7.65-14.51-2.36-20.94l29.42-12.04h0l-5.58,30.64h-.02Z"/>
+  </g>
+</svg>

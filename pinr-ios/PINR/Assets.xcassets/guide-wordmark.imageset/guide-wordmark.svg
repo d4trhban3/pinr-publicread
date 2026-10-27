@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- "GUIDE" drawn to match the PINR wordmark (art pack 64/65): the same cap height (y 29 to 490), stroke (90) and letter gap, the same thin violet base line. For the header's centre "PINR GUIDE" button. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1660 529.007" fill="none" role="img" aria-label="GUIDE">
+  <path d="M0 520H1660" stroke="#6C4DFB" stroke-opacity=".3" stroke-width="1" />
+  <g id="letters" fill="#F4EEFF" fill-rule="evenodd">
+    <path d="M340,29H110A110,110 0 0 0 0,139V380A110,110 0 0 0 110,490H230A110,110 0 0 0 340,380V240H180V320H250V375A25,25 0 0 1 225,400H115A25,25 0 0 1 90,375V144A25,25 0 0 1 115,119H340Z" />
+    <path d="M400,29H490V375A25,25 0 0 0 515,400H625A25,25 0 0 0 650,375V29H740V380A110,110 0 0 1 630,490H510A110,110 0 0 1 400,380Z" />
+    <path d="M800,29H890V490H800Z" />
+    <path d="M950,29H1180A110,110 0 0 1 1290,139V380A110,110 0 0 1 1180,490H950ZM1040,119V400H1175A25,25 0 0 0 1200,375V144A25,25 0 0 0 1175,119Z" />
+    <path d="M1350,29H1660V119H1440V215H1630V300H1440V400H1660V490H1350Z" />
+  </g>
+</svg>

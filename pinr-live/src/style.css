@@ -1,0 +1,4972 @@
+/*
+ * Design tokens. One live accent (lime) on ink. The teaser art behind carries its own colour;
+ * the interface itself stays monochrome.
+ */
+:root {
+  color-scheme: dark;
+  --ink: #0a0c0e;
+  --text: #f4eeff;
+  --mute: #9aa1ae;
+  --live: #d6ff3c;
+  --mandarin: #ff8c1a;
+  --on-live: #0a0c0e;
+  --knob: #f4eeff;
+  /* the colours the rest of this file is built from, as "r, g, b" so each use can set its own opacity */
+  --fg-rgb: 255, 255, 255; /* hairlines, rims, soft fills */
+  --glass-rgb: 0, 0, 0; /* tile glass and dark panels */
+  --panel-rgb: 10, 12, 14; /* menus and sheets */
+  --live-rgb: 214, 255, 60;
+  --mand-rgb: 255, 140, 26;
+  --text-rgb: 244, 238, 255;
+  --amber: #ffd24a;
+  --amber-rgb: 255, 210, 74;
+  --wash: rgba(0, 0, 0, 0); /* what is laid over the live background */
+  --font: -apple-system, BlinkMacSystemFont, "Inter Variable", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+  /* The safe zone: how far from the window's side everything sits. */
+  --edge: 16px;
+}
+@media (min-width: 600px) {
+  :root {
+    --edge: 24px;
+  }
+}
+/*
+ * LIGHT MODE. The dark scene's counterpart in its own colours (the operator, 2026-10-25: not "a glazed over white faded version of the dark"):
+ * a lavender-paper ground, the light teaser art (art/pinr-system-teaser-light.svg: deep violet and olive-lime on lavender), white glass tiles
+ * with real rims, dark ink for text, and a deeper olive and orange so the accents still read on a light surface. No wash over the dark art.
+ * It follows the phone's setting until the user taps the sun/moon button; that choice is saved (see src/ui/theme.ts).
+ */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ink: #ebe4f7;
+  --text: #14161c;
+  --mute: #434a58; /* small grey text: at least 4.5:1 (WCAG AA) on the pale tiles, even through their 0.83 opacity */
+  --live: #587a00;
+  --mandarin: #d96100;
+  --on-live: #ffffff;
+  --knob: #ffffff;
+  --fg-rgb: 14, 18, 28;
+  --glass-rgb: 245, 241, 251; /* a soft lavender-white, not pure white */
+  --panel-rgb: 242, 238, 249;
+  --live-rgb: 88, 122, 0;
+  --mand-rgb: 217, 97, 0;
+  --text-rgb: 20, 22, 28;
+  --amber: #8a6400;
+  --amber-rgb: 168, 124, 0;
+  --wash: rgba(0, 0, 0, 0);
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  overscroll-behavior: none;
+  /* The app owns every gesture: no browser scroll, zoom or text selection. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+#bg,
+#grid {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+/* The band between header and footer: a plain rectangle crop. (clip-path made the phone redraw every moving piece through a mask each frame.) */
+#clipper {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: var(--clip-top, 0px);
+  bottom: var(--clip-bottom, 0px);
+  overflow: hidden;
+}
+#inner {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: calc(-1 * var(--clip-top, 0px));
+  height: var(--vh, 100vh);
+}
+#pages,
+#glassLayer,
+#streams,
+#stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+#stage,
+#glassLayer,
+#pages {
+  overflow: hidden;
+}
+#pages {
+  pointer-events: none;
+}
+#glassLayer {
+  pointer-events: none;
+}
+.world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+/* LIVE BACKGROUND: the PINR system teaser video, drifting slightly against the camera for depth. */
+#bg {
+  overflow: hidden;
+  pointer-events: none;
+}
+/* Slightly oversized (7% each side) so its edges never show while it drifts against the camera. */
+#bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--wash);
+  pointer-events: none;
+}
+#bg video,
+#bg img {
+  position: absolute;
+  left: -7%;
+  top: -7%;
+  width: 114%;
+  height: 114%;
+  object-fit: cover;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  pointer-events: none;
+  user-select: none;
+  background: var(--ink);
+}
+/* Desktop width: the SVG teaser; phone width (under 600 px, PHONE_WIDTH in src/world/grid.ts): the creep video. */
+#bg img {
+  background: var(--ink);
+}
+@media (max-width: 599.98px) {
+  #bg img {
+    display: none;
+  }
+}
+@media (min-width: 600px) {
+  #bg video {
+    display: none;
+  }
+}
+/* Light mode: the light teaser at every width (the creep video is dark art; it is not shown or downloaded in light). */
+:root[data-theme="light"] #bg video {
+  display: none;
+}
+@media (max-width: 599.98px) {
+  :root[data-theme="light"] #bg img {
+    display: block;
+  }
+}
+#grid,
+#streams {
+  pointer-events: none;
+}
+
+/*
+ * TILE MATERIAL. Every tile is two layers, with the streams sandwiched between them:
+ *   .glass   (below the streams)  black at 60%, glass rim, moving light
+ *   streams  (canvas)             the flowing data, sharp, above the blur
+ *   .card    (above the streams)  the text, always crisp
+ * --heat is 0 (calm) to 1 (hot): the live accent rising through rim, number and glow.
+ */
+.glass,
+.card {
+  --heat: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  border-radius: var(--rad, 28px);
+  /* Its own compositor layer: moving a tile is a cheap slide, not a repaint of its shadows and gradients. */
+  will-change: transform;
+}
+.glass {
+  overflow: hidden;
+  /* Not contain:paint, which would clip the soft shadow below the tile. */
+  contain: layout style;
+  /* Plain black at 80%: no blur, no tint. The live background shows through, dimmed. */
+  background: rgba(var(--glass-rgb), 0.8);
+  box-shadow:
+    /* glass rim: bright top-left, dim bottom-right, lime all round when hot */
+    inset 1px 1px 0 color-mix(in srgb, var(--ev, var(--live)) calc(var(--heat) * 100%), rgba(var(--fg-rgb), 0.3)),
+    inset -1px -1px 0 color-mix(in srgb, var(--ev, var(--live)) calc(var(--heat) * 70%), rgba(var(--fg-rgb), 0.1)),
+    inset 0 0 0 1px color-mix(in srgb, var(--ev, var(--live)) calc(var(--heat) * 55%), rgba(var(--fg-rgb), 0.045)),
+    /* thickness */
+    inset 0 -18px 28px -16px rgba(var(--glass-rgb), 0.4),
+    inset 0 22px 34px -26px rgba(var(--fg-rgb), 0.07),
+    /* lift off the background */
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 14px 28px -16px rgba(0, 0, 0, 0.55),
+    0 0 calc(var(--heat) * 26px) color-mix(in srgb, var(--ev, var(--live)) calc(var(--heat) * 28%), transparent);
+}
+/* Light mode: the tile's edge is a real rim in PINR violet and its lift a violet-tinted shadow, so white glass stands off the lavender ground. */
+:root[data-theme="light"] .glass {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--ev, var(--live)) calc(var(--heat) * 70%), rgba(108, 77, 251, 0.24)),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -18px 28px -18px rgba(108, 77, 251, 0.08),
+    0 1px 2px rgba(75, 43, 176, 0.14),
+    0 14px 28px -16px rgba(75, 43, 176, 0.3),
+    0 0 calc(var(--heat) * 26px) color-mix(in srgb, var(--ev, var(--live)) calc(var(--heat) * 28%), transparent);
+}
+.card {
+  padding: var(--pad, 18px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  contain: layout style;
+}
+/* Off-screen tiles leave layout entirely: zoom and scroll then only ever cost what you can see. */
+.glass.off,
+.card.off {
+  display: none;
+}
+.glass.gone,
+.card.gone {
+  display: none;
+}
+.glass .spec {
+  position: absolute;
+  left: -35%;
+  top: -70%;
+  width: 170%;
+  height: 130%;
+  background: radial-gradient(closest-side, rgba(var(--fg-rgb), 0.1), rgba(var(--fg-rgb), 0));
+  pointer-events: none;
+  will-change: transform;
+}
+.glass .flash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 50% 100%, color-mix(in srgb, var(--ev, var(--live)) 38%, transparent), transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+}
+.glass.ping .flash {
+  animation: flash 1.1s ease-out;
+}
+@keyframes flash {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.card .top,
+.card .n {
+  position: relative;
+  z-index: 1;
+  /* The background shows through the tile, so text keeps a soft dark halo to stay legible. */
+  text-shadow: 0 1px 10px rgba(var(--panel-rgb), 0.6);
+}
+.card .top {
+  min-height: 0;
+}
+
+/*
+ * TYPE, BY ZOOM LEVEL (see LOD in cards.ts). Each level has its own design size, so text stays
+ * a sensible size at every zoom and new detail appears instead of everything just growing.
+ * SF on Apple devices, Inter elsewhere. Numbers are tabular so they never jitter while rolling.
+ */
+#glassLayer[data-lod="0"] {
+  --rad: 14px;
+}
+#glassLayer[data-lod="1"] {
+  --rad: 19px;
+}
+#glassLayer[data-lod="2"] {
+  --rad: 23px;
+}
+#glassLayer[data-lod="3"] {
+  --rad: 28px;
+}
+#stage[data-lod="0"] {
+  /* The 5 x 5 grid makes tiles about 66 wide and 130 tall. The top and bottom padding is a little tighter to hold the label rows. */
+  --pad: 7px 5px 6px;
+  --rad: 14px;
+  --fk: 7px;
+  --fname: 9px;
+  --fnum: 22px;
+  --fnote: 8px;
+  --fcov: 8.5px;
+  --fcovl: 5.4px;
+  --fimg: 27px;
+  --ftick: 6.2px;
+}
+#stage[data-lod="1"] {
+  --pad: 10px;
+  --rad: 19px;
+  --fk: 8.5px;
+  --fname: 12px;
+  --fnum: 30px;
+  --fnote: 9.5px;
+  --fcov: 10.5px;
+  --fcovl: 6.8px;
+  --fimg: 37px;
+  --ftick: 7.8px;
+}
+#stage[data-lod="2"] {
+  --pad: 13px;
+  --rad: 23px;
+  --fk: 9.5px;
+  --fname: 14px;
+  --fnum: 38px;
+  --fnote: 11px;
+  --fcov: 12px;
+  --fcovl: 8px;
+  --fimg: 48px;
+  --ftick: 9.4px;
+}
+#stage[data-lod="3"] {
+  --pad: 18px;
+  --rad: 28px;
+  --fk: 10.5px;
+  --fname: 17px;
+  --fnum: 46px;
+  --fnote: 12px;
+  --fcov: 14px;
+  --fcovl: 9.5px;
+  --fimg: 61px;
+  --ftick: 11.5px;
+}
+.card {
+  --tn: 1;
+  --tm: 1;
+}
+.card .k {
+  display: none;
+  justify-content: flex-end;
+  font: 500 var(--fk) / 1 var(--mono);
+  letter-spacing: 0.14em;
+  color: var(--mute);
+  text-transform: uppercase;
+}
+#stage[data-lod="2"] .card .k,
+#stage[data-lod="3"] .card .k {
+  display: flex;
+}
+#stage .card .k.none {
+  display: none;
+}
+.card .sim {
+  opacity: 0.55;
+}
+.card .ident {
+  /* Classic: a round picture (wearing the verification badge) with the name and $ticker beside it. */
+  display: flex;
+  align-items: center;
+  gap: calc(var(--fimg) * 0.2);
+  min-width: 0;
+}
+/* A narrow tile (see STACK_BELOW_PX in cards.ts): the name and ticker stand under the picture, so the name has the tile's whole width. */
+#stage[data-stack="1"] .card .ident {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--fimg) * 0.14);
+}
+#stage[data-stack="1"] .card .idtxt {
+  width: 100%;
+}
+/* A gap below the small tag row, only when that row is actually showing (zoomed in, made-up data with a tag). Otherwise the picture sits in the corner. */
+#stage[data-lod="2"] .card .k:not(.none) + .ident,
+#stage[data-lod="3"] .card .k:not(.none) + .ident {
+  margin-top: 0.7em;
+}
+/* The ticker picture: a circle. Until a token has one, a plain disc with its initial. */
+.card .avwrap {
+  flex: none;
+  position: relative;
+  width: var(--fimg);
+  height: var(--fimg);
+}
+.card .avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 35% 30%, rgba(var(--fg-rgb), 0.22), rgba(var(--fg-rgb), 0.06) 70%);
+  box-shadow: inset 0 0 0 1px rgba(var(--fg-rgb), 0.18);
+  font: 600 calc(var(--fimg) * 0.46) / 1 var(--font);
+  color: var(--mute);
+  text-shadow: none;
+}
+.card .avatar {
+  position: relative;
+}
+/* The picture fills the wide button and is cropped to it from the centre (it is held to the button's box, never its own shape). */
+.card .avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.card .idtxt {
+  min-width: 0;
+  display: grid;
+  gap: calc(var(--fimg) * 0.1);
+}
+.card .name {
+  font: 600 calc(var(--fname) * var(--tm)) / 1.1 var(--font);
+  /* never under 9 screen pixels: a name that does not fit is cut short with an ellipsis instead (--nmin is set from the zoom) */
+  font-size: max(calc(var(--fname) * var(--tm)), var(--nmin, 0px));
+  letter-spacing: -0.012em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* $TICKER: the small mono font, the same family as the coverage readout. */
+.card .tick {
+  font: 400 var(--ftick) / 1 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card .detail {
+  display: none;
+  margin-top: 4px;
+  font: 400 calc(var(--fname) * 0.78) / 1.35 var(--font);
+  letter-spacing: -0.006em;
+  color: var(--mute);
+}
+#stage[data-lod="3"] .card .detail {
+  display: block;
+}
+.card .note {
+  display: block;
+  margin-top: 0.5em;
+  font: 500 var(--fnote) / 1.2 var(--mono);
+  letter-spacing: 0.01em;
+  color: var(--ev, var(--live));
+  opacity: 0;
+  transform: translateY(3px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+.card .note.on {
+  opacity: 1;
+  transform: none;
+}
+/* The bottom row: the score at the left (coloured on the mandarin-to-lime scale), coverage at the right. */
+.card .n {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.25em;
+  font: 590 calc(var(--fnum) * var(--tn)) / 0.95 var(--font);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+}
+/* Coverage: the percentage over the word. */
+.card .val {
+  min-width: 0;
+}
+.card .cov {
+  flex: none;
+  display: grid;
+  justify-items: end;
+  gap: 1.5px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: right;
+}
+.card .cov b {
+  font: 500 var(--fcov) / 1 var(--mono);
+  color: var(--text);
+  opacity: 0.85;
+}
+.card .cov i {
+  font: 400 var(--fcovl) / 1 var(--mono);
+  font-style: normal;
+  letter-spacing: 0.02em;
+  color: var(--mute);
+}
+/* A flagged token shows just its label, in mandarin, where the score would be (smaller: VAMP is wider than a score). */
+.card.st-flag .n .val {
+  color: var(--mandarin);
+  font-weight: 700;
+  letter-spacing: 0;
+  font-size: calc(var(--fnum) * 0.4);
+}
+
+#hud {
+  position: fixed;
+  left: calc(var(--edge) + 4px);
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  font: 500 10px/1.4 var(--mono);
+  color: var(--live);
+  letter-spacing: 0.04em;
+  white-space: pre;
+  pointer-events: none;
+  z-index: 6;
+}
+
+/*
+ * HEADER. The same glass as the tiles, with no outline: PINR on the left, two symbols on the right.
+ * Tiles scroll underneath it and blur through it.
+ */
+#bar {
+  position: fixed;
+  z-index: 8;
+  left: var(--edge);
+  right: var(--edge);
+  top: calc(12px + env(safe-area-inset-top));
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px 0 6px;
+  border-radius: 25px;
+  background: rgba(var(--glass-rgb), 0.8);
+  /* No rim and no outline: just thickness and a soft lift. */
+  box-shadow:
+    inset 0 -16px 24px -14px rgba(0, 0, 0, 0.4),
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 14px 28px -16px rgba(0, 0, 0, 0.55);
+}
+#bar .wordmark {
+  height: 17px;
+  width: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+#bar .left {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+/* The compass owns the middle of the bar: the data label is in the Diagnostics panel instead. */
+#bar .simtag {
+  display: none !important;
+}
+#bar .simtag[hidden] {
+  display: none;
+}
+#bar .simtag {
+  margin-left: 9px;
+  font: 500 8.5px/1 var(--mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mute);
+  opacity: 0.55;
+  white-space: nowrap;
+  pointer-events: none;
+}
+#bar .simtag .short {
+  display: none;
+}
+@media (max-width: 359px) {
+  #bar .simtag .long {
+    display: none;
+  }
+  #bar .simtag .short {
+    display: inline;
+  }
+}
+/* The Back button: a lime arrow. */
+#bar .icon.back {
+  color: var(--live);
+}
+#bar .actions {
+  display: flex;
+  gap: 2px;
+}
+#bar .icon {
+  all: unset;
+  box-sizing: border-box;
+  position: relative;
+  flex: none;
+  width: 36px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 21px;
+  color: var(--mute);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    opacity 0.25s ease;
+}
+#bar .icon svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#bar .icon.off {
+  opacity: 0.28;
+  pointer-events: none;
+  cursor: default;
+}
+#bar .icon:hover,
+#bar .icon.open {
+  color: var(--text);
+  background: rgba(var(--fg-rgb), 0.07);
+}
+#bar .icon.on {
+  color: var(--live);
+}
+#bar .icon .dot {
+  position: absolute;
+  right: 9px;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--live);
+  box-shadow: 0 0 8px var(--live);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.pop {
+  position: fixed;
+  z-index: 9;
+  top: calc(12px + env(safe-area-inset-top) + 50px + 8px);
+  right: var(--edge);
+  min-width: 236px;
+  padding: 8px;
+  border-radius: 24px;
+  background: rgba(var(--panel-rgb), 0.97);
+  box-shadow:
+    inset 0 -16px 24px -14px rgba(var(--glass-rgb), 0.4),
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 22px 40px -18px rgba(0, 0, 0, 0.7);
+  animation: pop 0.18s ease-out both;
+  transform-origin: 90% 0;
+}
+.pop[hidden] {
+  display: none;
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+}
+.pop .row {
+  all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+.pop .row:hover {
+  background: rgba(var(--fg-rgb), 0.07);
+}
+.pop .row svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: none;
+  stroke: var(--mute);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pop .row .rt {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+}
+.pop .row b {
+  font: 600 15px/1.1 var(--font);
+  letter-spacing: -0.012em;
+}
+.pop .row i {
+  font: 400 12px/1.2 var(--font);
+  font-style: normal;
+  color: var(--mute);
+}
+.pop .row .tick {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--live);
+  box-shadow: 0 0 10px var(--live);
+  opacity: 0;
+}
+.pop .row.on svg {
+  stroke: var(--live);
+}
+.pop .row.on .tick {
+  opacity: 1;
+}
+.pop .ptitle {
+  padding: 8px 12px 6px;
+  font: 600 15px/1.1 var(--font);
+  letter-spacing: -0.012em;
+}
+.pop .seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 8px;
+}
+.pop .segb {
+  all: unset;
+  box-sizing: border-box;
+  min-width: 42px;
+  height: 40px;
+  padding: 0 8px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  font: 600 16px/1 var(--font);
+  font-variant-numeric: tabular-nums;
+  color: var(--mute);
+  background: rgba(var(--fg-rgb), 0.06);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.pop .segb.on {
+  color: var(--on-live);
+  background: var(--live);
+}
+.pop .phint {
+  padding: 4px 12px 10px;
+  font: 400 12px/1.3 var(--font);
+  color: var(--mute);
+}
+
+/* FOOTER: five tabs in the same black glass as the header, no outline. */
+#tabbar {
+  position: fixed;
+  z-index: 8;
+  left: var(--edge);
+  right: var(--edge);
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  height: 56px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  padding: 0 4px;
+  border-radius: 28px;
+  background: rgba(var(--glass-rgb), 0.8);
+  box-shadow:
+    inset 0 -16px 24px -14px rgba(var(--glass-rgb), 0.4),
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 -10px 28px -16px rgba(0, 0, 0, 0.55);
+}
+#tabbar .tab {
+  all: unset;
+  box-sizing: border-box;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  border-radius: 24px;
+  color: var(--mute);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.2s ease;
+}
+#tabbar .tab svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#tabbar .tab .wm {
+  height: 15px;
+  width: auto;
+  opacity: 0.55;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  user-select: none;
+}
+#tabbar .tab:hover {
+  color: var(--text);
+}
+#tabbar .tab.on {
+  color: var(--live);
+}
+#tabbar .tab.on .wm {
+  opacity: 1;
+}
+#tabbar .tab.on::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--live);
+  box-shadow: 0 0 8px var(--live);
+}
+#toast {
+  position: fixed;
+  z-index: 9;
+  left: 50%;
+  bottom: calc(76px + env(safe-area-inset-bottom));
+  transform: translate(-50%, 6px);
+  padding: 9px 16px;
+  border-radius: 18px;
+  background: rgba(var(--glass-rgb), 0.78);
+  font: 500 12px/1 var(--mono);
+  letter-spacing: 0.08em;
+  color: var(--text);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+#toast.on {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* SITE MAP ROOMS */
+.pageworld {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+/*
+ * GLASS TABLETS. From the macro zoom every PINR page is a slab of clear glass: almost no tint, so the live background shows
+ * straight through; a bright, thin bevel along the top-left edges and a fainter one along the bottom-right; an inner
+ * rim that catches light; a long diagonal sheen; and a soft, light lift off the background. No dark fill, no smoke.
+ */
+.page {
+  position: absolute;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  border-radius: 30px;
+  overflow: hidden;
+  /* Clear, not milky: the interior is nearly untinted, a whisper brighter toward the corners where glass gathers light. */
+  background: linear-gradient(135deg, rgba(var(--fg-rgb), 0.05) 0%, rgba(var(--fg-rgb), 0.008) 30%, rgba(var(--fg-rgb), 0.008) 70%, rgba(var(--fg-rgb), 0.045) 100%);
+  box-shadow:
+    /* the cut edge: bright where light hits, dimmer opposite */
+    inset 1.5px 1.5px 0 rgba(var(--fg-rgb), 0.85),
+    inset -1.5px -1.5px 0 rgba(var(--fg-rgb), 0.34),
+    inset 0 0 0 1px rgba(var(--fg-rgb), 0.16),
+    /* the glass's thickness: a faint lit band just inside the edge */
+    inset 0 0 0 6px rgba(var(--fg-rgb), 0.018),
+    inset 3px 3px 10px -4px rgba(var(--fg-rgb), 0.22),
+    inset -3px -3px 10px -5px rgba(var(--fg-rgb), 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 22px 44px -28px rgba(0, 0, 0, 0.45);
+}
+/* The sheen: light running diagonally across the glass, brightest in the top-left corner. */
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(118deg, rgba(var(--fg-rgb), 0.24) 0%, rgba(var(--fg-rgb), 0.07) 16%, rgba(var(--fg-rgb), 0) 34%),
+    linear-gradient(118deg, rgba(var(--fg-rgb), 0) 60%, rgba(var(--fg-rgb), 0.09) 70%, rgba(var(--fg-rgb), 0) 80%);
+  pointer-events: none;
+}
+/* The inner rim: the back edge of the glass seen through it, which is what gives a slab its thickness. */
+.page::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 24px;
+  border: 1px solid rgba(var(--fg-rgb), 0.1);
+  border-top-color: rgba(var(--fg-rgb), 0.2);
+  border-left-color: rgba(var(--fg-rgb), 0.16);
+  pointer-events: none;
+}
+/* PINR's room holds the tile grid itself, so it is a glass frame with nothing inside. */
+.page-pinr {
+  background: transparent;
+}
+/* Discover stands in for itself: the live page sits on top of this plate, which fades in as you zoom out. */
+.page-discover {
+  opacity: var(--dplate, 1);
+}
+/* ADVERTISING AREAS are open space, not glass: just outlined slots where ads go. */
+.page-adarea {
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+}
+.page-adarea::before,
+.page-adarea::after {
+  display: none;
+}
+.page.page-adarea .pbody {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* each row takes its share of the room and no more (min 0), so all four slots stay inside it at any window shape */
+  grid-template-rows: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1.15fr);
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 10px;
+  padding: 26px 6px calc(6px + var(--room-hidden, 0px));
+}
+.page .adtag {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font: 500 10px/1 var(--mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.page .adslot {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 6px;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px dashed rgba(var(--fg-rgb), 0.2);
+}
+.page .adslot.wide {
+  grid-column: 1 / -1;
+}
+.page .pbody {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: var(--text);
+}
+.page .pbody svg {
+  width: 44px;
+  height: 44px;
+  fill: none;
+  stroke: var(--mute);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.page .ptitle {
+  font: 600 26px/1.1 var(--font);
+  letter-spacing: -0.02em;
+}
+.page .ptitle.scan {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.page .ptitle.scan .wm {
+  height: 22px;
+  width: auto;
+}
+.page .ptitle.scan i {
+  font: 500 19px/1 var(--mono);
+  font-style: normal;
+  color: var(--mute);
+}
+.page .ptitle.scan .pin {
+  height: 30px;
+  width: auto;
+  margin-left: 4px;
+}
+.page .psub {
+  font: 500 12px/1 var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.page .pwho {
+  font: 500 15px/1.2 var(--font);
+  color: var(--text);
+  opacity: 0.85;
+}
+
+.pop-info {
+  background: rgba(var(--panel-rgb), 0.96);
+  min-width: 270px;
+}
+.pop .irows {
+  display: grid;
+  gap: 2px;
+  padding: 2px 8px 4px;
+}
+.pop .irow {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 9px 4px;
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.05);
+  font: 400 13px/1.2 var(--font);
+}
+.pop .irow:last-child {
+  border-bottom: 0;
+}
+.pop .irow .ik {
+  color: var(--mute);
+}
+.pop .irow .iv {
+  font: 500 13px/1.2 var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+.pop .irow .iv.live {
+  color: var(--live);
+}
+.pop .irow .iv.warn {
+  color: var(--mandarin);
+}
+
+/*
+ * DISCOVER. A real scrolling page laid over the camera view while the camera rests on its room.
+ * Same black glass as the tiles; lime for good and for buys, mandarin for bad and for sells.
+ */
+#discover,
+#deepscan,
+#coinpage,
+#arena,
+#wallet {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--page-w, 100%);
+  height: 100%;
+  z-index: 5;
+  transform-origin: 0 0;
+  will-change: transform;
+  visibility: hidden;
+  pointer-events: none;
+  /* The page owns vertical panning; sideways gestures arrive as pointer events for page swiping. */
+  touch-action: pan-y;
+}
+#discover.on,
+#deepscan.on,
+#coinpage.on,
+#arena.on,
+#wallet.on.on {
+  visibility: visible;
+}
+/* Only at home does the page take touches; zoomed out it is just a picture and the map underneath gets the taps. */
+#discover.live,
+#deepscan.live,
+#coinpage.live,
+#arena.live,
+#wallet.live.live {
+  pointer-events: auto;
+}
+.dscroll {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  padding: calc(var(--clip-top, 70px) + 8px) var(--edge) calc(var(--clip-bottom, 80px) + 14px);
+  scrollbar-width: none;
+}
+.dscroll::-webkit-scrollbar {
+  display: none;
+}
+.dhero {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 26px 8px 22px;
+  text-align: center;
+}
+.dmarkwrap {
+  position: relative;
+  width: min(55.5%, 217px);
+}
+.dmarkbadge {
+  /* Sits on the R's leg, halfway between centred on the leg (left edge 87.2%) and hanging off its right side (left edge 97.4%): 92.3%. The leg spans 92.7%-100% of the wordmark's width. Size is the usual 46% of the wordmark's height, and it
+     hangs 10% of that height below the baseline, as on the token pictures. */
+  position: absolute;
+  left: 92.3%;
+  bottom: 0;
+  height: 46%;
+  width: auto;
+  aspect-ratio: 1;
+  transform: translateY(21.74%);
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+.dmark {
+  width: 100%;
+  height: auto;
+  display: block;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 0 28px rgba(var(--live-rgb), 0.16));
+}
+.dtag {
+  font: 600 19px/1.1 var(--font);
+  letter-spacing: -0.015em;
+}
+.ddesc {
+  max-width: 340px;
+  font: 400 13px/1.5 var(--font);
+  color: var(--mute);
+}
+.dsearchwrap {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  padding-bottom: 14px;
+}
+.dsearch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 54px;
+  padding: 0 16px;
+  border-radius: 27px;
+  background: rgba(var(--glass-rgb), 0.8);
+  box-shadow:
+    inset 1px 1px 0 rgba(var(--fg-rgb), 0.16),
+    inset -1px -1px 0 rgba(var(--fg-rgb), 0.06),
+    0 14px 28px -16px rgba(0, 0, 0, 0.55);
+}
+.dsearch > svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--mute);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+.dinput {
+  all: unset;
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+  font: 400 15px/1 var(--font);
+  color: var(--text);
+  user-select: text;
+  -webkit-user-select: text;
+  text-overflow: ellipsis;
+}
+.dinput::placeholder {
+  color: var(--mute);
+  opacity: 0.8;
+}
+.dpulse {
+  display: grid;
+  gap: 8px;
+  padding: 4px 6px 12px;
+}
+.dpt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 11px/1 var(--mono);
+  letter-spacing: 0.14em;
+  color: var(--text);
+  opacity: 0.9;
+}
+.dpt .live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--live);
+  box-shadow: 0 0 10px var(--live);
+  animation: beat 2.4s ease-in-out infinite;
+}
+@keyframes beat {
+  50% {
+    opacity: 0.35;
+  }
+}
+.dpl {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font: 400 11px/1 var(--mono);
+  color: var(--mute);
+}
+.drefresh {
+  all: unset;
+  flex: none;
+  padding: 7px 11px;
+  border-radius: 12px;
+  background: rgba(var(--fg-rgb), 0.07);
+  color: var(--text);
+  font: 500 11px/1 var(--mono);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.dtabs {
+  display: flex;
+  gap: 6px;
+  padding: 0 2px 10px;
+}
+.dtab {
+  all: unset;
+  box-sizing: border-box;
+  flex: 1;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  background: rgba(var(--glass-rgb), 0.8);
+  box-shadow: inset 1px 1px 0 rgba(var(--fg-rgb), 0.12);
+  color: var(--mute);
+  font: 550 13px/1 var(--font);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.2s ease;
+}
+.dtab.on {
+  color: var(--on-live);
+  background: var(--live);
+  box-shadow: none;
+}
+.dnote {
+  padding: 0 8px 10px;
+  font: 400 11px/1 var(--mono);
+  letter-spacing: 0.04em;
+  color: var(--mute);
+}
+.dlist {
+  display: grid;
+  gap: 8px;
+}
+.dempty {
+  padding: 28px 18px;
+  text-align: center;
+  font: 400 13px/1.45 var(--font);
+  color: var(--mute);
+}
+.drow {
+  display: grid;
+  gap: 10px;
+  padding: 14px 14px 12px 14px;
+  border-radius: 26px;
+  background: rgba(var(--glass-rgb), 0.8);
+  box-shadow:
+    inset 1px 1px 0 rgba(var(--fg-rgb), 0.2),
+    inset -1px -1px 0 rgba(var(--fg-rgb), 0.07),
+    inset 0 -18px 28px -16px rgba(var(--glass-rgb), 0.4),
+    0 14px 28px -16px rgba(0, 0, 0, 0.55);
+}
+.drow[hidden] {
+  display: none;
+}
+/* The Discover card: left = the PINR tile's content, middle = the lite chart, right = the details. */
+.dtop {
+  display: grid;
+  /* Narrow card: details left, score top right, the chart across the full width beneath. */
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "left right"
+    "chart chart";
+  align-items: stretch;
+  gap: 10px 10px;
+}
+.dleft {
+  grid-area: left;
+}
+.dright {
+  grid-area: right;
+}
+.dchartwrap {
+  grid-area: chart;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto minmax(120px, 1fr);
+  gap: 6px;
+}
+/* The lite chart's options: the live line or candles at a size, and line or candles. */
+.dchopts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+.dchopt {
+  all: unset;
+  box-sizing: border-box;
+  min-height: 26px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  border-radius: 13px;
+  background: rgba(var(--fg-rgb), 0.07);
+  font: 500 11.5px/1 var(--mono);
+  color: var(--mute);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.dchopt.on {
+  background: rgba(var(--live-rgb), 0.16);
+  box-shadow: inset 0 0 0 1px rgba(var(--live-rgb), 0.45);
+  color: var(--live);
+}
+.dchkind {
+  margin-left: 6px;
+}
+.dleft {
+  min-width: 0;
+  display: grid;
+  align-content: space-between;
+  justify-items: start;
+  gap: 10px;
+}
+.dident {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.dfigs {
+  display: grid;
+  gap: 3px;
+  font: 500 12px/1.15 var(--mono);
+  white-space: nowrap;
+}
+.dfig {
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+  overflow: hidden;
+}
+.dfig i {
+  font-style: normal;
+  font-size: 0.82em;
+  letter-spacing: 0.04em;
+  color: var(--mute);
+}
+.dfig b {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dright {
+  display: grid;
+  align-content: start;
+  justify-items: end;
+  gap: 8px;
+  min-width: 0;
+}
+.drow .avwrap {
+  flex: none;
+  position: relative;
+  width: 46px;
+  height: 46px;
+}
+.drow .avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 35% 30%, rgba(var(--fg-rgb), 0.22), rgba(var(--fg-rgb), 0.06) 70%);
+  box-shadow: inset 0 0 0 1px rgba(var(--fg-rgb), 0.18);
+  font: 600 21px/1 var(--font);
+  color: var(--mute);
+  overflow: hidden;
+}
+.drow .avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.drow .idtxt {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+}
+.drow .name {
+  font: 600 14px/1.1 var(--font);
+  letter-spacing: -0.012em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.drow .tick {
+  font: 400 10.5px/1 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* The buy/sell ribbon: the size it is on the PINR page, directly to the left of the score. */
+.dribbon {
+  width: 132px;
+  height: 42px;
+}
+.dchart {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 84px;
+  align-self: center;
+}
+.dscore {
+  min-width: 58px;
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+}
+.dscore .cov {
+  display: grid;
+  justify-items: end;
+  gap: 1.5px;
+  line-height: 1;
+}
+.dscore .cov b {
+  font: 500 10px/1 var(--mono);
+  color: var(--text);
+  opacity: 0.85;
+}
+.dscore .cov i {
+  font: 400 8.5px/1 var(--mono);
+  font-style: normal;
+  letter-spacing: 0.02em;
+  color: var(--mute);
+}
+.dscore .val {
+  font: 650 42px/1 var(--font);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  color: var(--mute);
+}
+.drow[data-look="thin"] .dscore .val {
+  opacity: 0.6;
+}
+.drow[data-look="flag"] .dscore .val {
+  color: var(--mandarin);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.dbot {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.dbot .dchg {
+  grid-column: 1;
+  grid-row: 1;
+}
+.dbot .dmoney {
+  grid-column: 2;
+  grid-row: 1;
+  text-align: right;
+}
+.dbot .tlink,
+.dbot .dscan {
+  grid-row: 2;
+  justify-content: center;
+}
+.dchg {
+  flex: none;
+  font: 600 13px/1 var(--mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--live);
+}
+.dchg[data-dir="down"] {
+  color: var(--mandarin);
+}
+.dmoney {
+  flex: 1;
+  min-width: 0;
+  font: 400 10.5px/1 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dscan {
+  all: unset;
+  box-sizing: border-box;
+  flex: none;
+  height: 34px;
+  padding: 0 13px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 17px;
+  background: rgba(var(--fg-rgb), 0.08);
+  color: var(--text);
+  font: 550 12.5px/1 var(--font);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease;
+}
+.dscan:active {
+  background: rgba(var(--live-rgb), 0.22);
+}
+.dscan svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+.page-discover .pbody {
+  display: none;
+}
+
+/* The partner's name, as a soft gradient wordmark (colours are ours, not the partners' branding). */
+.page .adname {
+  font: 700 42px/1.05 var(--font);
+  letter-spacing: -0.035em;
+  background: var(--adgrad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding: 0 4px;
+}
+.page .adslot {
+  position: relative;
+  text-align: center;
+  padding: 10px;
+}
+.page .adslot.wide .adname {
+  font-size: 34px;
+}
+.page .adslot:not(.wide) .adname {
+  font-size: 19px;
+}
+.page .adkind {
+  font: 500 10px/1.25 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+/* A small "Ad" chip in each slot's corner, so a filled slot is never mistaken for content. */
+.page .adchip {
+  position: absolute;
+  top: 9px;
+  right: 11px;
+  padding: 3px 5px;
+  border-radius: 5px;
+  border: 1px solid rgba(var(--fg-rgb), 0.18);
+  font: 600 8px/1 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.page-ads {
+  --adgrad: linear-gradient(100deg, #9945ff 0%, #5ec6c0 55%, #19fb9b 100%);
+}
+.page-adsw {
+  --adgrad: linear-gradient(100deg, #4aa8ff 0%, #8f7bff 60%, var(--live) 130%);
+}
+.page-adse {
+  --adgrad: linear-gradient(100deg, var(--mandarin) 0%, #ff5e8a 55%, #b86bff 100%);
+}
+.page .adhere {
+  font: 500 12px/1 var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.pop-menu {
+  min-width: 250px;
+}
+.pop .sep {
+  height: 1px;
+  margin: 6px 12px;
+  background: rgba(var(--fg-rgb), 0.07);
+}
+
+/*
+ * SETTINGS. A full page over the view, below the header and footer, in the same black glass.
+ */
+#settings,
+#paperpage,
+#guidepanel,
+#adspanel {
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.22s ease,
+    visibility 0s linear 0.22s;
+  clip-path: inset(var(--clip-top, 0px) 0 var(--clip-bottom, 0px) 0);
+  background: radial-gradient(120% 80% at 50% 0%, rgba(var(--panel-rgb), 0.985), rgba(var(--panel-rgb), 0.99));
+  touch-action: pan-y;
+}
+#settings.on,
+#paperpage.on,
+#guidepanel.on,
+#adspanel.on {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.22s ease;
+}
+.sscroll {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  padding: calc(var(--clip-top, 70px) + 6px) var(--edge) calc(var(--clip-bottom, 80px) + 16px);
+  scrollbar-width: none;
+  -webkit-user-select: none;
+}
+.sscroll::-webkit-scrollbar {
+  display: none;
+}
+.stop {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 0 14px;
+}
+.sback {
+  all: unset;
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  color: var(--text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.sback:active {
+  background: rgba(var(--fg-rgb), 0.08);
+}
+.sback svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.stitle {
+  font: 650 28px/1.1 var(--font);
+  letter-spacing: -0.03em;
+}
+.ssec {
+  padding-bottom: 18px;
+}
+.shead {
+  padding: 0 8px 8px;
+  font: 600 11px/1 var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.scard {
+  border-radius: 26px;
+  background: rgba(var(--glass-rgb), 0.8);
+  box-shadow:
+    inset 1px 1px 0 rgba(var(--fg-rgb), 0.18),
+    inset -1px -1px 0 rgba(var(--fg-rgb), 0.06),
+    0 14px 28px -16px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+.srow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px 16px;
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.06);
+}
+.srow:last-child {
+  border-bottom: 0;
+}
+.stext {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+.stext b {
+  font: 550 15.5px/1.15 var(--font);
+  letter-spacing: -0.01em;
+}
+.stext i {
+  font: 400 12px/1.3 var(--font);
+  font-style: normal;
+  color: var(--mute);
+}
+.sright {
+  flex: none;
+}
+.sseg {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 5px;
+  max-width: 168px;
+}
+.ssegb {
+  all: unset;
+  box-sizing: border-box;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 6px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(var(--fg-rgb), 0.07);
+  color: var(--mute);
+  font: 600 15px/1 var(--font);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.ssegb.on {
+  background: var(--live);
+  color: var(--on-live);
+}
+.stoggle {
+  all: unset;
+  box-sizing: border-box;
+  position: relative;
+  width: 52px;
+  height: 31px;
+  border-radius: 16px;
+  background: rgba(var(--fg-rgb), 0.13);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.stoggle .knob {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: var(--knob);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+.stoggle.on {
+  background: var(--live);
+}
+.stoggle.on .knob {
+  transform: translateX(21px);
+  background: var(--on-live);
+}
+.swarn {
+  font: 600 12px/1 var(--mono);
+  letter-spacing: 0.1em;
+  color: var(--mandarin);
+}
+.smono {
+  font: 500 12px/1 var(--mono);
+  color: var(--mute);
+}
+.snote {
+  padding: 10px 10px 0;
+  font: 400 12.5px/1.45 var(--font);
+  color: var(--mute);
+}
+.wpcard {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 54px 16px;
+}
+.wpicon {
+  width: 44px;
+  height: 44px;
+  fill: rgba(143, 91, 255, 0.78);
+  stroke: var(--live);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.wpsoon {
+  font: 500 12px/1 var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+/* Discover's frame: the page shows only inside it (the room's edges), cropped with a plain rectangle, rounded only when zoomed out. */
+.dframe {
+  position: absolute;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+/* The little label on a tile ("SIM" for made-up data) is simply absent for real results. */
+.card .sim:empty {
+  display: none;
+}
+
+.ssegb.wide {
+  min-width: 0;
+  padding: 0 12px;
+  font-size: 13.5px;
+}
+.sstatus {
+  font: 500 12.5px/1.3 var(--mono);
+  text-align: right;
+  color: var(--text);
+}
+
+/* Flag labels scale down with their length so VAMP, MAYHEM and HONEYPOT all fit beside the coverage figure. */
+.card.st-flag[data-flen="m"] .n .val {
+  font-size: calc(var(--fnum) * 0.3);
+}
+.card.st-flag[data-flen="l"] .n .val {
+  font-size: calc(var(--fnum) * 0.22);
+}
+.drow[data-look="flag"][data-flen="m"] .dscore .val {
+  font-size: 13px;
+}
+.drow[data-look="flag"][data-flen="l"] .dscore .val {
+  font-size: 10.5px;
+}
+
+/* The funnel panel has two parts; the one that does not apply to this page is faded and inert. */
+.pop-filter {
+  min-width: 250px;
+}
+.pop .psec {
+  transition: opacity 0.2s ease;
+}
+.pop .psec.off {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* The status line is long, so it takes the room it needs and wraps instead of running under its label. */
+.sright.fill {
+  flex: 1;
+  min-width: 0;
+}
+.sstatus {
+  display: block;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* THE PAIR AND LAUNCHPAD LOGOS. A dark pill on the lower right of a token's picture, like Pump.fun's: what it trades against, then where it
+   launched. Sized from the picture's own width (container units), so it scales with the picture everywhere. */
+.avwrap {
+  container-type: size;
+}
+.pbadge {
+  position: absolute;
+  right: -24%;
+  bottom: -16%;
+  display: flex;
+  align-items: center;
+  gap: 4cqw;
+  padding: 4cqw 6cqw;
+  border-radius: 999px;
+  background: rgba(8, 10, 16, 0.92);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  pointer-events: none;
+}
+.pbadge[hidden] {
+  display: none;
+}
+.pbadge i {
+  display: block;
+  width: 40cqw;
+  height: 40cqw;
+}
+.pbadge svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/*
+ * DEEPSCAN. One token's page, laid out the way a stock page is on Robinhood: name and price, a line chart you can drag through,
+ * range pills, then sections. Same black glass as the rest; lime for up, mandarin for down.
+ */
+.page-deepscan {
+  opacity: var(--dplate, 1);
+}
+.page-deepscan .pbody {
+  display: none;
+}
+#deepscan:not(.hastoken) .dspage,
+#deepscan:not(.hastoken) .dsbar,
+#deepscan:not(.hastoken) .dsmini,
+#deepscan.hastoken .dsempty {
+  display: none;
+}
+.dsempty {
+  min-height: 60%;
+  display: grid;
+  place-content: center;
+  gap: 10px;
+  padding: 120px 30px 0;
+  text-align: center;
+}
+.dsemptyt {
+  font: 650 24px/1.1 var(--font);
+  letter-spacing: -0.02em;
+}
+.dsemptys {
+  font: 400 14px/1.45 var(--font);
+  color: var(--mute);
+}
+.dspage {
+  padding: 8px 4px 28px;
+}
+.dshero {
+  display: grid;
+  gap: 4px;
+}
+.dsid {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.dsid .avwrap {
+  flex: none;
+  position: relative;
+  width: 46px;
+  height: 46px;
+}
+.dsid .avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 35% 30%, rgba(var(--fg-rgb), 0.22), rgba(var(--fg-rgb), 0.06) 70%);
+  box-shadow: inset 0 0 0 1px rgba(var(--fg-rgb), 0.18);
+  font: 600 21px/1 var(--font);
+  color: var(--mute);
+}
+.dsid .avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dsidt {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+.dsticker {
+  font: 500 12px/1 var(--mono);
+  letter-spacing: 0.04em;
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dsname {
+  font: 650 28px/1.08 var(--font);
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+.dsprice {
+  margin-top: 6px;
+  font: 650 40px/1.05 var(--font);
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+.dschange {
+  font: 500 13px/1.3 var(--mono);
+  color: var(--live);
+  font-variant-numeric: tabular-nums;
+}
+.dschange.down {
+  color: var(--mandarin);
+}
+.dschart {
+  position: relative;
+  margin: 10px -14px 0;
+  height: 236px;
+  touch-action: none;
+  user-select: none;
+}
+.dscanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+.dsscrub {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font: 500 11px/1 var(--mono);
+  color: var(--mute);
+  pointer-events: none;
+}
+.dschartnote {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 0;
+  font: 400 10.5px/1.3 var(--mono);
+  color: var(--mute);
+  opacity: 0.8;
+  pointer-events: none;
+}
+.dschartnote.warn {
+  color: var(--mandarin);
+}
+.dsranges {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  margin: 6px 0 0;
+  padding: 0 2px;
+}
+.dsrange {
+  all: unset;
+  box-sizing: border-box;
+  flex: 1;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 17px;
+  font: 600 13px/1 var(--font);
+  color: var(--mute);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+.dsrange.on {
+  background: var(--live);
+  color: var(--on-live);
+}
+.dssec {
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(var(--fg-rgb), 0.08);
+}
+.dsh {
+  margin-bottom: 14px;
+  font: 650 22px/1.1 var(--font);
+  letter-spacing: -0.02em;
+}
+.dsscore {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.dsring {
+  position: relative;
+  flex: none;
+  width: 124px;
+  height: 124px;
+}
+.dsring.thin svg {
+  opacity: 0.6;
+}
+.dsring svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.dsringnum {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  font: 650 38px/1 var(--font);
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  padding-bottom: 12px;
+}
+.dsringnum.flag {
+  font-size: 17px;
+  letter-spacing: 0.02em;
+}
+.dsringword {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 30px;
+  text-align: center;
+  font: 500 10px/1 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.dsscoreside {
+  min-width: 0;
+  display: grid;
+  gap: 10px;
+}
+.dscov {
+  font: 500 12.5px/1.3 var(--mono);
+  color: var(--mute);
+}
+.dsfind {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.dschip {
+  padding: 6px 10px;
+  border-radius: 14px;
+  background: rgba(var(--fg-rgb), 0.07);
+  font: 500 12px/1.2 var(--font);
+  color: var(--text);
+}
+/* Stats are a clean evidence list like the facts above them: label left, figure right, its source line beneath, every one visible. */
+.dsstats {
+  display: grid;
+  gap: 2px;
+}
+.dsstat {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  min-height: 46px;
+  align-content: center;
+  padding: 8px 2px;
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.06);
+}
+.dsstat .dsfhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.dsstat .dsstatv {
+  font-family: var(--mono);
+  font-size: 13px;
+  white-space: normal;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+.dsstat .dsstatl {
+  font-size: 14px;
+  color: var(--text);
+  flex: none;
+}
+.dsstatl {
+  font: 400 11.5px/1.1 var(--font);
+  color: var(--mute);
+}
+.dsstatv {
+  font: 600 15px/1.15 var(--font);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dssimilar {
+  display: grid;
+  gap: 8px;
+}
+.dssimrow {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 18px;
+  background: rgba(var(--glass-rgb), 0.8);
+  box-shadow:
+    inset 1px 1px 0 rgba(var(--fg-rgb), 0.14),
+    inset -1px -1px 0 rgba(var(--fg-rgb), 0.05);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.dssimpic {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: rgba(var(--fg-rgb), 0.1);
+  font: 600 15px/1 var(--font);
+}
+.dssimpic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dssimname {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.dssimname b {
+  font: 650 15px/1.15 var(--font);
+}
+.dssimname span {
+  font: 400 12px/1.2 var(--font);
+  color: var(--mute);
+}
+.dssimscore {
+  font: 650 18px/1 var(--font);
+  font-variant-numeric: tabular-nums;
+}
+.dssimnone {
+  font: 400 12.5px/1.4 var(--font);
+  color: var(--mute);
+}
+.dssoon {
+  position: relative;
+  margin-bottom: 10px;
+  padding: 16px 16px 16px;
+  border-radius: 22px;
+  background: rgba(var(--glass-rgb), 0.8);
+  box-shadow:
+    inset 1px 1px 0 rgba(var(--fg-rgb), 0.14),
+    inset -1px -1px 0 rgba(var(--fg-rgb), 0.05);
+  display: grid;
+  gap: 6px;
+}
+.dssoont {
+  font: 650 17px/1.15 var(--font);
+  letter-spacing: -0.015em;
+}
+.dssoond {
+  font: 400 12.5px/1.4 var(--font);
+  color: var(--mute);
+}
+.dssoonb {
+  justify-self: start;
+  margin-top: 6px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(var(--live-rgb), 0.4);
+  font: 500 9.5px/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--live);
+}
+.dsfine {
+  margin-top: 26px;
+  font: 400 11px/1.5 var(--font);
+  color: var(--mute);
+  opacity: 0.8;
+}
+.dsmini {
+  position: sticky;
+  top: var(--clip-top, 70px);
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin: -4px 4px -36px;
+  padding: 10px 16px;
+  border-radius: 20px;
+  background: rgba(var(--glass-rgb), 0.9);
+  box-shadow: inset 1px 1px 0 rgba(var(--fg-rgb), 0.14);
+  font: 600 15px/1 var(--font);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+.dsmini.on {
+  opacity: 1;
+}
+.dsmini span {
+  font-variant-numeric: tabular-nums;
+}
+.dsbar {
+  position: sticky;
+  bottom: calc(var(--clip-bottom, 80px) + 6px);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0 2px;
+  padding: 9px 9px 9px 20px;
+  border-radius: 30px;
+  background: rgba(var(--glass-rgb), 0.9);
+  box-shadow:
+    inset 1px 1px 0 rgba(var(--fg-rgb), 0.16),
+    inset -1px -1px 0 rgba(var(--fg-rgb), 0.05),
+    0 14px 28px -12px rgba(0, 0, 0, 0.7);
+}
+.dsbarl {
+  display: grid;
+  gap: 4px;
+}
+.dsbarl span {
+  font: 400 11px/1 var(--mono);
+  color: var(--mute);
+}
+.dsbarl b {
+  font: 650 16px/1 var(--font);
+  font-variant-numeric: tabular-nums;
+}
+.dscopy {
+  all: unset;
+  box-sizing: border-box;
+  height: 46px;
+  padding: 0 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 23px;
+  background: var(--live);
+  color: var(--on-live);
+  font: 650 15px/1 var(--font);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.dscopy:active {
+  transform: scale(0.97);
+}
+.dscopy:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+/* DeepScan reads like a stock page, so it has its own near-black base; the live background shows through only faintly. */
+#deepscan .dframe {
+  background: rgba(var(--panel-rgb), 0.93);
+}
+
+/* A whole Discover card is a button: it opens that token's DeepScan page. */
+.drow {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s ease;
+}
+.drow:active {
+  transform: scale(0.985);
+}
+.drow:focus-visible {
+  outline: 2px solid var(--live);
+  outline-offset: 2px;
+}
+
+.page-scan {
+  opacity: var(--dplate, 1);
+}
+.gdpage {
+  padding: 8px 4px 40px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.gdtop {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 10px 2px 22px;
+  text-align: center;
+}
+.gdblade {
+  height: 120px;
+  width: auto;
+  filter: drop-shadow(0 0 26px rgba(var(--live-rgb), 0.35));
+  -webkit-user-drag: none;
+}
+.gdtitle {
+  margin: 0;
+  font: 700 34px/1.05 var(--font);
+  letter-spacing: -0.03em;
+}
+.gdsec {
+  margin-bottom: 18px;
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(var(--fg-rgb), 0.05);
+}
+.gdsec .dsh {
+  font-size: 20px;
+}
+.gdp,
+.gdli {
+  margin: 0;
+  font: 400 14.5px/1.55 var(--font);
+  color: var(--text);
+}
+.gdp + .gdp,
+.gdp + .gdul,
+.gdul + .gdp {
+  margin-top: 10px;
+}
+.gdul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+}
+.gdlead {
+  font-weight: 650;
+}
+#coinpage .dframe {
+  background: rgba(var(--panel-rgb), 0.93);
+}
+#coinpage:not(.hastoken) .cpmain,
+#coinpage.hastoken .cpempty {
+  display: none;
+}
+.cpmain {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cproot {
+  display: block;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  padding-left: var(--edge);
+  padding-right: var(--edge);
+}
+/* The chart workspace is exactly one screen tall; the dossier (DeepScan's evidence) is the second half, below it. */
+.cptop {
+  display: flex;
+  flex-direction: row;
+  min-height: 100%; /* a screen at least; taller when the chart and stats need it, so what follows never overlaps them */
+}
+.cpdossier {
+  padding: 18px 0 10px;
+}
+#coinpage.isvamp .cptop {
+  display: none;
+}
+/* the dossier's bar (24h volume, Copy contract) closes the page instead of floating over the chart */
+.cpdossier .dsbar {
+  position: static;
+  margin: 14px 2px 4px;
+}
+#coinpage:not(.hastoken) .cpdossier,
+#coinpage:not(.hastoken) .orbit,
+#coinpage:not(.hastoken) .cphealth,
+#coinpage:not(.hastoken) .cpgo,
+#coinpage.isvamp .orbit,
+#coinpage.isvamp .cphealth,
+#coinpage.isvamp .cpgo {
+  display: none;
+}
+/* The buttons between the chart screen and the dossier: the chart owns wheel and touch, so these are the way down and back. */
+.cpgo {
+  all: unset;
+  box-sizing: border-box;
+  flex: none;
+  align-self: center;
+  min-height: 40px;
+  margin: 6px auto 4px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  background: rgba(var(--live-rgb), 0.14);
+  box-shadow: inset 0 0 0 1px rgba(var(--live-rgb), 0.4);
+  font: 600 14px/1 var(--font);
+  color: var(--live);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.cpgoup {
+  display: flex;
+  width: max-content;
+}
+.cpgo:active {
+  background: rgba(var(--live-rgb), 0.26);
+}
+
+/* A wide Discover card (tablet, desktop): a bigger picture and a single bottom row. */
+.drow {
+  container-type: inline-size;
+}
+@container (min-width: 520px) {
+  /* Wide card: details left, the chart in the centre, the score top right with its lite dossier under it. */
+  .dtop {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr) minmax(150px, 0.6fr);
+    grid-template-areas: "left chart right";
+  }
+  .dscore .val {
+    font-size: 58px;
+  }
+  .drow .avwrap {
+    width: 63px;
+    height: 63px;
+  }
+  .drow .name {
+    font-size: 16px;
+  }
+  .drow .tick {
+    font-size: 11.5px;
+  }
+  .dfigs {
+    font-size: 13px;
+  }
+  .dbot {
+    grid-template-columns: auto 1fr auto auto;
+  }
+  .dbot .dchg,
+  .dbot .dmoney,
+  .dbot .tlink,
+  .dbot .dscan {
+    grid-row: 1;
+  }
+  .dbot .dchg {
+    grid-column: 1;
+  }
+  .dbot .dmoney {
+    grid-column: 2;
+    text-align: left;
+  }
+  .dbot .tlink {
+    grid-column: 3;
+  }
+  .dbot .dscan {
+    grid-column: 4;
+  }
+}
+
+/* DeepScan: checks, evidence, the read, links */
+.dschecks,
+.dsfacts {
+  display: grid;
+  gap: 2px;
+}
+.dscheck,
+.dsfact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 46px;
+  padding: 0 2px;
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.06);
+  font: 450 14px/1.2 var(--font);
+  color: var(--text);
+}
+.dsfact .dsstatv {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 13px;
+  white-space: normal;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+.dsfact .dsstatl {
+  min-width: 0;
+}
+.dsfcopy {
+  all: unset;
+  box-sizing: border-box;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 14px;
+  background: rgba(var(--fg-rgb), 0.08);
+  font: 550 12px/28px var(--font);
+  color: var(--text);
+  cursor: pointer;
+}
+.dsband {
+  padding: 5px 12px;
+  border-radius: 14px;
+  font: 600 12px/1 var(--font);
+  background: rgba(var(--fg-rgb), 0.08);
+  color: var(--mute);
+}
+.dsband.good {
+  background: rgba(var(--live-rgb), 0.16);
+  color: var(--live);
+}
+.dsband.fair {
+  background: rgba(var(--amber-rgb), 0.16);
+  color: var(--amber);
+}
+.dsband.weak {
+  background: rgba(var(--mand-rgb), 0.16);
+  color: var(--mandarin);
+}
+.dsband.clear {
+  background: rgba(var(--fg-rgb), 0.1);
+  color: var(--text);
+}
+.dsnone {
+  margin: 0;
+  font: 400 13px/1.4 var(--font);
+  color: var(--mute);
+}
+.dsreadp {
+  margin: 0 0 10px;
+  font: 400 14px/1.45 var(--font);
+  color: var(--text);
+}
+.dslinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.dslink {
+  display: inline-grid;
+  place-items: center;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 18px;
+  background: rgba(var(--fg-rgb), 0.08);
+  font: 550 13px/1 var(--font);
+  color: var(--text);
+  text-decoration: none;
+}
+
+/*
+ * WALLET / PROFILE. A real page over its room, like Discover and DeepScan. Read-only: the safety note comes first.
+ */
+.page-wallet {
+  opacity: var(--dplate, 1);
+}
+.page-wallet .pbody {
+  display: none;
+}
+#wallet .dframe {
+  background: rgba(var(--panel-rgb), 0.93);
+}
+.wlpage {
+  padding: 8px 4px 40px;
+}
+.wltop {
+  padding: 4px 2px 16px;
+}
+.wltitle {
+  margin: 0;
+  font: 700 34px/1.05 var(--font);
+  letter-spacing: -0.03em;
+}
+.wlsub {
+  margin: 6px 0 0;
+  font: 400 14px/1.4 var(--font);
+  color: var(--mute);
+}
+.wlsafe {
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(var(--live-rgb), 0.07);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--live-rgb), 0.35),
+    inset 1px 1px 0 rgba(var(--fg-rgb), 0.08);
+}
+.wlsafeh {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 650 17px/1.2 var(--font);
+  color: var(--live);
+}
+.wlsafei {
+  display: grid;
+  place-items: center;
+  color: var(--live);
+}
+.wlsafeul {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  font: 400 13.5px/1.45 var(--font);
+  color: var(--text);
+}
+.wlsafep {
+  margin: 10px 0 0;
+  font: 400 13.5px/1.45 var(--font);
+  color: var(--text);
+}
+.wlmore {
+  margin-top: 10px;
+  font: 500 12.5px/1.4 var(--font);
+  color: var(--mute);
+}
+.wlmore summary {
+  cursor: pointer;
+  color: var(--live);
+}
+.wlmore ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+  color: var(--text);
+}
+.wlsec .dsh {
+  font-size: 20px;
+}
+.wlnone,
+.wlhint {
+  margin: 0;
+  font: 400 13px/1.45 var(--font);
+  color: var(--mute);
+}
+.wlmsg {
+  margin: 10px 0 0;
+  font: 450 13px/1.4 var(--font);
+  color: var(--mandarin);
+}
+.wlmsg:empty {
+  display: none;
+}
+.wlrow {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+.wlinput {
+  all: unset;
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 14px;
+  border-radius: 14px;
+  background: rgba(var(--fg-rgb), 0.08);
+  font: 500 14px/48px var(--mono);
+  color: var(--text);
+}
+.wlgo {
+  all: unset;
+  box-sizing: border-box;
+  height: 48px;
+  padding: 0 20px;
+  border-radius: 14px;
+  background: var(--live);
+  color: var(--on-live);
+  font: 650 15px/48px var(--font);
+  cursor: pointer;
+}
+.wlprofile {
+  margin-top: 4px;
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(var(--glass-rgb), 0.8);
+  box-shadow:
+    inset 1px 1px 0 rgba(var(--fg-rgb), 0.14),
+    inset -1px -1px 0 rgba(var(--fg-rgb), 0.05);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: center;
+}
+.wlavatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px rgba(var(--fg-rgb), 0.25);
+}
+.wladdr {
+  font: 650 19px/1.1 var(--mono);
+  letter-spacing: -0.01em;
+}
+.wlchips {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.wlchip {
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: rgba(var(--fg-rgb), 0.08);
+  font: 550 11.5px/1.2 var(--font);
+  color: var(--mute);
+}
+.wlchip.on {
+  background: rgba(var(--live-rgb), 0.16);
+  color: var(--live);
+}
+.wlactions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 8px;
+}
+.wlsmall {
+  all: unset;
+  box-sizing: border-box;
+  height: 36px;
+  padding: 0 16px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: rgba(var(--fg-rgb), 0.09);
+  font: 600 13px/1 var(--font);
+  color: var(--text);
+  cursor: pointer;
+}
+.wlwarn {
+  color: var(--mandarin);
+}
+.wlprofile .wlhint {
+  grid-column: 1 / -1;
+}
+.wltotal {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.wltotal b {
+  font: 700 28px/1.1 var(--font);
+  letter-spacing: -0.02em;
+}
+.wlhold {
+  all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 58px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.06);
+  cursor: pointer;
+}
+.wlhold:disabled {
+  cursor: default;
+}
+.wlholdn,
+.wlholdv {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.wlholdv {
+  justify-items: end;
+}
+.wlholdn b,
+.wlholdv b {
+  font: 600 15px/1.1 var(--font);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wlholdn i,
+.wlholdv i {
+  font: 500 12px/1.1 var(--mono);
+  font-style: normal;
+  color: var(--mute);
+}
+
+.trp {
+  margin-bottom: 10px;
+}
+.trph {
+  display: flex;
+  justify-content: space-between;
+  font: 500 11.5px/1 var(--font);
+  color: var(--mute);
+  margin-bottom: 5px;
+}
+.trpbar {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(var(--mand-rgb), 0.55);
+  overflow: hidden;
+}
+.trpb {
+  display: block;
+  height: 100%;
+  background: var(--live);
+}
+.trpv {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font: 600 12px/1 var(--mono);
+}
+.trpv .up,
+.trs.up {
+  color: var(--live);
+}
+.trpv .down,
+.trs.down {
+  color: var(--mandarin);
+}
+.trlist {
+  display: grid;
+}
+.trrow {
+  display: grid;
+  grid-template-columns: 72px 44px 1fr 34px;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.05);
+  font: 500 12px/1 var(--mono);
+}
+.trt {
+  color: var(--mute);
+}
+.trs {
+  font-weight: 650;
+}
+.trv {
+  text-align: right;
+}
+.tra {
+  font-style: normal;
+  text-align: right;
+  font-size: 10.5px;
+  color: var(--mute);
+}
+.trnote {
+  margin: 8px 0 0;
+  font: 400 12px/1.4 var(--font);
+  color: var(--mute);
+}
+.trnote.warn {
+  color: var(--mandarin);
+}
+
+/* DeepScan: social and callouts */
+.dssocial {
+  display: grid;
+  gap: 2px;
+}
+.dssocialh {
+  margin: 14px 0 4px;
+  font: 650 11px/1 var(--font);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.dssocialh:first-child {
+  margin-top: 0;
+}
+.dslinkin {
+  height: 30px;
+  padding: 0 12px;
+  font-size: 12px;
+  color: var(--live);
+}
+.dsnotm {
+  margin: 4px 0 8px;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+  font: 400 13.5px/1.4 var(--font);
+  color: var(--text);
+}
+
+/* Light mode: the wordmark art is made for dark (pale letters); turn its lightness over and keep its hues. */
+/* The wordmark: the operator's dark one in dark, his light one (art pack 65) in light; never one turned over by a filter. */
+:root:not([data-theme="light"]) .wmlight,
+:root[data-theme="light"] .wmdark {
+  display: none !important;
+}
+
+/* A VAMP (a copy): its page shows the label and the notice, and nothing else. */
+.dsvamp {
+  display: none;
+  margin-top: 20px;
+  padding: 18px 16px;
+  border-radius: 22px;
+  background: rgba(var(--mand-rgb), 0.12);
+  box-shadow: inset 0 0 0 1px rgba(var(--mand-rgb), 0.45);
+}
+.dsvamp b {
+  font: 700 13px/1 var(--mono);
+  letter-spacing: 0.12em;
+  color: var(--mandarin);
+}
+.dsvamp p {
+  margin-top: 10px;
+  font: 400 14px/1.45 var(--font);
+}
+.dsvamp .dsvampnote {
+  font: 400 12.5px/1.4 var(--mono);
+  color: var(--mute);
+}
+.isvamp .dsvamp {
+  display: block;
+}
+.isvamp .dschart,
+.isvamp .dsranges,
+.isvamp .dsstats,
+.isvamp .dssec:not(.dsscore),
+.isvamp .dsbar {
+  display: none;
+}
+
+/*
+ * THE TRADER'S FACTS AND PINR'S CHIPS on a tile. First what a trader sees on Pump.fun or Fomo (market cap, age, price move), then what PINR
+ * adds: a chip for each thing it found (serial launcher, copy of another token, its own findings). Small and mono, so they never fight the score.
+ */
+.card .facts {
+  margin-top: 0.55em;
+  display: grid;
+  gap: 0.18em;
+  font: 500 calc(var(--fnote) * 1.1) / 1.15 var(--mono);
+  letter-spacing: 0;
+  color: var(--text);
+}
+.card .facts:empty,
+.card .chips:empty {
+  display: none;
+}
+.card .frow {
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.card .fage {
+  color: var(--mute);
+}
+.card .fchg.up {
+  color: var(--live);
+}
+.card .fchg.down {
+  color: var(--mandarin);
+}
+.card .chips {
+  margin-top: 0.5em;
+  display: none;
+  flex-wrap: wrap;
+  gap: 0.25em;
+}
+.card .chip {
+  padding: 0.18em 0.5em;
+  border-radius: 99px;
+  border: 1px solid rgba(var(--fg-rgb), 0.2);
+  font: 500 calc(var(--fnote) * 0.8) / 1.1 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--mute);
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card .chip.bad {
+  border-color: rgba(var(--mand-rgb), 0.55);
+  color: var(--mandarin);
+}
+#stage[data-lod="1"] .card .chips,
+#stage[data-lod="2"] .card .chips,
+#stage[data-lod="3"] .card .chips {
+  display: flex;
+}
+.dsvampopen {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: 1px solid rgba(var(--mand-rgb), 0.6);
+  border-radius: 99px;
+  background: transparent;
+  color: var(--mandarin);
+  font: 600 13px/1 var(--font);
+  cursor: pointer;
+}
+
+/*
+ * THE COMPASS. A game-controller d-pad in the middle of the header with the PINR blade as its needle.
+ * The blade turns its tip toward the page you are on; that arm of the pad (or corner dot, for the ad spaces) lights lime.
+ */
+.compass {
+  all: unset;
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s ease;
+}
+.compass:active {
+  transform: scale(0.92);
+}
+.compass:focus-visible {
+  outline: 2px solid var(--live);
+  outline-offset: 1px;
+  border-radius: 14px;
+}
+.compass svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.compass .arm {
+  fill: rgba(var(--fg-rgb), 0.16);
+  transition:
+    fill 0.3s ease,
+    filter 0.3s ease;
+}
+.compass .dot {
+  fill: rgba(var(--fg-rgb), 0.22);
+  transition:
+    fill 0.3s ease,
+    filter 0.3s ease;
+}
+.compass .hub {
+  fill: rgba(var(--glass-rgb), 0.95);
+  stroke: rgba(var(--fg-rgb), 0.2);
+  stroke-width: 1;
+  transition:
+    stroke 0.3s ease,
+    filter 0.3s ease;
+}
+.compass .lit {
+  fill: var(--live);
+  filter: drop-shadow(0 0 4px rgba(var(--live-rgb), 0.8));
+}
+.compass .hub.lit {
+  fill: rgba(var(--glass-rgb), 0.95);
+  stroke: var(--live);
+  stroke-width: 1.6;
+}
+.compass .needle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 3.6px;
+  height: 30px;
+  margin: -15px 0 0 -1.8px;
+  transition: transform 0.6s cubic-bezier(0.3, 1.3, 0.5, 1);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+/* While the whole site is in view the pad glows. */
+.compass.map .arm,
+.compass.map .dot {
+  fill: rgba(var(--live-rgb), 0.4);
+}
+@media (prefers-reduced-motion: reduce) {
+  .compass .needle {
+    transition: none;
+  }
+}
+/* Light mode: the blade art is made for dark (pale body); turn its lightness over and keep its hues. */
+:root[data-theme="light"] img[src$="pinr-blade-large.svg"] {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+@media (max-width: 380px) {
+  #bar .icon {
+    width: 34px;
+  }
+  .compass {
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+  }
+  #bar .actions {
+    gap: 0;
+  }
+}
+
+/* A possible copy: a scored token whose picture matches an earlier coin. A warning only: the score and data below stay. */
+.dspossible {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(var(--mand-rgb), 0.1);
+  box-shadow: inset 0 0 0 1px rgba(var(--mand-rgb), 0.4);
+}
+.dspossible[hidden] {
+  display: none;
+}
+.dspossible b {
+  display: block;
+  color: var(--mandarin);
+  font: 700 12px/1 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.dspossible p {
+  margin: 8px 0 0;
+  font: 400 13px/1.45 var(--font);
+  color: var(--text);
+}
+.dsorig {
+  margin: 8px 0 0;
+  font: 500 12px/1.4 var(--mono);
+  color: var(--mute);
+  overflow-wrap: anywhere;
+}
+a.dsvampopen {
+  display: inline-block;
+  text-decoration: none;
+}
+.dsvampopen[hidden] {
+  display: none;
+}
+.drow .tick.warn {
+  color: var(--mandarin);
+}
+
+/* "Early": the word beside a score that is an early one. Hover, tap or keyboard focus shows the one-sentence explanation. */
+.earlytag {
+  position: relative;
+  font: 600 8.5px/1 var(--mono);
+  font-style: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mandarin);
+  cursor: help;
+  outline: none;
+}
+.earlytag[hidden] {
+  display: none;
+}
+/* "Social: not checked yet": the same small label as "Early", in sentence case on one line. */
+.socialtag {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: var(--mute);
+}
+.earlytag:hover::after,
+.earlytag:focus::after {
+  content: attr(data-tip);
+  position: absolute;
+  right: 0;
+  top: 130%;
+  z-index: 30;
+  width: max-content;
+  max-width: 200px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--bg, #111);
+  color: var(--text);
+  border: 1px solid rgba(var(--fg-rgb), 0.2);
+  font: 400 11px/1.35 var(--font);
+  letter-spacing: 0;
+  text-transform: none;
+  text-align: left;
+  white-space: normal;
+}
+.dsscoreside .earlytag {
+  justify-self: start;
+  font-size: 10px;
+}
+.dsscoreside .earlytag:hover::after,
+.dsscoreside .earlytag:focus::after {
+  right: auto;
+  left: 0;
+}
+
+/* The notice beside every score. */
+.dsnotice {
+  font: 400 11px/1.4 var(--font);
+  color: var(--mute);
+}
+.dsnotice[hidden] {
+  display: none;
+}
+
+/* "Chain only": the short tag beside every score; "by count": a mix counted in trades, not dollars. */
+.chaintag {
+  font: 500 8px/1 var(--mono);
+  font-style: normal;
+  letter-spacing: 0.04em;
+  color: var(--mute);
+  white-space: nowrap;
+}
+.chaintag[hidden],
+.bycount[hidden] {
+  display: none;
+}
+.bycount {
+  font: 400 8px/1 var(--mono);
+  font-style: normal;
+  color: var(--mute);
+  white-space: nowrap;
+}
+.dribwrap {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+}
+.wlholdv .chaintag {
+  display: block;
+  text-align: right;
+}
+
+/* Overview tiles (five or more to a row) keep to one chip: the first (the most important) one; the full list shows when a tile is opened up. */
+#stage[data-lod="1"] .card .chips .chip + .chip,
+#stage[data-lod="2"] .card .chips .chip + .chip {
+  display: none;
+}
+
+/* "scored 41 min ago" on a Discover row (a tile has the combined "Chain only · 41m" row instead). */
+.scoredage {
+  font: 400 9px/1 var(--mono);
+  font-style: normal;
+  color: var(--mute);
+  white-space: nowrap;
+}
+.scoredage[hidden] {
+  display: none;
+}
+
+/* Tile: the score left and the coverage right on the bottom row; above them, when the tile has room, ONE label row. */
+.card .n {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  align-items: end;
+}
+.card .n > .cov {
+  justify-self: end;
+  gap: 3px;
+}
+.card .stags {
+  grid-column: 1 / -1;
+  /* centred on the tile, and free to use the padding, so the row fits the narrowest tile that can carry it */
+  justify-self: center;
+  /* the chain icons hang a little below the picture: the row starts below them (ICON_DROP in cards.ts) */
+  margin: 6px 0 2px;
+}
+.card .ctag {
+  /* --lab makes this 9 screen pixels whatever the zoom; the score's big font must not give the row a tall line box */
+  font: 500 var(--lab, 9px) / 1.2 var(--font);
+  letter-spacing: 0;
+  color: var(--mute);
+  white-space: nowrap;
+  text-shadow: none;
+}
+/* What a tile holds (see labelsFor), by the room it has: "fee" = also a third line; "all" = coverage, market cap and the hour's trades; "mc" = no all-time high; "cov" = coverage only; "bare" = name and score. */
+#stage[data-fit="cov"] .card .facts,
+#stage[data-fit="bare"] .card .facts,
+#stage[data-fit="bare"] .card .cov {
+  display: none;
+}
+/* the hour's trades sit beside the market cap when a tile has one line ("mc"), on their own line otherwise. */
+.card .ftx {
+  display: none;
+}
+#stage[data-fit="mc"] .card .ftx {
+  display: inline;
+}
+#stage[data-fit="mc"] .card .frow + .frow,
+#stage:not([data-fit="fee"]) .card .frow + .frow + .frow {
+  display: none;
+}
+/* A tile carries only picture, name, ticker, a small badge, market cap, all-time high, ribbon, score and coverage: the rest lives on Discover and DeepScan. */
+.card .stags,
+.card .earlytag,
+.card .chips,
+.card .detail,
+.card .note {
+  display: none !important;
+}
+.card .pbadge {
+  right: -16%;
+  bottom: -10%;
+  gap: 3cqw;
+  padding: 3cqw 4cqw;
+}
+.card .pbadge i {
+  width: 27cqw;
+  height: 27cqw;
+}
+.card .flab {
+  color: var(--mute);
+  font-size: 0.82em;
+  letter-spacing: 0.04em;
+}
+
+/* Discover rows, DeepScan and the wallet list: the same labels, never under 9 px. */
+.dscore .cov .chaintag,
+.dscore .cov .scoredage,
+.wlholdv .chaintag,
+.dscore .cov .earlytag,
+.dscore .cov .bycount {
+  font-size: 9px;
+}
+.card .earlytag {
+  font-size: var(--lab, 9px);
+}
+
+/* A tile shorter than its level assumes shrinks what is in it to fit (--hs is 1 when there is room). */
+.card .top,
+.card .n {
+  zoom: var(--hs, 1);
+}
+
+/* The small line under a figure on DeepScan: source, time read, link. */
+.dsrcpt {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font: 400 10px/1.3 var(--mono);
+  color: var(--mute);
+}
+.dsrcpt a {
+  color: var(--text);
+  opacity: 0.8;
+  text-decoration: underline;
+}
+.dsnosrc {
+  color: var(--mandarin);
+}
+/* A check with its receipt under it, and PINRbot's read. */
+.dscheckw {
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.06);
+  padding-bottom: 8px;
+}
+.dscheckw .dscheck {
+  border-bottom: 0;
+}
+.dscheckw .dsrcpt {
+  padding: 0 2px;
+}
+.dsbudgetbar {
+  height: 6px;
+  margin-top: 6px;
+  border-radius: 3px;
+  background: rgba(var(--fg-rgb), 0.1);
+  overflow: hidden;
+}
+.dsbudgetbar i {
+  display: block;
+  height: 100%;
+  background: var(--live);
+}
+.dsintent {
+  display: grid;
+  gap: 10px;
+}
+.dsintitem {
+  display: grid;
+  gap: 4px;
+  padding: 8px 2px 10px;
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.06);
+}
+.dsinthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font: 550 14px/1.3 var(--font);
+  color: var(--text);
+}
+.dsintwhy {
+  margin: 0;
+  font: 400 13px/1.45 var(--font);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.dsintitem .dsrcpt {
+  overflow-wrap: anywhere;
+}
+.dsfact .dsfhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dsfacts .dsfact {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 3px;
+  padding: 8px 2px;
+}
+
+/* Social (not scored) on DeepScan */
+.dsscannote {
+  margin: 0 0 8px;
+  font: 400 11px/1.4 var(--font);
+  color: var(--mute);
+}
+.dsscanclaim,
+.dsscanflag {
+  display: grid;
+  gap: 3px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.06);
+}
+.dsscanflagt {
+  margin: 0;
+  font: 600 13px/1.35 var(--font);
+  color: var(--mandarin);
+}
+.dsscansum {
+  margin: 8px 0 0;
+  font: 450 12px/1.4 var(--font);
+  color: var(--mute);
+}
+.dsscanres {
+  font: 600 11px/1.2 var(--mono);
+  letter-spacing: 0.03em;
+  color: var(--mute);
+}
+.dsscanres.rdiverges {
+  color: var(--mandarin);
+}
+.dsscanres.rmatches {
+  color: var(--live);
+}
+.dsscanline {
+  margin: 0;
+  font: 450 13px/1.4 var(--font);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+/* The tape's "Show more" control (R6): ten lines by default. */
+.trmore {
+  all: unset;
+  box-sizing: border-box;
+  margin: 8px 0 2px;
+  padding: 8px 14px;
+  border-radius: 16px;
+  background: rgba(var(--fg-rgb), 0.08);
+  color: var(--text);
+  font: 550 12px/1 var(--font);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.trmore:active {
+  background: rgba(var(--live-rgb), 0.22);
+}
+
+/* The lite dossier under the PINRscore: the facts the card already has, as a small list. */
+.dscore {
+  align-content: start;
+}
+.dscore .cov {
+  width: 100%;
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(var(--fg-rgb), 0.1);
+  gap: 5px;
+}
+.dscore .cov b {
+  font-size: 12px;
+}
+.dscore .cov i {
+  font-size: 10px;
+}
+
+/* HIDE: the eye-slash on a Discover card, the one-button menu on a tile, the "Hidden: name · Undo" note, and the Settings button. */
+.dident {
+  position: relative;
+}
+.dleft .dident {
+  width: 100%;
+}
+.dhide {
+  all: unset;
+  box-sizing: border-box;
+  margin-left: auto;
+  align-self: flex-start;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  color: var(--mute);
+  background: rgba(var(--fg-rgb), 0.06);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.dhide:hover {
+  color: var(--text);
+}
+.dhide:active {
+  background: rgba(var(--mandarin-rgb, var(--fg-rgb)), 0.18);
+}
+.hidemenu {
+  position: fixed;
+  z-index: 60;
+  min-width: 190px;
+  padding: 8px;
+  display: grid;
+  gap: 6px;
+  border-radius: 18px;
+  background: rgba(var(--panel-rgb), 0.96);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--fg-rgb), 0.14),
+    0 18px 40px -12px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.hidemenuname {
+  padding: 4px 8px 0;
+  font: 500 12px/1.2 var(--mono);
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+}
+.hidemenubtn {
+  all: unset;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  background: rgba(var(--fg-rgb), 0.07);
+  font: 600 15px/1 var(--font);
+  color: var(--mandarin);
+  cursor: pointer;
+}
+.hidemenubtn:active {
+  background: rgba(var(--fg-rgb), 0.16);
+}
+#hidenote {
+  position: fixed;
+  z-index: 61;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--clip-bottom, 80px) + 10px);
+  max-width: calc(100vw - 32px);
+  padding: 8px 8px 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 22px;
+  background: rgba(var(--panel-rgb), 0.97);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--fg-rgb), 0.14),
+    0 14px 30px -10px rgba(0, 0, 0, 0.6);
+  font: 500 14px/1.2 var(--font);
+  color: var(--text);
+}
+#hidenote span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#hidenote button,
+.sbtn {
+  all: unset;
+  box-sizing: border-box;
+  min-height: 34px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  border-radius: 17px;
+  background: rgba(var(--live-rgb), 0.16);
+  box-shadow: inset 0 0 0 1px rgba(var(--live-rgb), 0.4);
+  font: 600 13px/1 var(--font);
+  color: var(--live);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.sbtn[hidden] {
+  display: none;
+}
+
+/* YOUR CHOICES: the code boxes and the import confirmation in Settings. */
+.scode {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 4px 0 8px;
+  padding: 10px 12px;
+  resize: none;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(var(--fg-rgb), 0.07);
+  box-shadow: inset 0 0 0 1px rgba(var(--fg-rgb), 0.1);
+  font: 400 12px/1.4 var(--mono);
+  color: var(--text);
+  word-break: break-all;
+}
+.scode[hidden] {
+  display: none;
+}
+.scodenote {
+  margin: 0 0 6px;
+}
+.sconfirm {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.sconfirm[hidden] {
+  display: none;
+}
+.sbtnq {
+  background: rgba(var(--fg-rgb), 0.07);
+  box-shadow: inset 0 0 0 1px rgba(var(--fg-rgb), 0.14);
+  color: var(--text);
+}
+
+/* "Not investment advice" beside the score (tiles at the widest zoom level 3, Discover, DeepScan). At level 2 the tile is 150 px wide in design and the tag, which cannot wrap, runs into the score, so there it is not drawn; the notice stays in the tile's hover text and on every other page. */
+.card .advtag {
+  display: none;
+  font: 500 var(--lab, 9px) / 1.2 var(--font);
+  letter-spacing: 0;
+  color: var(--mute);
+  white-space: nowrap;
+  text-shadow: none;
+  font-style: normal;
+}
+#stage[data-lod="3"] .card .advtag {
+  display: block;
+}
+.dscore .cov .advtag {
+  font-size: 9px;
+  font-style: normal;
+  letter-spacing: 0.02em;
+  color: var(--mute);
+}
+.advtag[hidden] {
+  display: none !important;
+}
+.dsadvice {
+  font: 600 12px/1.3 var(--font);
+  color: var(--text);
+}
+.dsadvice[hidden] {
+  display: none;
+}
+#stage[data-fit="bare"] .card .advtag {
+  display: none !important;
+}
+.card .cov .advtag {
+  margin-top: 1px;
+}
+
+/* DeepScan's fee line: which case applied, and the "High fee" label in the existing warning style */
+.dsfline {
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--text);
+}
+.dsfbadge {
+  margin-left: 8px;
+  padding: 3px 8px;
+  font-size: 11px;
+}
+
+/* The filters sheet's phone-only end (the apps'): hidden on a wide screen. */
+.pop .pphone,
+.pop .pphonesep {
+  display: none;
+}
+/*
+ * PHONE WIDTH MIRRORS THE APPS: under 600 px the site matches the iPhone app screen for screen.
+ * The desktop version above 600 px is untouched by everything below.
+ */
+.pop .lp,
+.pop-menu .mtitle {
+  display: none;
+}
+@media (max-width: 599.98px) {
+  /* Every panel from the header is a bottom sheet, as in the apps; the page behind it dims. */
+  .pop {
+    top: auto;
+    left: var(--edge);
+    right: var(--edge);
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    min-width: 0;
+    max-height: 72vh;
+    overflow: auto;
+    padding: 14px 12px 18px;
+    border-radius: 30px;
+    transform-origin: 50% 100%;
+    animation: sheet 0.22s ease-out both;
+    box-shadow:
+      0 0 0 100vmax rgba(0, 0, 0, 0.32),
+      0 -10px 40px -18px rgba(0, 0, 0, 0.6);
+  }
+  /* The menu: titled "Menu", the apps' order and words, no icons and no Whitepaper row. */
+  .pop-menu {
+    display: flex;
+    flex-direction: column;
+  }
+  .pop-menu[hidden] {
+    display: none;
+  }
+  .pop-menu .mtitle {
+    display: block;
+    order: 0;
+    padding: 6px 14px 8px;
+    font-size: 17px;
+  }
+  .pop-menu .row {
+    order: var(--po, 9);
+    padding-left: 14px;
+  }
+  .pop-menu .row svg,
+  .pop-menu .sep,
+  .pop-menu .row.mpaper {
+    display: none;
+  }
+  .pop-menu .row b {
+    font-size: 16px;
+  }
+  .pop .lw,
+  .pop .phint {
+    display: none;
+  }
+  .pop .lp {
+    display: inline;
+  }
+  /* Discover: no hide button on the cards (a long press hides, as in the apps); the four tabs on one line each. */
+  .dhide {
+    display: none !important;
+  }
+  .dtab {
+    white-space: nowrap;
+    flex: 0 0 auto;
+    padding: 0 14px;
+  }
+  /* checklist 5: five tabs do not fit a phone's width; the row scrolls sideways (as the apps' chips do) instead of cutting the last one off */
+  .dtabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    /* the cue that more tabs are there: the row fades out at its right edge, and the last tab can scroll clear of the fade */
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent);
+    padding-right: 36px;
+  }
+  .dtabs::-webkit-scrollbar {
+    display: none;
+  }
+  
+  
+  /* Filters: the apps' sheet: the four filters, tiles per row and tiles on the page (Sort and Take out are desktop only); no icons. */
+  .pop .psort,
+  .pop .psortsep,
+  .pop .ptakeout,
+  .pop .ptakeoutsep,
+  .pop .psec .row svg {
+    display: none;
+  }
+  /* The filters sheet as in the apps: no "Filter" title, a tick mark for the chosen one, and its end: rude names, hidden coins, the hint. */
+  .pop .pfiltitle {
+    display: none;
+  }
+  .pop-filter .row .tick {
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--live);
+    font: 600 18px/1 var(--font);
+  }
+  .pop-filter .row .tick::before {
+    content: "\2713";
+  }
+  .pop-menu .row .tick {
+    display: none;
+  }
+  .pop .pphone,
+  .pop .pphonesep {
+    display: block;
+  }
+  .pop .prude {
+    all: unset;
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    cursor: pointer;
+  }
+  .pop .prude b {
+    font: 600 15px/1.2 var(--font);
+  }
+  .pop .pswitch {
+    flex: none;
+    width: 50px;
+    height: 30px;
+    border-radius: 15px;
+    background: rgba(var(--fg-rgb), 0.18);
+    position: relative;
+    transition: background 0.18s ease;
+  }
+  .pop .pswitch i {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    background: #fff;
+    transition: transform 0.18s ease;
+  }
+  .pop .prude.on .pswitch {
+    background: var(--live);
+  }
+  .pop .prude.on .pswitch i {
+    transform: translateX(20px);
+  }
+  .pop .phidden {
+    padding: 6px 12px;
+    font: 500 14px/1.2 var(--font);
+    color: var(--mute);
+  }
+  .pop .pholdhint {
+    padding: 4px 12px 2px;
+    font: 400 12px/1.4 var(--mono);
+    color: var(--mute);
+  }
+  /* Tiles: the names a size larger, as in the apps (still cut with an ellipsis, never under 9 px). */
+  .card .name {
+    font-size: max(calc(var(--fname) * var(--tm) * 1.22), var(--nmin, 0px));
+  }
+}
+@keyframes sheet {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------
+   The DeepScan page: ticker and name, a big price, the change with its period, a full-width line coloured
+   by direction with a dotted start line, a scrub, range tabs, links out, key stats, then the report. Up is lime, down is mandarin.
+   ------------------------------------------------------------------------------------------------------------------------------ */
+.coinpage {
+  --cpc: var(--live);
+}
+.coinpage.down {
+  --cpc: var(--mandarin);
+}
+.cphead {
+  padding: 6px 18px 0;
+}
+.cpidrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 34px;
+}
+.cpidrow .avwrap {
+  flex: none;
+}
+.cpticker {
+  flex: 1;
+  min-width: 0;
+  font: 500 12px/1.2 var(--mono);
+  letter-spacing: 0.04em;
+  color: var(--mute);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cphide {
+  all: unset;
+  box-sizing: border-box;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 17px;
+  color: var(--mute);
+  cursor: pointer;
+}
+.cphide svg {
+  width: 18px;
+  height: 18px;
+}
+.cpname {
+  margin: 6px 0 0;
+  font: 600 clamp(26px, 7.4vw, 34px) / 1.12 var(--font);
+  letter-spacing: -0.02em;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.cpprice {
+  margin-top: 2px;
+  font: 600 clamp(30px, 8.6vw, 40px) / 1.1 var(--font);
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.cpchangerow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 4px;
+  font: 500 14px/1.3 var(--font);
+  min-height: 20px;
+}
+.cpchange {
+  font-weight: 650;
+  color: var(--cpc);
+  font-variant-numeric: tabular-nums;
+}
+.cpperiod {
+  color: var(--text);
+  opacity: 0.8;
+}
+.cpchart {
+  position: relative;
+  flex: none; /* the chart keeps its height in the page's column (it used to shrink to what was left) */
+  margin-top: 14px;
+  height: clamp(260px, 38vh, 380px);
+  touch-action: pan-y;
+}
+.cpplot {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+}
+.cpstatus {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 400 14px/1.4 var(--font);
+  color: var(--mute);
+  pointer-events: none;
+}
+.cpstatus.hide {
+  display: none;
+}
+.cptabs {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 10px 14px 0;
+}
+.cptab {
+  all: unset;
+  box-sizing: border-box;
+  flex: 1;
+  max-width: 64px;
+  text-align: center;
+  padding: 7px 0;
+  border-radius: 15px;
+  font: 650 13px/1.2 var(--font);
+  color: var(--cpc);
+  cursor: pointer;
+}
+.cptab.on {
+  background: var(--cpc);
+  color: var(--on-live);
+}
+.cpcap {
+  min-height: 14px;
+  margin-top: 6px;
+  padding: 0 18px;
+  font: 400 10px/1.2 var(--mono);
+  color: var(--mute);
+  text-align: right;
+}
+.cplinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 18px 4px;
+}
+.cplinks[hidden] {
+  display: none;
+}
+.cplink {
+  padding: 8px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(var(--fg-rgb), 0.28);
+  font: 600 12.5px/1.2 var(--font);
+  color: var(--text);
+  text-decoration: none;
+}
+.cplink:hover,
+.cplink:focus-visible {
+  background: rgba(var(--fg-rgb), 0.1);
+}
+.cpstatsec {
+  padding: 18px 18px 6px;
+}
+.cpstath {
+  margin: 0 0 12px;
+  font: 600 20px/1.2 var(--font);
+  color: var(--text);
+}
+.cpstats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 12px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(var(--fg-rgb), 0.12);
+}
+.cpstat {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.cpstatl {
+  font: 400 12px/1.2 var(--font);
+  color: var(--mute);
+}
+.cpstatv {
+  font: 500 14px/1.25 var(--font);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.cpmini {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 18px;
+  background: rgba(var(--panel-rgb), 0.97);
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+.cpmini.on {
+  opacity: 1;
+}
+.cpmininame {
+  font: 600 14px/1.2 var(--font);
+  color: var(--text);
+}
+.cpminiprice {
+  font: 600 14px/1.2 var(--font);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.cpminichange {
+  font: 600 12.5px/1.2 var(--font);
+  color: var(--cpc);
+}
+.coinpage.isvamp .cpchart,
+.coinpage.isvamp .cptabs,
+.coinpage.isvamp .cpcap,
+.coinpage.isvamp .cplinks {
+  display: none;
+}
+.cpidrow .avwrap {
+  flex: none;
+  position: relative;
+  width: 36px;
+  height: 36px;
+}
+.cpidrow .avatar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 35% 30%, rgba(var(--fg-rgb), 0.22), rgba(var(--fg-rgb), 0.06) 70%);
+  font: 600 16px/1 var(--font);
+  color: var(--mute);
+}
+.cpidrow .avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ------------------------------------------------------------------------------------------------------------------------------
+   the evidence hub. While the score is hidden (the `noscore` class on the page, set by world/hub.ts) the score, its coverage, its
+   tags, PINRbot and the budget meter are not shown. Hidden, not deleted: switch the class off and they are back. A copy's label (VAMP) stays.
+   ------------------------------------------------------------------------------------------------------------------------------ */
+.dssec[hidden] {
+  display: none;
+}
+.noscore .dsscore,
+.noscore .card .cov,
+.noscore .card .advtag,
+.noscore .card .ctag,
+.noscore .card .earlytag,
+.noscore .dscore .cov > :not(.bycount),
+.noscore .drow:not([data-look="flag"]) .dscore .val {
+  display: none !important;
+}
+
+/* Orbit: the coin in the middle, what is linked to it around it, each fact with its dot, age and link. */
+.orbit {
+  padding: 22px 2px 6px;
+}
+.orbit[hidden] {
+  display: none;
+}
+.orbith,
+.cphealth {
+  margin: 0 0 8px;
+  font: 600 20px/1.2 var(--font);
+  color: var(--text);
+}
+.cphealth {
+  padding: 18px 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cphealthget {
+  display: inline-grid;
+  place-items: center;
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 15px;
+  background: rgba(var(--fg-rgb), 0.08);
+  font: 550 13px/1 var(--font);
+  color: var(--text);
+  text-decoration: none;
+}
+.cphealthget:hover {
+  background: rgba(var(--fg-rgb), 0.14);
+}
+.cphealthget[hidden] {
+  display: none;
+}
+.orbitnote {
+  margin: 0 0 10px;
+  font: 400 13px/1.45 var(--font);
+  color: var(--mute);
+}
+.orbitfig {
+  display: flex;
+  justify-content: center;
+}
+.orbitsvg {
+  width: min(100%, 360px);
+  height: auto;
+  overflow: visible;
+}
+.orbspoke {
+  stroke: rgba(var(--fg-rgb), 0.18);
+  stroke-width: 1;
+}
+.orbcoin {
+  fill: rgba(var(--live-rgb), 0.14);
+  stroke: rgba(var(--live-rgb), 0.7);
+  stroke-width: 1.5;
+}
+.orbcointxt {
+  fill: var(--text);
+  font: 700 14px var(--font);
+}
+.orbdot {
+  fill: rgba(var(--glass-rgb), 0.55);
+  stroke: rgba(var(--live-rgb), 0.65);
+  stroke-width: 1.5;
+}
+.orbnode.empty .orbdot {
+  stroke: rgba(var(--fg-rgb), 0.35);
+  stroke-dasharray: 3 3;
+}
+.orbnode {
+  cursor: pointer;
+  outline: none;
+}
+.orbnode:focus-visible .orbdot {
+  stroke-width: 3;
+}
+.orbcount {
+  fill: var(--text);
+  font: 600 14px var(--font);
+}
+.orblabel {
+  fill: var(--mute);
+  font: 500 12px var(--font);
+}
+.orbitlists {
+  display: grid;
+  gap: 18px;
+  margin-top: 8px;
+}
+.orbgroup {
+  scroll-margin-top: 70px;
+  border-radius: 10px;
+  transition: background 0.4s;
+}
+.orbgroup.flash {
+  background: rgba(var(--live-rgb), 0.1);
+}
+.orbgh {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 6px;
+  font: 600 15px/1.2 var(--font);
+  color: var(--text);
+}
+.orbgh em {
+  font-style: normal;
+  color: var(--mute);
+}
+.orbnone {
+  margin: 0;
+  font: 400 13px/1.45 var(--font);
+  color: var(--mute);
+}
+.orbrow {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  gap: 2px 8px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(var(--fg-rgb), 0.1);
+  font: 400 14px/1.4 var(--font);
+  color: var(--text);
+}
+.orbd.on {
+  color: var(--live);
+}
+.orbd.off {
+  color: var(--mute);
+}
+.orbtext {
+  overflow-wrap: anywhere;
+}
+.orbmeta {
+  grid-column: 2;
+  font: 400 12px/1.35 var(--font);
+  color: var(--mute);
+}
+.orblink {
+  grid-column: 3;
+  grid-row: 1;
+  color: var(--live);
+  font: 500 13px var(--font);
+  text-decoration: none;
+}
+.orbmore {
+  all: unset;
+  cursor: pointer;
+  padding: 8px 0;
+  color: var(--live);
+  font: 500 13px var(--font);
+}
+
+/* The gate's result on the coin page: what was observed at launch, in plain words. */
+.orbgate {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(var(--glass-rgb), 0.5);
+  border: 1px solid rgba(var(--fg-rgb), 0.1);
+}
+.orbgate[hidden] {
+  display: none;
+}
+.orbgateh {
+  margin: 0 0 4px;
+  font: 600 15px/1.2 var(--font);
+  color: var(--text);
+}
+.orbgatehead {
+  margin: 0 0 6px;
+  font: 400 13px/1.4 var(--font);
+  color: var(--mute);
+}
+.orbgaterow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  padding: 6px 0;
+  border-top: 1px solid rgba(var(--fg-rgb), 0.08);
+  font: 400 14px/1.4 var(--font);
+  color: var(--text);
+}
+.orbgatewhen {
+  color: var(--mute);
+  font-size: 12px;
+}
+.orbgateothers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: 8px;
+  font: 400 13px/1.4 var(--font);
+}
+.orbgateotherl {
+  flex-basis: 100%;
+  color: var(--mute);
+}
+.orbgatecoin {
+  color: var(--text);
+}
+.orbgateread {
+  margin: 8px 0 0;
+  font: 400 12px/1.35 var(--font);
+  color: var(--mute);
+}
+
+/* PINRai's reading on the coin page: observed words, each item with the receipts it stands on. */
+.orbai {
+  margin-top: 0;
+}
+.orbairow {
+  flex-direction: column;
+  gap: 2px;
+}
+.orbaireceipt {
+  font: 400 12px/1.4 var(--font);
+  color: var(--mute);
+  padding-left: 10px;
+}
+
+/* a coin found by its address that has had no trade for 24 hours says so, in plain words. */
+.cpquiet {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(var(--glass-rgb), 0.5);
+  border: 1px solid rgba(var(--fg-rgb), 0.12);
+  color: var(--mute);
+  font: 500 13px/1.35 var(--font);
+}
+.cpquiet[hidden] {
+  display: none;
+}
+
+/* The operator's swap (2026-10-25): the compass sits in the footer's centre, the PINR guide button (the quiet lime logo) in the header's. */
+#tabbar .compassslot {
+  cursor: default;
+}
+#tabbar .compassslot .compass {
+  position: relative;
+  left: auto;
+  top: auto;
+  margin: 0;
+}
+/* The footer's icon rule (24 px, outlined) is for the tab symbols, not the compass's pad. */
+#tabbar .compassslot .compass svg {
+  width: 100%;
+  height: 100%;
+  stroke: none;
+}
+/* The centre "PINR GUIDE" button: the PINR wordmark and the matching GUIDE wordmark on a quiet glass pill. */
+#bar .guidebtn {
+  all: unset;
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 14px;
+  border-radius: 14px;
+  background: rgba(var(--fg-rgb), 0.05);
+  box-shadow:
+    0 0 0 1px rgba(var(--fg-rgb), 0.12),
+    0 0 0 0 rgba(var(--live-rgb), 0);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+#bar .guidebtn .gwm {
+  height: 16px;
+  width: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+#bar .guidebtn:hover {
+  background: rgba(var(--fg-rgb), 0.08);
+}
+#bar .guidebtn:active {
+  transform: translate(-50%, -50%) scale(0.96);
+}
+#bar .guidebtn:focus-visible {
+  outline: 2px solid var(--live);
+  outline-offset: 2px;
+}
+#bar .guidebtn.on,
+#bar .guidebtn.open {
+  box-shadow:
+    0 0 0 1px rgba(var(--live-rgb), 0.7),
+    0 0 14px 1px rgba(var(--live-rgb), 0.35);
+}
+/* Its choice (PINR guide or Whitepaper) drops from the middle of the header; at phone width it is a bottom sheet like the rest. */
+@media (min-width: 600px) {
+  .pop-guide {
+    left: calc(50% - 130px);
+    right: auto;
+    width: 260px;
+    min-width: 0;
+    transform-origin: 50% 0;
+  }
+}
+/* The PINR tab: the wordmark with a small "page" centred below it. */
+#tabbar .tab .wmpage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+}
+#tabbar .tab .wmpage .pg {
+  font: 600 9px/1 var(--font);
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  opacity: 0.7;
+}
+#tabbar .tab.on .wmpage .pg {
+  opacity: 1;
+}
+/* Phone width: smaller, so it sits clear of the wordmark on the left and the pipeline symbol on the right. */
+@media (max-width: 599.98px) {
+  #bar .guidebtn {
+    height: 32px;
+    gap: 4px;
+    padding: 0 7px;
+    border-radius: 11px;
+  }
+  #bar .guidebtn .gwm {
+    height: 10.5px;
+  }
+}
+/* A phone: the header is left, GUIDE, actions in a row, so GUIDE sits in the room between the two and never over a button. */
+@media (max-width: 440px) {
+  #bar .guidebtn {
+    position: static;
+    transform: none;
+    flex: none;
+  }
+}
+@media (max-width: 340px) {
+  #bar .wordmark {
+    display: none;
+  }
+}
+@media (max-width: 380px) {
+  #bar .guidebtn {
+    padding: 0 5px;
+    gap: 3px;
+  }
+  #bar .guidebtn .gwm {
+    height: 9.5px;
+  }
+}
+/* Light mode: the compass's pad in PINR violet, so it reads on the light glass. */
+:root[data-theme="light"] .compass .arm,
+:root[data-theme="light"] .compass .dot {
+  fill: rgba(108, 77, 251, 0.2);
+}
+:root[data-theme="light"] .compass .hub {
+  fill: rgb(var(--glass-rgb));
+  stroke: rgba(108, 77, 251, 0.35);
+}
+:root[data-theme="light"] .compass .lit {
+  fill: var(--live);
+}
+:root[data-theme="light"] .compass .hub.lit {
+  fill: rgb(var(--glass-rgb));
+  stroke: var(--live);
+}
+/* Light mode: the centre button's pill in PINR violet, so it reads on the light glass. */
+:root[data-theme="light"] #bar .guidebtn {
+  background: rgba(108, 77, 251, 0.06);
+  box-shadow:
+    0 0 0 1px rgba(108, 77, 251, 0.22),
+    0 0 0 0 rgba(var(--live-rgb), 0);
+}
+
+/* DECISION 259: the PvP Arena (north-east room). Each contested coin's versions side by side, the leader first. */
+.page-arena .pbody {
+  display: none;
+}
+#arena .dframe {
+  background: rgba(var(--panel-rgb), 0.93);
+}
+.arpage {
+  padding: 8px 4px 40px;
+  margin: 0 auto;
+}
+.arhead h1 {
+  margin: 0;
+  font: 700 34px/1.05 var(--font);
+  letter-spacing: -0.03em;
+}
+.arsub,
+.arfoot,
+.arempty {
+  margin: 6px 0 14px;
+  font: 400 13.5px/1.45 var(--font);
+  color: var(--mute);
+}
+.argroup {
+  margin: 0 0 14px;
+  padding: 10px;
+  border-radius: 22px;
+  background: rgba(var(--glass-rgb), 0.6);
+  box-shadow: inset 0 0 0 1px rgba(var(--fg-rgb), 0.1);
+}
+.argh {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding: 2px 6px 8px;
+  font: 600 15px/1.2 var(--font);
+}
+.arghv {
+  font: 500 12px/1.2 var(--mono);
+  color: var(--mute);
+  white-space: nowrap;
+}
+.arrow {
+  all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 38px minmax(120px, 1.6fr) repeat(5, minmax(56px, 1fr));
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 16px;
+  cursor: pointer;
+}
+.arrow + .arrow {
+  margin-top: 4px;
+}
+.arrow:hover {
+  background: rgba(var(--fg-rgb), 0.05);
+}
+.arrow.lead {
+  background: rgba(var(--live-rgb), 0.08);
+  box-shadow: inset 0 0 0 1px rgba(var(--live-rgb), 0.4);
+}
+.arpic {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: rgba(var(--fg-rgb), 0.08);
+  font: 700 15px/1 var(--font);
+  color: var(--mute);
+}
+.arpic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.arwho {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
+}
+.arwho b {
+  font: 600 14px/1.2 var(--font);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.artick,
+.armeta {
+  font: 500 11px/1.25 var(--mono);
+  color: var(--mute);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.archip {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 1px 7px;
+  border-radius: 9px;
+  font: 600 10px/1.5 var(--font);
+  color: var(--text);
+  background: rgba(var(--fg-rgb), 0.08);
+}
+.arfig {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.arlab {
+  font: 500 10px/1.2 var(--font);
+  color: var(--mute);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.arval {
+  font: 600 12.5px/1.25 var(--mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.arfig.arhot .arval {
+  color: var(--live);
+}
+.arfig.up .arval {
+  color: var(--live);
+}
+.arfig.down .arval {
+  color: var(--mandarin);
+}
+@media (max-width: 599.98px) {
+  .arrow {
+    grid-template-columns: 34px 1fr 1fr 1fr;
+  }
+  .arwho {
+    grid-column: 2 / span 3;
+  }
+  .arpic {
+    width: 34px;
+    height: 34px;
+  }
+  /* checklist 5: the five figures sit in two rows under the name (never in the picture's 34 px column), and a figure wraps at a space rather
+     than being cut ("$41…") */
+  .arrow > .arfig:nth-child(3),
+  .arrow > .arfig:nth-child(6) {
+    grid-column-start: 2;
+  }
+  .arval {
+    white-space: normal;
+    overflow: visible;
+  }
+}
+/* the Pool section, one observed event a line, newest first. */
+.dspool {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.dspoolrow {
+  font: 400 13px/1.45 var(--font);
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(var(--fg-rgb), 0.04);
+}
+.dspoolrow .dsdot {
+  color: var(--live);
+  margin-right: 6px;
+}
+.dspoolwhat,
+.dspoolwhen {
+  color: var(--mute);
+}
+
+/* PINRads: the line that says an empty ad space can be applied for, and the application form. */
+.page .adapply {
+  margin-top: 4px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: rgba(var(--fg-rgb), 0.1);
+  font: 600 12px/1.3 var(--font);
+  color: var(--text);
+}
+.adform {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+  max-width: 560px;
+}
+.adfield {
+  display: grid;
+  gap: 6px;
+}
+.adlabel {
+  font: 600 13px/1.2 var(--font);
+  color: var(--text);
+}
+.adhint {
+  font: 400 12px/1.4 var(--font);
+  color: var(--mute);
+}
+.adform input,
+.adform select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(var(--fg-rgb), 0.18);
+  background: rgba(var(--fg-rgb), 0.05);
+  color: var(--text);
+  font: 400 14px/1.3 var(--font);
+}
+.adform input[type="file"] {
+  padding: 8px;
+}
+.adform input:focus,
+.adform select:focus {
+  outline: 2px solid var(--live);
+  outline-offset: 1px;
+}
+.adsend {
+  all: unset;
+  box-sizing: border-box;
+  justify-self: start;
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 21px;
+  background: var(--live);
+  color: var(--on-live);
+  font: 650 14px/42px var(--font);
+  cursor: pointer;
+}
+.adsend:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.adstatus {
+  margin: 0;
+  min-height: 1.3em;
+  font: 500 13px/1.4 var(--font);
+  color: var(--mute);
+}
+.adstatus.bad {
+  color: var(--mandarin);
+}
+.addone .adsend {
+  margin-top: 8px;
+}
+
+/* The ad slots are as tall as the room allows (the rows shrink to fit), so their words follow the slot's own height: the name and the "Apply"
+   line always show; the small "placeholder" line goes when a slot is short. */
+.page .adslot {
+  container-type: size;
+}
+.page .adslot.wide .adname {
+  font-size: clamp(14px, 22cqh, 34px);
+}
+.page .adslot:not(.wide) .adname {
+  font-size: clamp(12px, 15cqh, 19px);
+}
+.page .adapply {
+  font-size: clamp(9px, 10cqh, 12px);
+  padding: clamp(2px, 2cqh, 4px) 10px;
+}
+@container (max-height: 120px) {
+  .page .adkind {
+    display: none;
+  }
+}
+
+/* a coin's tags (copy, bot launch, serial launcher), the same chip everywhere it appears. */
+.tagchip {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 9px;
+  font: 650 10px/1.5 var(--font);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  border: 1px solid currentColor;
+  background: rgba(var(--fg-rgb), 0.04);
+}
+.tagchip.tag-vamp {
+  color: var(--mandarin);
+}
+.tagchip.tag-bot {
+  color: #ff5e8a;
+}
+.tagchip.tag-serial_launcher {
+  color: #b86bff;
+}
+.dtags,
+.cptags,
+.artags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.dtags:empty,
+.cptags:empty {
+  display: none;
+}
+.cptags {
+  margin: 4px 0 6px;
+}
+/* on a tile the tags sit under the ticker, sized with the tile, at every size */
+.card .ttags {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  gap: 0.3em;
+  margin-top: 0.25em;
+}
+.card .ttags:empty {
+  display: none;
+}
+/* A tile with a tag chip has one line less: the figures sit closer and the score is a little smaller, so nothing lands on the score (seen live on a phone). */
+.card:has(.ttags:not(:empty)) .facts {
+  margin-top: 0.12em;
+  gap: 0.06em;
+}
+.card .ttags {
+  margin-top: 0.1em;
+}
+.card:has(.ttags:not(:empty)) .val {
+  font-size: calc(var(--fnum) * 0.86);
+}
+.card .ttags .tagchip {
+  font-size: calc(var(--ftick) * 0.95);
+  line-height: 1.05;
+  padding: 0 0.35em;
+  border-radius: 0.8em;
+}

@@ -1,0 +1,17 @@
+# every listed coin's trades from SQD Portal (scanner/sqd_live.py) into the feed's tick files, about a second
+# behind the chain. A user unit of `pinr` (lingering), like pinr-trades: restarted by `pinr` without sudo. No key: the Portal
+# is free and keyless. Off unless `sqd_live` is "on" in scanner/settings.json (the service then stops by itself).
+[Unit]
+Description=PINR live trades from SQD Portal
+
+[Service]
+WorkingDirectory=%h/pinr/engine
+ExecStart=/usr/bin/python3 scanner/sqd_live.py run
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=10
+StandardOutput=append:%h/pinr/engine/scanner/sqd_live.log
+StandardError=append:%h/pinr/engine/scanner/sqd_live.log
+
+[Install]
+WantedBy=default.target

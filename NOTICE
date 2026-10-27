@@ -1,0 +1,8 @@
+Copyright (c) PINR. All rights reserved.
+
+This repository is published for reading only. No license (open-source or otherwise) is granted to use, copy,
+modify, merge, publish, distribute, sublicense or sell any part of it without written permission from PINR.
+
+Third-party files keep their own licenses: the Solidity sources under engine/stage4/clanker_src/,
+clanker_old_src/, clanker_v40_src/ and doppler_src/ are copies of the launchpads' published contracts, under the licenses
+stated in their SPDX headers.

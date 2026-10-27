@@ -1,0 +1,14 @@
+# PINRbot's relay readings to the server, one pass. Copies only pinrbot/relay/readings/*.json from
+# GitHub's main into the engine's index/relay-readings/ (git show; the working tree and the code are never touched), puts
+# each new or changed coin on PINRbot's wanted list and asks the scanner to score it first. Free: no API call. A user unit
+# of `pinr`; installed only on the operator's typed yes: ops/systemd/install-relay-sync.sh.
+[Unit]
+Description=PINR relay readings sync
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/pinr/engine
+ExecStart=/usr/bin/python3 stage3/relay_sync.py
+StandardOutput=append:%h/pinr/engine/scanner/relay-sync.log
+StandardError=append:%h/pinr/engine/scanner/relay-sync.log
+TimeoutStartSec=4min

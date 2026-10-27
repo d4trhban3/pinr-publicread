@@ -1,0 +1,211 @@
+{
+ "_about": "What each data wire on the control page can do: for each field, the sources the code can use to fill it, who fills it (engine = the scanner; feed = the feed server), the default order, and whether its wires are followed yet. control/routing.json (written only by the control service) holds the chosen order; scanner/routing.py and the feed read it live. Optional: `nodes` (Solana node order per read kind) and `trade_feed`.",
+ "fields": {
+  "picture": {
+   "owner": "engine",
+   "followed": true,
+   "words": "a coin's picture",
+   "sources": [
+    "jupiter",
+    "ipfs",
+    "pumpfun"
+   ],
+   "default": [
+    "jupiter",
+    "ipfs",
+    "pumpfun"
+   ]
+  },
+  "links": {
+   "owner": "engine",
+   "followed": true,
+   "words": "a coin's own links (X, website, Telegram)",
+   "sources": [
+    "ipfs",
+    "pumpfun"
+   ],
+   "default": [
+    "ipfs",
+    "pumpfun"
+   ]
+  },
+  "token_data": {
+   "owner": "engine",
+   "followed": true,
+   "words": "token data for the gate (creator, launches, name, ticker, launch time)",
+   "sources": [
+    "jupiter"
+   ],
+   "default": [
+    "jupiter"
+   ]
+  },
+  "price": {
+   "owner": "feed",
+   "followed": true,
+   "words": "a coin's price",
+   "sources": [
+    "dexscreener",
+    "pumpfun",
+    "geckoterminal",
+    "jupiter",
+    "pumpportal"
+   ],
+   "default": [
+    "dexscreener",
+    "pumpfun",
+    "geckoterminal",
+    "jupiter",
+    "pumpportal"
+   ]
+  },
+  "volume": {
+   "owner": "feed",
+   "followed": true,
+   "words": "a coin's 24-hour volume",
+   "sources": [
+    "dexscreener",
+    "geckoterminal",
+    "jupiter",
+    "pumpfun"
+   ],
+   "default": [
+    "dexscreener",
+    "geckoterminal",
+    "jupiter"
+   ]
+  },
+  "liquidity": {
+   "owner": "feed",
+   "followed": true,
+   "words": "a coin's liquidity",
+   "sources": [
+    "dexscreener",
+    "jupiter",
+    "geckoterminal"
+   ],
+   "default": [
+    "dexscreener",
+    "geckoterminal",
+    "jupiter"
+   ]
+  },
+  "candles": {
+   "owner": "feed",
+   "followed": true,
+   "words": "a coin's chart candles",
+   "sources": [
+    "pumpfun",
+    "tape",
+    "geckoterminal"
+   ],
+   "default": [
+    "pumpfun",
+    "tape",
+    "geckoterminal"
+   ]
+  }
+ },
+ "sources": {
+  "jupiter": "Jupiter (token list, icons, prices)",
+  "ipfs": "the coin's own metadata file (IPFS gateways)",
+  "pumpfun": "Pump.fun's own API",
+  "pumpportal": "PumpPortal's free stream",
+  "dexscreener": "DexScreener",
+  "geckoterminal": "GeckoTerminal",
+  "tape": "PINR's own trade tape"
+ },
+ "discovery": {
+  "pumpfun": {
+   "owner": "feed",
+   "followed": true,
+   "words": "Pump.fun and PumpSwap coins (the app's pool)",
+   "default": true
+  },
+  "launchlab": {
+   "owner": "engine",
+   "followed": true,
+   "words": "Raydium LaunchLab's own list (Stonk.fun, letsbonk.fun and the rest)",
+   "default": true
+  },
+  "bags": {
+   "owner": "engine",
+   "followed": true,
+   "words": "Bags' own launch feed",
+   "default": true
+  },
+  "jupiter_recent": {
+   "owner": "engine",
+   "followed": true,
+   "words": "Jupiter's recent list (Meteora DBC, Moonshot, Boop and the rest)",
+   "default": true
+  },
+  "stonkfun": {
+   "owner": "engine",
+   "followed": true,
+   "words": "Stonk.fun's own ten-minute list",
+   "default": true
+  }
+ },
+ "nodes": {
+  "owner": "engine",
+  "followed": true,
+  "words": "which Solana node answers each kind of read, top wire first (the server's reads; the Mac keeps its own sign-ups)",
+  "kinds": {
+   "largest_holders": {
+    "words": "a coin's largest holders",
+    "methods": [
+     "getTokenLargestAccounts"
+    ]
+   },
+   "token_accounts": {
+    "words": "a wallet's token accounts",
+    "methods": [
+     "getTokenAccountsByOwner"
+    ]
+   },
+   "transactions": {
+    "words": "transactions and their signatures",
+    "methods": [
+     "getTransaction",
+     "getSignaturesForAddress"
+    ]
+   },
+   "other": {
+    "words": "every other read (accounts, balances, supply, slots)",
+    "methods": "*"
+   }
+  },
+  "names": {
+   "public": "Solana's public node",
+   "publicnode": "PublicNode",
+   "shyft": "Shyft",
+   "chainstack": "Chainstack",
+   "helius": "Helius (the older key)",
+   "alchemy": "Alchemy (the older key)",
+   "drpc": "dRPC",
+   "helius_official": "Helius",
+   "alchemy_official": "Alchemy",
+   "quicknode": "QuickNode",
+   "orbitflare": "OrbitFlare",
+   "vibestation": "Solana Vibe Station"
+  }
+ },
+ "trade_feed": {
+  "owner": "engine",
+  "followed": true,
+  "words": "the live trade feed's websocket: its first node, the overflow that takes over when the first will not hold, and how many coins it watches",
+  "names": {
+   "public": "Solana's public node",
+   "publicnode": "PublicNode",
+   "chainstack": "Chainstack",
+   "helius": "Helius (the older key)",
+   "shyft": "Shyft"
+  },
+  "max_nodes": 2,
+  "coins": [
+   1,
+   1000
+  ]
+ }
+}

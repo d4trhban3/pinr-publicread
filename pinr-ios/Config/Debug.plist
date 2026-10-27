@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Test builds read the feed server on this Mac (the Simulator shares the Mac's address). -->
+	<key>PINRFeedURL</key>
+	<string>http://127.0.0.1:8787</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<!-- A link `pinr://coin/<address>` opens that coin in the app. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>io.pinr.app</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>pinr</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
