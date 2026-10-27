@@ -85,7 +85,7 @@ struct TileView: View {
     private var spoken: String {
         var parts = [Format.title(token), Format.ticker(token)]
         if let label = token.label { parts.append("labelled \(label.rawValue), no score") }
-        else if let s = token.score { parts.append("PINRscore \(s), coverage \(Format.coverage(token.coverage))") }
+        else if let s = token.score { parts.append("PINR Index \(s), coverage \(Format.coverage(token.coverage))") }
         else { parts.append(Ranking.isRead(token) ? "no score" : "not scored yet") }
         if token.label == nil {
             parts.append("market cap \(Format.usdCompact(token.valuationUsd))")

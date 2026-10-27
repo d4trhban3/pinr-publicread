@@ -3,7 +3,7 @@
  "answer": {
   "data": [
    {
-    "id": "solana_7pJwgHd4bpysQvMd4MLkKyb1bVrkWHYTZknHKpS5T51g",
+    "id": "solana_6jbJydo31LJ5DfK1Epv7JYuXKf65hy5xUEGiDWMNeF8m",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000514565065430699196831136502953065254685055936110380640616293102",
@@ -12,7 +12,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000004571570121",
      "quote_token_price_base_token": "21874322.6818498",
-     "address": "7pJwgHd4bpysQvMd4MLkKyb1bVrkWHYTZknHKpS5T51g",
+     "address": "6jbJydo31LJ5DfK1Epv7JYuXKf65hy5xUEGiDWMNeF8m",
      "name": "Rich / SOL",
      "pool_created_at": "2026-10-17T18:45:55Z",
      "fdv_usd": "5912.870024",
@@ -76,7 +76,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_GqVHdiSoFJNqTFW7t13WG82r7Pyp4h46sZEYZ1Yqpump",
+       "id": "solana_3Byf2ZnatEr1jkjm1dt6ejKxzqvi2Qp5dUcBfNEgpump",
        "type": "token"
       }
      },
@@ -95,7 +95,7 @@
     }
    },
    {
-    "id": "solana_3WfFxwDU1BU1XRE2fS2QTQvAWnVZ3HEzpp7L6tybwmc4",
+    "id": "solana_9yZ7zHNRuX72hwi6Ah98FDgJFtifZBCWixCxCtp7yKrR",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000372268479312474968895566397145103382666324043359996708752473656",
@@ -104,7 +104,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000003823920404",
      "quote_token_price_base_token": "26151171.9493261",
-     "address": "3WfFxwDU1BU1XRE2fS2QTQvAWnVZ3HEzpp7L6tybwmc4",
+     "address": "9yZ7zHNRuX72hwi6Ah98FDgJFtifZBCWixCxCtp7yKrR",
      "name": "TUNA / SOL",
      "pool_created_at": "2026-10-17T18:45:51Z",
      "fdv_usd": "5851.79274",
@@ -168,7 +168,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_7VRrAE9VCBvqpf9cEHDmz6ZH5ZGxTHkA6Ko6Xwm3pump",
+       "id": "solana_869USt2jeafihubUVShdgbu5oNogBJodXsJnXJmfpump",
        "type": "token"
       }
      },
@@ -187,7 +187,7 @@
     }
    },
    {
-    "id": "solana_GqFdXh18Wev9hFAiQrEZrtScQTQBXiE7pA9UAKWuvFt",
+    "id": "solana_3rk8V7RDaeMWV3XAGR7MVydwWdBy6qaYkMRCeFGgqcL",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000298889998124773129498974291578913059864644393205833549494298175",
@@ -196,7 +196,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000002877282365",
      "quote_token_price_base_token": "34755017.8708841",
-     "address": "GqFdXh18Wev9hFAiQrEZrtScQTQBXiE7pA9UAKWuvFt",
+     "address": "3rk8V7RDaeMWV3XAGR7MVydwWdBy6qaYkMRCeFGgqcL",
      "name": "ILON / SOL",
      "pool_created_at": "2026-10-17T18:45:50Z",
      "fdv_usd": "5977.799962",
@@ -260,7 +260,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_B4ruPWtqTqRb1z6goqbvYaPKx8v5r95gJS4tsjxwpump",
+       "id": "solana_EkZwhD5sBW8xejM2JVRH5Tndn5n5ivJxzcx42TJ2pump",
        "type": "token"
       }
      },
@@ -279,7 +279,7 @@
     }
    },
    {
-    "id": "solana_7ETGSsiCYbMdR3bFSTKhQDBu6sCrounvAxjAL7fjqjkL",
+    "id": "solana_CypUQHPaeJU4dzHn52MGVrEoM8Fg9hnUVamRLwqS8rMb",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000093087717716652765349263450934072357393008967948734902615034757",
@@ -288,7 +288,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000001194376148",
      "quote_token_price_base_token": "83725717.54674",
-     "address": "7ETGSsiCYbMdR3bFSTKhQDBu6sCrounvAxjAL7fjqjkL",
+     "address": "CypUQHPaeJU4dzHn52MGVrEoM8Fg9hnUVamRLwqS8rMb",
      "name": "$DODO / SOL",
      "pool_created_at": "2026-10-17T18:45:46Z",
      "fdv_usd": "2634.639168",
@@ -352,7 +352,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_GpZHPyMY74WCubBYe5ZSj9KgWzPwuEJGfNG3GQDjpump",
+       "id": "solana_9vhwHUUvsmk6gEpk2A9q1zZJp42PJ1rq3XJ1HaAwpump",
        "type": "token"
       }
      },
@@ -371,7 +371,7 @@
     }
    },
    {
-    "id": "solana_AuKLkRWtJGozrfD46kuMwoRfQWDdnWmMPkyUNhTAt2m5",
+    "id": "solana_CwTcADcQT9B4t68iGTXKT2jSVW5ypscaAVut5tSuq3cT",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000338835476293672301406703229794774186439486048953537387497330242",
@@ -380,7 +380,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000003288334598",
      "quote_token_price_base_token": "30410530.625844",
-     "address": "AuKLkRWtJGozrfD46kuMwoRfQWDdnWmMPkyUNhTAt2m5",
+     "address": "CwTcADcQT9B4t68iGTXKT2jSVW5ypscaAVut5tSuq3cT",
      "name": "CHAROC / SOL",
      "pool_created_at": "2026-10-17T18:45:45Z",
      "fdv_usd": "6776.24758",
@@ -444,7 +444,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_Db3WfXrsPJ33AGG5RUscY7iQg5MJT1t3mRe7dPfjpump",
+       "id": "solana_BuDUgfLMzz4GPb7iAUBj5SHoPJ4cY17xfHxT9ub2pump",
        "type": "token"
       }
      },
@@ -463,7 +463,7 @@
     }
    },
    {
-    "id": "solana_ArY6Ja193Gfxv4WCocKHa9vgxLQsnBoGH2uJfrPuSj57",
+    "id": "solana_FKBAV53b44XmpBvxYdyRNdhBjqx54VSddYSEnKkHonoD",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000363850404828679128348771155357298617004405118884263591623725149",
@@ -472,7 +472,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000003502634488",
      "quote_token_price_base_token": "28549938.7247091",
-     "address": "ArY6Ja193Gfxv4WCocKHa9vgxLQsnBoGH2uJfrPuSj57",
+     "address": "FKBAV53b44XmpBvxYdyRNdhBjqx54VSddYSEnKkHonoD",
      "name": "CYBERLEEK / SOL",
      "pool_created_at": "2026-10-17T18:45:44Z",
      "fdv_usd": "4907.16452",
@@ -536,7 +536,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_9iL4zLwd3NarhipzFppvCNbiCyxSR63mQ9aTj6nSpump",
+       "id": "solana_55QZXFY3Gdu4ahWCUFbEgSRyEtJpNtamRSWycoMMpump",
        "type": "token"
       }
      },
@@ -555,7 +555,7 @@
     }
    },
    {
-    "id": "solana_DxK99W7RP5wgjh9GF4rMtSU7xRgaVeWY8pS2QEhUJHa",
+    "id": "solana_4S4qgPQQDtwJDGgcu1WUeCEnL92NAbwY3eKhr6ajwsL",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.000000939777168165664452726489061202535889976954691412288413304856947",
@@ -564,7 +564,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.000000009046838691",
      "quote_token_price_base_token": "110535849.504573",
-     "address": "DxK99W7RP5wgjh9GF4rMtSU7xRgaVeWY8pS2QEhUJHa",
+     "address": "4S4qgPQQDtwJDGgcu1WUeCEnL92NAbwY3eKhr6ajwsL",
      "name": "1\u20ac / SOL",
      "pool_created_at": "2026-10-17T18:45:41Z",
      "fdv_usd": "2155.694722",
@@ -628,7 +628,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_G6rtSh7BsYtrcq99UGURHE1j1iLZLPjT2tsSURGMpump",
+       "id": "solana_6P39G6Xi3MvPwHykQByWPk8RYKKRPDdsALGK4xZwpump",
        "type": "token"
       }
      },
@@ -647,7 +647,7 @@
     }
    },
    {
-    "id": "solana_H8LHf2uNXQjzBfACN14knFuWFPqAk6MzrmfGFXFbhWGT",
+    "id": "solana_DQjYpqJVNtXejGnk42haXsCXuPaUCpCXaiqRFBk1Qvsq",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000292819589429326911972466747853410349610430942356134454592754041",
@@ -656,7 +656,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000002818863407",
      "quote_token_price_base_token": "35475291.1218163",
-     "address": "H8LHf2uNXQjzBfACN14knFuWFPqAk6MzrmfGFXFbhWGT",
+     "address": "DQjYpqJVNtXejGnk42haXsCXuPaUCpCXaiqRFBk1Qvsq",
      "name": "HBAG / SOL",
      "pool_created_at": "2026-10-17T18:45:35Z",
      "fdv_usd": "2928.195894",
@@ -720,7 +720,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_2PD2zVZfeh1nyHzCGasV42wh5qyxGLHCka8hpc46pump",
+       "id": "solana_43C6BAyZrBdvXt7aRhPDUsXgS7UkoF3SxV9GaoMqpump",
        "type": "token"
       }
      },
@@ -739,7 +739,7 @@
     }
    },
    {
-    "id": "solana_6GntMSpVNCUMwVWB72rk4DLetdfeHJH3WnGhZK1CiPe1",
+    "id": "solana_FxQsshMxhWeEPSRDUC8yU1tq5V693ciGGXtuMDFn1auE",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.000000913379968772407448328529093784921616499963078493803107180609694",
@@ -748,7 +748,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.000000009932033167",
      "quote_token_price_base_token": "100684319.435388",
-     "address": "6GntMSpVNCUMwVWB72rk4DLetdfeHJH3WnGhZK1CiPe1",
+     "address": "FxQsshMxhWeEPSRDUC8yU1tq5V693ciGGXtuMDFn1auE",
      "name": "BROKE / SOL",
      "pool_created_at": "2026-10-17T18:45:35Z",
      "fdv_usd": "1607.7815422",
@@ -812,7 +812,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_5v2qsa8UX7y4eMxgxiq5M3en32agD7JuZN5dXccUpump",
+       "id": "solana_27TaxzQk1Jhif5ba45fURBd8dWsoTAvLSnbhJsfXpump",
        "type": "token"
       }
      },
@@ -831,7 +831,7 @@
     }
    },
    {
-    "id": "solana_BF61jK754WRqCevEm66gL6ECw6geJDNEPBJdUW5pAP9h",
+    "id": "solana_6BAKzWwXJotuhyo1c62EzCqRMoExvgYpbAvAMC9Tx6Bp",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000110036315377122032553450998454129456320472388265534478005860878",
@@ -840,7 +840,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000001365712589",
      "quote_token_price_base_token": "73221848.2802692",
-     "address": "BF61jK754WRqCevEm66gL6ECw6geJDNEPBJdUW5pAP9h",
+     "address": "6BAKzWwXJotuhyo1c62EzCqRMoExvgYpbAvAMC9Tx6Bp",
      "name": "MIRA / SOL",
      "pool_created_at": "2026-10-17T18:45:32Z",
      "fdv_usd": "2139.377642",
@@ -904,7 +904,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_EvWjvrvtAThL2yQLquxn3YaMzZRE56PM163yGUkzpump",
+       "id": "solana_2TDXwwqXC7vX2NgC6QBTHCRyWzTxFeUgsvZnk8LUpump",
        "type": "token"
       }
      },
@@ -923,7 +923,7 @@
     }
    },
    {
-    "id": "solana_AutgDdkYhxcLjefGTYybnVUFv9AAWXiDBbfBZ4Qq1ryg",
+    "id": "solana_w6nhqA9W2tZFoYDK1hftDqHLKTPqR4fAmA8QNd4D7qG4",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000355056650618765599623517791754066017926899568315488689857480544",
@@ -932,7 +932,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000003417981322",
      "quote_token_price_base_token": "29257035.2456429",
-     "address": "AutgDdkYhxcLjefGTYybnVUFv9AAWXiDBbfBZ4Qq1ryg",
+     "address": "w6nhqA9W2tZFoYDK1hftDqHLKTPqR4fAmA8QNd4D7qG4",
      "name": "LUNA / SOL",
      "pool_created_at": "2026-10-17T18:45:32Z",
      "fdv_usd": "3550.566506",
@@ -996,7 +996,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_55xEB7e9ZftBDdsKL1rvY299bb9qXbJurN6JyExcpump",
+       "id": "solana_2QV6tjRwKFdANPrAE8eBwf8bbxwqk61TApveGj4kpump",
        "type": "token"
       }
      },
@@ -1015,7 +1015,7 @@
     }
    },
    {
-    "id": "solana_GLgofRKSMMvRbynNwW5PNhKPhNWeFXnF4xGa31BXcRjp",
+    "id": "solana_EdHHuHNwFsjYaRwEiyj311UJCeiWg8KAaLcqVtr1GX76",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.000000257251455178310340356088032851526162157615152039021897609065865",
@@ -1024,7 +1024,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.000000002476444431",
      "quote_token_price_base_token": "403804740.152067",
-     "address": "GLgofRKSMMvRbynNwW5PNhKPhNWeFXnF4xGa31BXcRjp",
+     "address": "EdHHuHNwFsjYaRwEiyj311UJCeiWg8KAaLcqVtr1GX76",
      "name": "DOLPHINU / SOL",
      "pool_created_at": "2026-10-17T18:45:30Z",
      "fdv_usd": "514.5029104",
@@ -1088,7 +1088,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_6uV1vhXNUithwmazGv4QBNqkPbk671dDekCGfWjapump",
+       "id": "solana_JEErfZ3vKYr8JgSSwQix138QPF3QUPZPcEyRqWWppump",
        "type": "token"
       }
      },
@@ -1107,7 +1107,7 @@
     }
    },
    {
-    "id": "solana_G1DsZTCEmqZ6a7yfzr4TvXYDvr2A83BzdLoBZgisT2dP",
+    "id": "solana_89va71KEC6Dt8pCNbMfekthNu9XoQStLZN6AiQhPK258",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.0000014527806473414050163169390421447377264554570128076264357398236",
@@ -1116,7 +1116,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000001398526454",
      "quote_token_price_base_token": "71503831.540434",
-     "address": "G1DsZTCEmqZ6a7yfzr4TvXYDvr2A83BzdLoBZgisT2dP",
+     "address": "89va71KEC6Dt8pCNbMfekthNu9XoQStLZN6AiQhPK258",
      "name": "67 / SOL",
      "pool_created_at": "2026-10-17T18:45:30Z",
      "fdv_usd": "2344.608864",
@@ -1180,7 +1180,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_7yTMkGAAwHRueYShsZeqoPxeMcgLR1PRh6qBY5wBpump",
+       "id": "solana_DRQh7gvzvamqjkinHgk4FkPbGbU83KVybWDYFMWupump",
        "type": "token"
       }
      },
@@ -1199,7 +1199,7 @@
     }
    },
    {
-    "id": "solana_6JxoDh2uKMZciH57fmucYJCLnTqsW5Hq3GJdyqco77nr",
+    "id": "solana_9CRMtvJcP2LHvvQxXuiXZoHHyN9Vngof4eex8U9qonND",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000290408945476338573567470809308736117289167895942055039351272577",
@@ -1208,7 +1208,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.0000000279612302",
      "quote_token_price_base_token": "35763805.5620834",
-     "address": "6JxoDh2uKMZciH57fmucYJCLnTqsW5Hq3GJdyqco77nr",
+     "address": "9CRMtvJcP2LHvvQxXuiXZoHHyN9Vngof4eex8U9qonND",
      "name": "Unstuck / SOL",
      "pool_created_at": "2026-10-17T18:45:30Z",
      "fdv_usd": "2904.089455",
@@ -1272,7 +1272,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_BRaFPXFdTmQ1Ex6YvcaJQKd5YciNVXVKhjvLK7ibMxs2",
+       "id": "solana_CeHLewwRXgPmafQqwVABHeGWjbTvBprcKPHaRpLBWdVP",
        "type": "token"
       }
      },
@@ -1291,7 +1291,7 @@
     }
    },
    {
-    "id": "solana_99K7W5eHk7GdkVa4UPAGGAXPsSFEopWUt45PpBy8qQNw",
+    "id": "solana_27SVZ27gTwJLa1tugjoXzkEVkg5WiTnA2qtaK2y4j556",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000383009955101281593370485257912422545476024653278270563207907",
@@ -1300,7 +1300,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000003594050345",
      "quote_token_price_base_token": "27823761.6072673",
-     "address": "99K7W5eHk7GdkVa4UPAGGAXPsSFEopWUt45PpBy8qQNw",
+     "address": "27SVZ27gTwJLa1tugjoXzkEVkg5WiTnA2qtaK2y4j556",
      "name": "Catnomics / SOL",
      "pool_created_at": "2026-10-17T18:45:29Z",
      "fdv_usd": "3830.099551",
@@ -1364,7 +1364,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_48aBJUFGne3Vg5c199rQvXW8KPHjgCuvXq5wybB1pump",
+       "id": "solana_5vKjqmuzHVHMJyUvWDGLTMHoEwg7ZPySaHA2eXRspump",
        "type": "token"
       }
      },
@@ -1383,7 +1383,7 @@
     }
    },
    {
-    "id": "solana_4nTXGMNqSwWbaVUM2LjUfbuxSSV4mDH2kvus8nXoT6Vk",
+    "id": "solana_Crp919vei79RmqiihfBYdXh68RcTi9V92WsJMYSDXreg",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.000003649844230099949671291487470300235240336297786874881670708621",
@@ -1392,7 +1392,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000003514152403",
      "quote_token_price_base_token": "28456364.0164618",
-     "address": "4nTXGMNqSwWbaVUM2LjUfbuxSSV4mDH2kvus8nXoT6Vk",
+     "address": "Crp919vei79RmqiihfBYdXh68RcTi9V92WsJMYSDXreg",
      "name": "NIP / SOL",
      "pool_created_at": "2026-10-17T18:45:28Z",
      "fdv_usd": "3649.84423",
@@ -1456,7 +1456,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_FwgvL3dEKattDPjukDNEwHrMPWfBbTyaHvgCqfQepump",
+       "id": "solana_68pYvRVwz6sjPAWT7bKuyoqKKAQ7uEsS1V3ZkT1dpump",
        "type": "token"
       }
      },
@@ -1475,7 +1475,7 @@
     }
    },
    {
-    "id": "solana_9iP6w5WnoPRGBMLHZb5T718X7MrTZe2yUhhgsQxopGt7",
+    "id": "solana_2ucV7Ppq1GDAiv3r75dsx3NjRVkmKWx96Afvv7Fd6Qv3",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000300268792936931732125629027786303497371039746010930128727378503",
@@ -1484,7 +1484,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.00000002984394498",
      "quote_token_price_base_token": "33507634.4854259",
-     "address": "9iP6w5WnoPRGBMLHZb5T718X7MrTZe2yUhhgsQxopGt7",
+     "address": "2ucV7Ppq1GDAiv3r75dsx3NjRVkmKWx96Afvv7Fd6Qv3",
      "name": "GEM / SOL",
      "pool_created_at": "2026-10-17T18:45:25Z",
      "fdv_usd": "3099.630804",
@@ -1548,7 +1548,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_6HaSBzz3aEdY9MPrZ4fDW7tfhgGSuupG7HSu5i4Rpump",
+       "id": "solana_D3Xm17t365wPcSkJqh1sQJa6Fo2g2GA1rtGq7ocGpump",
        "type": "token"
       }
      },
@@ -1567,7 +1567,7 @@
     }
    },
    {
-    "id": "solana_VraprZoa2AoahMWwzceorz64ydoVcKhgnW9UUAqU3rh",
+    "id": "solana_HNNeYRkGsFq3VxZzcqVBsz4HX6VSvkzv1WifJmPTMjX",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.00000304067432690665292065440985364918190217064904656574916439349957",
@@ -1576,7 +1576,7 @@
      "quote_token_price_native_currency": "7.37437880367937",
      "base_token_price_quote_token": "0.000000003969357466",
      "quote_token_price_base_token": "251929942.965544",
-     "address": "VraprZoa2AoahMWwzceorz64ydoVcKhgnW9UUAqU3rh",
+     "address": "HNNeYRkGsFq3VxZzcqVBsz4HX6VSvkzv1WifJmPTMjX",
      "name": "STOINKS / SPYx",
      "pool_created_at": "2026-10-17T18:45:20Z",
      "fdv_usd": "2985.878388",
@@ -1640,13 +1640,13 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_5Jj8xVgRxoN7TDP3u8KXyzer85bGKZU4MpWr2Lvtkvax",
+       "id": "solana_6UGDPSrJkY5JDojn6MQjxT2XmVbb2eCFzx3GZP9Zramn",
        "type": "token"
       }
      },
      "quote_token": {
       "data": {
-       "id": "solana_XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+       "id": "solana_C7qz9SBKit2Bdq135JbWehzWevBiEs1eVDnTpr1mDrm",
        "type": "token"
       }
      },
@@ -1659,7 +1659,7 @@
     }
    },
    {
-    "id": "solana_GgtKp1Z5xnhas23HemLuPJkELPzNhxHyDk9YrjY8UYTX",
+    "id": "solana_2LMmxj71S8JKi5owBdwUKUeUE3H5ymS8mTADr2ATHzG4",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.0000123264785372817230718396723569097749910611628917949625013948556",
@@ -1668,7 +1668,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.0000001150993323",
      "quote_token_price_base_token": "8688147.70678527",
-     "address": "GgtKp1Z5xnhas23HemLuPJkELPzNhxHyDk9YrjY8UYTX",
+     "address": "2LMmxj71S8JKi5owBdwUKUeUE3H5ymS8mTADr2ATHzG4",
      "name": "Unstuck / SOL",
      "pool_created_at": "2026-10-17T18:45:18Z",
      "fdv_usd": "11473.99171",
@@ -1732,7 +1732,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_3nf8eRSfpydgNE7K8jhw6bmDUzb9AG37FyJxq7Qwpump",
+       "id": "solana_9bQpdXqxjxffWUuYPPotYUeJdmqf7g9hMx4wxbq6pump",
        "type": "token"
       }
      },
@@ -1751,7 +1751,7 @@
     }
    },
    {
-    "id": "solana_9PjREGcRm72kscxdWQ4JjbrgKiioQbWjumBySiRQjDQB",
+    "id": "solana_CRA8vHW6kHnwuGhm1G9iWDVBtFEUwc46G4vF4JnHDn5h",
     "type": "pool",
     "attributes": {
      "base_token_price_usd": "0.0000527355010066239236991574922185914541119410451679115647245366288",
@@ -1760,7 +1760,7 @@
      "quote_token_price_native_currency": "1.0",
      "base_token_price_quote_token": "0.0000005175812517",
      "quote_token_price_base_token": "1932063.79995688",
-     "address": "9PjREGcRm72kscxdWQ4JjbrgKiioQbWjumBySiRQjDQB",
+     "address": "CRA8vHW6kHnwuGhm1G9iWDVBtFEUwc46G4vF4JnHDn5h",
      "name": "bounds / SOL",
      "pool_created_at": "2026-10-17T18:45:17Z",
      "fdv_usd": "53553.23511",
@@ -1824,7 +1824,7 @@
     "relationships": {
      "base_token": {
       "data": {
-       "id": "solana_7C4drCarqSfZ95Qvjprk4hmH1qiaLuPSZRXK8hwtR6mo",
+       "id": "solana_YJqKDzbRZ1QXdDKAqXSsku88URjXG3ZxH4tCWkT6ZTzC",
        "type": "token"
       }
      },
@@ -1845,10 +1845,10 @@
   ],
   "included": [
    {
-    "id": "solana_GqVHdiSoFJNqTFW7t13WG82r7Pyp4h46sZEYZ1Yqpump",
+    "id": "solana_3Byf2ZnatEr1jkjm1dt6ejKxzqvi2Qp5dUcBfNEgpump",
     "type": "token",
     "attributes": {
-     "address": "GqVHdiSoFJNqTFW7t13WG82r7Pyp4h46sZEYZ1Yqpump",
+     "address": "3Byf2ZnatEr1jkjm1dt6ejKxzqvi2Qp5dUcBfNEgpump",
      "name": "Rich",
      "symbol": "Rich",
      "decimals": 6,
@@ -1864,10 +1864,10 @@
     }
    },
    {
-    "id": "solana_7VRrAE9VCBvqpf9cEHDmz6ZH5ZGxTHkA6Ko6Xwm3pump",
+    "id": "solana_869USt2jeafihubUVShdgbu5oNogBJodXsJnXJmfpump",
     "type": "token",
     "attributes": {
-     "address": "7VRrAE9VCBvqpf9cEHDmz6ZH5ZGxTHkA6Ko6Xwm3pump",
+     "address": "869USt2jeafihubUVShdgbu5oNogBJodXsJnXJmfpump",
      "name": "TunaMoney",
      "symbol": "TUNA",
      "decimals": 6,
@@ -1876,10 +1876,10 @@
     }
    },
    {
-    "id": "solana_B4ruPWtqTqRb1z6goqbvYaPKx8v5r95gJS4tsjxwpump",
+    "id": "solana_EkZwhD5sBW8xejM2JVRH5Tndn5n5ivJxzcx42TJ2pump",
     "type": "token",
     "attributes": {
-     "address": "B4ruPWtqTqRb1z6goqbvYaPKx8v5r95gJS4tsjxwpump",
+     "address": "EkZwhD5sBW8xejM2JVRH5Tndn5n5ivJxzcx42TJ2pump",
      "name": "Inulon Musk",
      "symbol": "ILON",
      "decimals": 6,
@@ -1888,10 +1888,10 @@
     }
    },
    {
-    "id": "solana_GpZHPyMY74WCubBYe5ZSj9KgWzPwuEJGfNG3GQDjpump",
+    "id": "solana_9vhwHUUvsmk6gEpk2A9q1zZJp42PJ1rq3XJ1HaAwpump",
     "type": "token",
     "attributes": {
-     "address": "GpZHPyMY74WCubBYe5ZSj9KgWzPwuEJGfNG3GQDjpump",
+     "address": "9vhwHUUvsmk6gEpk2A9q1zZJp42PJ1rq3XJ1HaAwpump",
      "name": "$DODO",
      "symbol": "$DODO",
      "decimals": 6,
@@ -1900,10 +1900,10 @@
     }
    },
    {
-    "id": "solana_Db3WfXrsPJ33AGG5RUscY7iQg5MJT1t3mRe7dPfjpump",
+    "id": "solana_BuDUgfLMzz4GPb7iAUBj5SHoPJ4cY17xfHxT9ub2pump",
     "type": "token",
     "attributes": {
-     "address": "Db3WfXrsPJ33AGG5RUscY7iQg5MJT1t3mRe7dPfjpump",
+     "address": "BuDUgfLMzz4GPb7iAUBj5SHoPJ4cY17xfHxT9ub2pump",
      "name": "Chaotic Rocket",
      "symbol": "CHAROC",
      "decimals": 6,
@@ -1912,10 +1912,10 @@
     }
    },
    {
-    "id": "solana_9iL4zLwd3NarhipzFppvCNbiCyxSR63mQ9aTj6nSpump",
+    "id": "solana_55QZXFY3Gdu4ahWCUFbEgSRyEtJpNtamRSWycoMMpump",
     "type": "token",
     "attributes": {
-     "address": "9iL4zLwd3NarhipzFppvCNbiCyxSR63mQ9aTj6nSpump",
+     "address": "55QZXFY3Gdu4ahWCUFbEgSRyEtJpNtamRSWycoMMpump",
      "name": "CyberLeek 1",
      "symbol": "CYBERLEEK",
      "decimals": 6,
@@ -1924,10 +1924,10 @@
     }
    },
    {
-    "id": "solana_G6rtSh7BsYtrcq99UGURHE1j1iLZLPjT2tsSURGMpump",
+    "id": "solana_6P39G6Xi3MvPwHykQByWPk8RYKKRPDdsALGK4xZwpump",
     "type": "token",
     "attributes": {
-     "address": "G6rtSh7BsYtrcq99UGURHE1j1iLZLPjT2tsSURGMpump",
+     "address": "6P39G6Xi3MvPwHykQByWPk8RYKKRPDdsALGK4xZwpump",
      "name": "Myh Doge",
      "symbol": "1\u20ac",
      "decimals": 6,
@@ -1936,10 +1936,10 @@
     }
    },
    {
-    "id": "solana_2PD2zVZfeh1nyHzCGasV42wh5qyxGLHCka8hpc46pump",
+    "id": "solana_43C6BAyZrBdvXt7aRhPDUsXgS7UkoF3SxV9GaoMqpump",
     "type": "token",
     "attributes": {
-     "address": "2PD2zVZfeh1nyHzCGasV42wh5qyxGLHCka8hpc46pump",
+     "address": "43C6BAyZrBdvXt7aRhPDUsXgS7UkoF3SxV9GaoMqpump",
      "name": "Higgsbag",
      "symbol": "HBAG",
      "decimals": 6,
@@ -1948,10 +1948,10 @@
     }
    },
    {
-    "id": "solana_5v2qsa8UX7y4eMxgxiq5M3en32agD7JuZN5dXccUpump",
+    "id": "solana_27TaxzQk1Jhif5ba45fURBd8dWsoTAvLSnbhJsfXpump",
     "type": "token",
     "attributes": {
-     "address": "5v2qsa8UX7y4eMxgxiq5M3en32agD7JuZN5dXccUpump",
+     "address": "27TaxzQk1Jhif5ba45fURBd8dWsoTAvLSnbhJsfXpump",
      "name": "BROKECAT",
      "symbol": "BROKE",
      "decimals": 6,
@@ -1960,10 +1960,10 @@
     }
    },
    {
-    "id": "solana_EvWjvrvtAThL2yQLquxn3YaMzZRE56PM163yGUkzpump",
+    "id": "solana_2TDXwwqXC7vX2NgC6QBTHCRyWzTxFeUgsvZnk8LUpump",
     "type": "token",
     "attributes": {
-     "address": "EvWjvrvtAThL2yQLquxn3YaMzZRE56PM163yGUkzpump",
+     "address": "2TDXwwqXC7vX2NgC6QBTHCRyWzTxFeUgsvZnk8LUpump",
      "name": "OnlyAI",
      "symbol": "MIRA",
      "decimals": 6,
@@ -1972,10 +1972,10 @@
     }
    },
    {
-    "id": "solana_55xEB7e9ZftBDdsKL1rvY299bb9qXbJurN6JyExcpump",
+    "id": "solana_2QV6tjRwKFdANPrAE8eBwf8bbxwqk61TApveGj4kpump",
     "type": "token",
     "attributes": {
-     "address": "55xEB7e9ZftBDdsKL1rvY299bb9qXbJurN6JyExcpump",
+     "address": "2QV6tjRwKFdANPrAE8eBwf8bbxwqk61TApveGj4kpump",
      "name": "Lunatic AI",
      "symbol": "LUNA",
      "decimals": 6,
@@ -1984,10 +1984,10 @@
     }
    },
    {
-    "id": "solana_6uV1vhXNUithwmazGv4QBNqkPbk671dDekCGfWjapump",
+    "id": "solana_JEErfZ3vKYr8JgSSwQix138QPF3QUPZPcEyRqWWppump",
     "type": "token",
     "attributes": {
-     "address": "6uV1vhXNUithwmazGv4QBNqkPbk671dDekCGfWjapump",
+     "address": "JEErfZ3vKYr8JgSSwQix138QPF3QUPZPcEyRqWWppump",
      "name": "Dolphinu",
      "symbol": "DOLPHINU",
      "decimals": 6,
@@ -1996,10 +1996,10 @@
     }
    },
    {
-    "id": "solana_7yTMkGAAwHRueYShsZeqoPxeMcgLR1PRh6qBY5wBpump",
+    "id": "solana_DRQh7gvzvamqjkinHgk4FkPbGbU83KVybWDYFMWupump",
     "type": "token",
     "attributes": {
-     "address": "7yTMkGAAwHRueYShsZeqoPxeMcgLR1PRh6qBY5wBpump",
+     "address": "DRQh7gvzvamqjkinHgk4FkPbGbU83KVybWDYFMWupump",
      "name": "doot doot",
      "symbol": "67",
      "decimals": 6,
@@ -2008,10 +2008,10 @@
     }
    },
    {
-    "id": "solana_BRaFPXFdTmQ1Ex6YvcaJQKd5YciNVXVKhjvLK7ibMxs2",
+    "id": "solana_CeHLewwRXgPmafQqwVABHeGWjbTvBprcKPHaRpLBWdVP",
     "type": "token",
     "attributes": {
-     "address": "BRaFPXFdTmQ1Ex6YvcaJQKd5YciNVXVKhjvLK7ibMxs2",
+     "address": "CeHLewwRXgPmafQqwVABHeGWjbTvBprcKPHaRpLBWdVP",
      "name": "Unstuck",
      "symbol": "Unstuck",
      "decimals": 6,
@@ -2020,10 +2020,10 @@
     }
    },
    {
-    "id": "solana_48aBJUFGne3Vg5c199rQvXW8KPHjgCuvXq5wybB1pump",
+    "id": "solana_5vKjqmuzHVHMJyUvWDGLTMHoEwg7ZPySaHA2eXRspump",
     "type": "token",
     "attributes": {
-     "address": "48aBJUFGne3Vg5c199rQvXW8KPHjgCuvXq5wybB1pump",
+     "address": "5vKjqmuzHVHMJyUvWDGLTMHoEwg7ZPySaHA2eXRspump",
      "name": "Catnomics",
      "symbol": "Catnomics",
      "decimals": 6,
@@ -2032,10 +2032,10 @@
     }
    },
    {
-    "id": "solana_FwgvL3dEKattDPjukDNEwHrMPWfBbTyaHvgCqfQepump",
+    "id": "solana_68pYvRVwz6sjPAWT7bKuyoqKKAQ7uEsS1V3ZkT1dpump",
     "type": "token",
     "attributes": {
-     "address": "FwgvL3dEKattDPjukDNEwHrMPWfBbTyaHvgCqfQepump",
+     "address": "68pYvRVwz6sjPAWT7bKuyoqKKAQ7uEsS1V3ZkT1dpump",
      "name": "Niggas in Paris",
      "symbol": "NIP",
      "decimals": 6,
@@ -2044,10 +2044,10 @@
     }
    },
    {
-    "id": "solana_6HaSBzz3aEdY9MPrZ4fDW7tfhgGSuupG7HSu5i4Rpump",
+    "id": "solana_D3Xm17t365wPcSkJqh1sQJa6Fo2g2GA1rtGq7ocGpump",
     "type": "token",
     "attributes": {
-     "address": "6HaSBzz3aEdY9MPrZ4fDW7tfhgGSuupG7HSu5i4Rpump",
+     "address": "D3Xm17t365wPcSkJqh1sQJa6Fo2g2GA1rtGq7ocGpump",
      "name": "GEM",
      "symbol": "GEM",
      "decimals": 6,
@@ -2056,10 +2056,10 @@
     }
    },
    {
-    "id": "solana_5Jj8xVgRxoN7TDP3u8KXyzer85bGKZU4MpWr2Lvtkvax",
+    "id": "solana_6UGDPSrJkY5JDojn6MQjxT2XmVbb2eCFzx3GZP9Zramn",
     "type": "token",
     "attributes": {
-     "address": "5Jj8xVgRxoN7TDP3u8KXyzer85bGKZU4MpWr2Lvtkvax",
+     "address": "6UGDPSrJkY5JDojn6MQjxT2XmVbb2eCFzx3GZP9Zramn",
      "name": "STOINKS",
      "symbol": "STOINKS",
      "decimals": 6,
@@ -2075,10 +2075,10 @@
     }
    },
    {
-    "id": "solana_3nf8eRSfpydgNE7K8jhw6bmDUzb9AG37FyJxq7Qwpump",
+    "id": "solana_9bQpdXqxjxffWUuYPPotYUeJdmqf7g9hMx4wxbq6pump",
     "type": "token",
     "attributes": {
-     "address": "3nf8eRSfpydgNE7K8jhw6bmDUzb9AG37FyJxq7Qwpump",
+     "address": "9bQpdXqxjxffWUuYPPotYUeJdmqf7g9hMx4wxbq6pump",
      "name": "Unstuck",
      "symbol": "Unstuck",
      "decimals": 6,
@@ -2087,10 +2087,10 @@
     }
    },
    {
-    "id": "solana_7C4drCarqSfZ95Qvjprk4hmH1qiaLuPSZRXK8hwtR6mo",
+    "id": "solana_YJqKDzbRZ1QXdDKAqXSsku88URjXG3ZxH4tCWkT6ZTzC",
     "type": "token",
     "attributes": {
-     "address": "7C4drCarqSfZ95Qvjprk4hmH1qiaLuPSZRXK8hwtR6mo",
+     "address": "YJqKDzbRZ1QXdDKAqXSsku88URjXG3ZxH4tCWkT6ZTzC",
      "name": "bounds",
      "symbol": "bounds",
      "decimals": 6,

@@ -166,7 +166,7 @@ fun VolumeBars(candles: List<Candle>, modifier: Modifier) {
     }
 }
 
-/** The PINRmetric pane: the histogram (lime above zero, mandarin below), the line in lime, its signal in lilac, its levels. */
+/** The PINR Index line pane: the histogram (lime above zero, mandarin below), the line in lime, its signal in lilac, its levels. */
 @Composable
 fun MetricPlot(metric: Metric, modifier: Modifier) {
     val m = rememberTextMeasurer()
@@ -229,7 +229,7 @@ private val TIME_STEPS = longArrayOf(60, 300, 900, 1800, 3600, 7200, 10800, 2160
 
 /**
  * The site's terminal chart (ui/terminal.ts): one chart in three panes sharing one time axis at the bottom: prices
- * (64%), volume (16%) and the PINRmetric (20%, a fixed 0 to 100 scale, the score in lime and its signal in purple, the
+ * (64%), volume (16%) and the PINR Index line (20%, a fixed 0 to 100 scale, the score in lime and its signal in purple, the
  * histogram behind). Round steps on every axis; the last price dotted in its candle's colour with its tag; six bars of
  * room after the newest candle; the score and flag events as dashed lines.
  */
@@ -330,7 +330,7 @@ fun TerminalPanes(candles: List<Candle>, line: Boolean, events: List<ChartEvent>
             }
         }
 
-        // PINRmetric pane: a fixed 0 to 100 scale, as the site's.
+        // PINR Index line pane: a fixed 0 to 100 scale, as the site's.
         drawLine(sep, Offset(0f, y2), Offset(size.width, y2), 1f)
         fun my(v: Double) = y2 + h2 * (1 - (v / 100.0).toFloat().coerceIn(0f, 1f))
         for (v in listOf(40.0, 80.0)) {

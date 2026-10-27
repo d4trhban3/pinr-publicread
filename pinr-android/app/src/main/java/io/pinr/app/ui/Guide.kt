@@ -45,7 +45,7 @@ object GuideCopy {
 
     val SECTIONS = listOf(
         Section("Where everything is", listOf(
-            p("Discover", "is the search page and the market pulse: Trending, Top Movers, Fresh Launches and PINRscore lists, each card showing the coin, its market cap and all-time high, a small chart, and the score with its coverage."),
+            p("Discover", "is the search page and the market pulse: Trending, Top Movers, Fresh Launches and PINR Index lists, each card showing the coin, its market cap and all-time high, a small chart, and the score with its coverage."),
             p("PINR", "is the home page: every scored coin as a tile, biggest and most active first, so you see what the scanner is looking at."),
             p("PINRbot DeepScan", "is one page per coin: the live chart on top, then the dossier below it: the score, the recent trades, the checks, the facts, the written read, the coin's own links and what the posts about it say."),
             p("Wallet / Profile", "reads a wallet's public holdings. It cannot sign, send or approve anything."),

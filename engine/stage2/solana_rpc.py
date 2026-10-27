@@ -46,13 +46,13 @@ _KNOWN = {
     # Chainstack free: the operator's own node, its HTTPS address in .env as CHAINSTACK_SOLANA_URL; first for
     # the largest-accounts read, after Shyft for the rest; its plan says 25 requests a second, PINR asks at most ten for all workers
     "chainstack": (lambda e: (e.get("CHAINSTACK_SOLANA_URL") or "").strip().startswith("https://") and e["CHAINSTACK_SOLANA_URL"].strip() or None, 0.05),   # 20 a second, under its Developer plan's published 25 RPS
-    # The operator's free sign-ups for the Mac's scoring workers: each its HTTPS
-    # address in the Mac's .env, used on the Mac only (scanner/mac_worker.py sets the Mac's list to these three), never with a card.
-    # Quicknode's free trial 15 requests a second and OrbitFlare's free 10: PINR asks at most that, for all
-    # workers together; Solana Vibe Station a polite two a second until its own page's limit is read
-    "quicknode": (lambda e: (e.get("QUICKNODE_SOLANA_URL") or "").strip().startswith("https://") and e["QUICKNODE_SOLANA_URL"].strip() or None, 0.07),
-    "orbitflare": (lambda e: (e.get("ORBITFLARE_SOLANA_URL") or "").strip().startswith("https://") and e["ORBITFLARE_SOLANA_URL"].strip() or None, 0.1),
-    "vibestation": (lambda e: (e.get("VIBESTATION_SOLANA_URL") or "").strip().startswith("https://") and e["VIBESTATION_SOLANA_URL"].strip() or None, 0.5),
+    # Your RPC providers for the worker machine's scoring workers: each its HTTPS
+    # address in the worker machine's .env, used on the worker machine only (scanner/extra_worker.py sets the worker machine's list to these three), never with a card.
+    # RPC provider A's free trial 15 requests a second and RPC provider B's free 10: PINR asks at most that, for all
+    # workers together; RPC provider C a polite two a second until its own page's limit is read
+    "rpc_a": (lambda e: (e.get("RPC_A_SOLANA_URL") or "").strip().startswith("https://") and e["RPC_A_SOLANA_URL"].strip() or None, 0.07),
+    "rpc_b": (lambda e: (e.get("RPC_B_SOLANA_URL") or "").strip().startswith("https://") and e["RPC_B_SOLANA_URL"].strip() or None, 0.1),
+    "rpc_c": (lambda e: (e.get("RPC_C_SOLANA_URL") or "").strip().startswith("https://") and e["RPC_C_SOLANA_URL"].strip() or None, 0.5),
     # the operator's official keys: behind every free source except the two reads FIRST_FOR names, each under its cap
     "alchemy_official": (lambda e: e.get("ALCHEMY_OFFICIAL_KEY") and "https://solana-mainnet.g.alchemy.com/v2/" + e["ALCHEMY_OFFICIAL_KEY"], 0.025),
     "helius_official": (lambda e: e.get("HELIUS_OFFICIAL_KEY") and "https://mainnet.helius-rpc.com/?api-key=" + e["HELIUS_OFFICIAL_KEY"], 0.01),
@@ -258,7 +258,7 @@ CREDIT_CAP = 9_500_000         # the built-in cap: below the plan's 10,000,000; 
 # for the scoring reads leaves room for the trades websocket's share (60,000 a day, at most 1.86 M a month) under the 3 M.
 CREDIT_CAPS = {"helius": CREDIT_CAP, "chainstack": 1_000_000,
                # the free plans' allowances (helius.dev/pricing: 1,000,000 credits; alchemy.com/pricing: 30,000,000
-               # compute units; both read 2026-10-24), 95% of each like Helius's own, HALVED: the server and the Mac both use the keys
+               # compute units; both read 2026-10-24), 95% of each like Helius's own, HALVED: the server and the worker machine both use the keys
                # and each counts its own use; "<name>_monthly_credit_cap" sets one machine's
                # the logs websocket (livews/logs.mjs) takes most of Helius's
                # month, its own daily share in bytes (scanner/settings.json trades_logs_daily_mb); each machine's reads keep
@@ -441,7 +441,7 @@ DESCRIBE = {"shyft": "Solana RPC, Shyft free key", "public": "Solana RPC, the pu
             "coingecko": "CoinGecko simple price", "geckoterminal": "GeckoTerminal pools and trades", "jupiter": "Jupiter price (cross-check)",
             "stonkfun": "Stonk.fun public API", "raydium": "Raydium pools", "raydium-launchlab": "Raydium LaunchLab records (a coin's pool by mint, launches by a wallet)", "goplus": "GoPlus token security (BNB)",
             "ipfs": "IPFS gateways (coin metadata)", "websites": "the coins' own websites (read-only check)", "rdap": "domain registration dates (RDAP)",
-            "ankr": "Ankr RPC", "base-public": "Base public RPC", "bsc-public": "BNB public RPC", "publicnode": "PublicNode RPC (Base, BNB)", "publicnode-solana": "PublicNode RPC (Solana; single reads the other providers refuse)", "drpc-solana": "dRPC", "chainstack": "Chainstack free", "quicknode": "Quicknode free trial", "orbitflare": "OrbitFlare free", "vibestation": "Solana Vibe Station free",
+            "ankr": "Ankr RPC", "base-public": "Base public RPC", "bsc-public": "BNB public RPC", "publicnode": "PublicNode RPC (Base, BNB)", "publicnode-solana": "PublicNode RPC (Solana; single reads the other providers refuse)", "drpc-solana": "dRPC", "chainstack": "Chainstack free", "rpc_a": "RPC provider A free trial", "rpc_b": "RPC provider B free", "rpc_c": "RPC provider C free",
             "clanker": "Clanker's own list and creator counts (Base, keyless)", "zora": "Zora's own list and creator counts (Base, keyless)",
             "virtuals": "Virtuals' own list and creator counts (Base, keyless)",
             "nodereal": "NodeReal public RPC (BNB)", "drpc": "dRPC public RPC (Base)", "tenderly": "Tenderly public gateway (Base)", "blastapi": "BlastAPI public RPC (Base)",
@@ -596,7 +596,7 @@ _ROUTED = {}                       # (names...) -> the endpoints built for them,
 
 def _node_route(method):
     """the operator's node wires for this kind of read, as endpoints, or None (today's
-    order). Read live from control/routing.json (on the server; a copy with no routing file, like the Mac's, keeps its own)."""
+    order). Read live from control/routing.json (on the server; a copy with no routing file, like the worker machine's, keeps its own)."""
     try:
         here = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scanner")
         if here not in sys.path:
@@ -707,7 +707,7 @@ def _ask(name, url, pace, method, params, quick, tries):
 # that was answered is kept, so an exact repeat is served from memory and never sent again; the cache is emptied when the
 # next score starts (a balance or a holder list may change between scores, never inside one). A transaction never changes,
 # so answered getTransaction reads are kept across scores in this worker as well, up to CACHE_TXS_MAX. Off unless a score
-# switched it on (score_cache_start), so a plain read, and the checks, behave as before. PINR_SCORE_CACHE=off in the
+# switched it on (score_cache_start), so a plain read, and the checks, behave as before. PINR_INDEX_CACHE=off in the
 # environment keeps it off for a measurement. An error is never cached; an answer is handed out as a copy.
 _CACHE = {"on": False, "reads": {}, "txs": {}, "served": 0}
 IMMUTABLE = ("getTransaction",)
@@ -715,7 +715,7 @@ CACHE_TXS_MAX = 4000
 
 
 def score_cache_start() -> None:
-    _CACHE["on"] = os.environ.get("PINR_SCORE_CACHE", "on").lower() != "off"
+    _CACHE["on"] = os.environ.get("PINR_INDEX_CACHE", "on").lower() != "off"
     _CACHE["reads"].clear(); _CACHE["served"] = 0
 
 

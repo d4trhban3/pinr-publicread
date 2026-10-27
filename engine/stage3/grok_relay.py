@@ -17,7 +17,7 @@ import datetime, json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "stage2"))
-sys.path.insert(0, os.path.join(HERE, "..", "pinr-score"))
+sys.path.insert(0, os.path.join(HERE, "..", "pinr-index"))
 import score_engine_v1 as E
 
 SCHEMA_VERSION = "pinr-grok-social-v1"

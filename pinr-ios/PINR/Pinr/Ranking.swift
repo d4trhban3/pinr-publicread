@@ -3,7 +3,7 @@ import Foundation
 /// The PINR page's filters, as on the site (pinr-live/src/world/filters.ts). A filter chooses which
 /// tiles show and ranks them, best first; the page shows the top of that ranking.
 enum PinrFilter: String, CaseIterable, Identifiable, Sendable {
-    case trending, movers, new, pinrscore
+    case trending, movers, new, pinrindex
 
     var id: String { rawValue }
 
@@ -12,7 +12,7 @@ enum PinrFilter: String, CaseIterable, Identifiable, Sendable {
         case .trending: "Trending"
         case .movers: "Movers"
         case .new: "New Launches"
-        case .pinrscore: "PINRscore"
+        case .pinrindex: "PINR Index"
         }
     }
 
@@ -21,7 +21,7 @@ enum PinrFilter: String, CaseIterable, Identifiable, Sendable {
         case .trending: "Most active right now"
         case .movers: "Biggest score swings"
         case .new: "Under an hour old"
-        case .pinrscore: "Real, scored projects by score"
+        case .pinrindex: "Real, scored projects by score"
         }
     }
 }
@@ -64,7 +64,7 @@ enum Ranking {
         }
 
         switch filter {
-        case .pinrscore:
+        case .pinrindex:
             let withScore = indexed.filter { scoreOf($0.t) != nil }
             return Array(sorted(withScore) { scoreOf($0.t).map(Double.init) }.prefix(limit))
         case .new:
@@ -101,7 +101,7 @@ enum Ranking {
         return age <= recentWindow && age >= -60 ? d : nil
     }
 
-    /// The PINRscore as a number, or nil (unscored, flagged, nothing loaded): never zero.
+    /// The PINR Index as a number, or nil (unscored, flagged, nothing loaded): never zero.
     static func scoreOf(_ t: Token) -> Int? {
         guard t.label == nil, t.coverage > 0 else { return nil }
         return t.score

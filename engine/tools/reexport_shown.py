@@ -14,7 +14,7 @@ import glob, json, os, sys, time, urllib.request
 
 root = os.path.abspath(sys.argv[1]); dry = "--dry" in sys.argv; everything = "--all" in sys.argv
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "feed"))
-for p in ("stage2", "stage3", "stage4", "pinr-score", "feed"):
+for p in ("stage2", "stage3", "stage4", "pinr-index", "feed"):
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", p))
 import feed_export as F
 F.FEED_DIR = os.path.join(root, "frontend-feed"); F.CACHE = os.path.join(root, "feed", "meta_cache.json")

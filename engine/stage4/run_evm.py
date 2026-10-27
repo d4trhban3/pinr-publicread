@@ -4,7 +4,7 @@ history service; linked wallets on EVM are not built yet). Every number carries 
 from __future__ import annotations
 import calendar, glob, json, os, sys, time, urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
-for p in ("../stage2", "../stage3", "../pinr-score"):
+for p in ("../stage2", "../stage3", "../pinr-index"):
     sys.path.insert(0, os.path.join(HERE, p))
 import score_engine_v1 as E
 from readers import Log, http_json, metadata_document

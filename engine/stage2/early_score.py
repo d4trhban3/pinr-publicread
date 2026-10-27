@@ -1,12 +1,12 @@
 """REDACTED PUBLIC COPY.
 
-The proprietary logic in this module (PINRscore rules, weights, caps, thresholds and their tuning) is withheld.
+The proprietary logic in this module (PINR Index rules, weights, caps, thresholds and their tuning) is withheld.
 Signatures and data types are kept so the surrounding code still imports; calling a stubbed
 function raises NotImplementedError."""
 from __future__ import annotations
 import json, os, sys, time
 HERE = os.path.dirname(os.path.abspath(__file__))
-for _p in ('../pinr-step2', '../pinr-score', '../stage3', '../scanner', '../feed', '.'):
+for _p in ('../pinr-step2', '../pinr-index', '../stage3', '../scanner', '../feed', '.'):
     _d = os.path.normpath(os.path.join(HERE, _p))
     if _d not in sys.path:
         sys.path.insert(0, _d)

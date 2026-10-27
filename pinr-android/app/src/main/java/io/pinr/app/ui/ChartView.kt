@@ -183,7 +183,7 @@ class ChartGeometry(val w: Float, val h0: Float, val x: (Double) -> Float, val t
 
 /**
  * The site's terminal chart (ui/terminal.ts, terminalind.ts, terminaldraw.ts) on the app's own canvas: price (64%, less as
- * indicator panes are added), volume (16%), PINRmetric (20%) and a pane for each switched-on pane indicator (15% each),
+ * indicator panes are added), volume (16%), PINR Index line (20%) and a pane for each switched-on pane indicator (15% each),
  * one time axis at the bottom. The chart type, scale and axis (price or market cap) as chosen; the indicators over the
  * price, on the volume and in their panes; the drawings, and the points of one being placed.
  */
@@ -303,7 +303,7 @@ fun TerminalChartCanvas(
             for (s in volLines) line(s, c, ::xt, ::vy)
             for (v in niceTicks(0.0, vHi, 3)) { val r = m.measure(volumeLabel(v), axisStyle); drawText(r, topLeft = Offset(w + 6.dp.toPx(), (vy(v) - r.size.height / 2).coerceIn(y1, y2 - r.size.height))) }
         }
-        // PINRmetric pane (fixed 0 to 100).
+        // PINR Index line pane (fixed 0 to 100).
         val y3 = tops[3]
         drawLine(sep, Offset(0f, y2), Offset(size.width, y2), 1f)
         fun my(v: Double) = y2 + hs[2] * (1 - (v / 100.0).toFloat().coerceIn(0f, 1f))

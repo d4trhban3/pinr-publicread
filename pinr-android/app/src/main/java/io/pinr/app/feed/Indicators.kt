@@ -12,7 +12,7 @@ import org.json.JSONTokener
 /**
  * Chart maths for the terminal, line for line the site's (pinr-live/src/world/indicators.ts): standard public chart
  * calculations on candles. Each returns one value per candle, or NaN while there is not yet enough history (the chart
- * skips NaN: nothing is invented). PINR's own PINRmetric is NOT here: it is calculated only in the engine.
+ * skips NaN: nothing is invented). PINR's own PINR Index line is NOT here: it is calculated only in the engine.
  */
 object Ind {
     /** The change over the last 24 hours of candles: from the open of the first candle inside the window to the last close (change24h). */

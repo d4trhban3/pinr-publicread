@@ -10,7 +10,7 @@ from __future__ import annotations
 import datetime, json, os, re, sys, urllib.request
 from urllib.parse import urlparse
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pinr-score"))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pinr-index"))
 import score_engine_v1 as E
 
 NOT_A_WEBSITE = ("x.com", "twitter.com", "instagram.com", "facebook.com", "tiktok.com", "youtube.com", "t.me",

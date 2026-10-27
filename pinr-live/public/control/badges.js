@@ -30,7 +30,7 @@
       return status.control.pinrai.on ? { text: "live", why: "PINRai is on" } : { text: "hidden", why: "PINRai is switched off" };
     }
     if (id === "e_score" && c.feed && typeof c.feed.scoreShown === "boolean") {
-      return c.feed.scoreShown ? { text: "live", why: "the site shows the PINRscore" } : { text: "hidden", why: "the site does not show the PINRscore" };
+      return c.feed.scoreShown ? { text: "live", why: "the site shows the PINR Index" } : { text: "hidden", why: "the site does not show the PINR Index" };
     }
     if (GATE_NODES.includes(id) && c.gate && c.gate.status) {
       const checks = G && G.CHECKS_OF[id];
@@ -111,7 +111,7 @@
     }
     notePanel(c);
   }
-  // For the wires (routes.js): the score engine's wires are solid while the site shows the PINRscore; a wire from a node whose live badge is off is dotted.
+  // For the wires (routes.js): the score engine's wires are solid while the site shows the PINR Index; a wire from a node whose live badge is off is dotted.
   window.PinrBadges.scoreLive = () => !!(feed && feed.scoreShown === true);
   window.PinrBadges.liveText = (id) => {
     if (!window.PinrLive || !window.PinrGate) return null;

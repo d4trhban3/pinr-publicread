@@ -476,7 +476,7 @@ export function vampNote(o: Original): string {
 /** A ticker with exactly one leading dollar sign. */
 const dollar = (sym: string): string => (sym.startsWith("$") ? sym : `$${sym}`);
 
-/** A launchpad coin as a pool token. It has no PINRscore (the engine has not scored it): the app shows a dash, never a made-up number. */
+/** A launchpad coin as a pool token. It has no PINR Index (the engine has not scored it): the app shows a dash, never a made-up number. */
 export function coinToken(c: PumpCoin, copyOf?: Original, creatorCoins = 0): WireToken {
   // until the picture matcher has been inspected, a coin it calls a copy is only a "possible copy". It keeps its
   // price, chart and picture like any other coin; the note says how it matched and whether the chain agreed, and it carries a link to the original.

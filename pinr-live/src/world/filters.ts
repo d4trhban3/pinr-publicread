@@ -7,13 +7,13 @@ import { padOf } from "./marks";
  * in that order (top-left first, reading across then down). The base view is Trending; "all" (tap the chosen filter again) ranks by long-term weight.
  * A filter is a snapshot taken when it is chosen: tiles never reshuffle by themselves afterwards.
  */
-export type Filter = "all" | "trending" | "movers" | "new" | "pinrscore";
+export type Filter = "all" | "trending" | "movers" | "new" | "pinrindex";
 
 export const FILTERS: { id: Exclude<Filter, "all">; label: string; hint: string }[] = [
   { id: "trending", label: "Trending", hint: "Most active right now" },
   { id: "movers", label: "Movers", hint: "Biggest moves" },
   { id: "new", label: "New Launches", hint: "Under an hour old" },
-  { id: "pinrscore", label: "PINRscore", hint: "Real, scored projects by score" },
+  { id: "pinrindex", label: "PINR Index", hint: "Real, scored projects by score" },
 ];
 
 /**
@@ -31,7 +31,7 @@ let sorts: Partial<Record<Filter, SortDir>> = {};
 try {
   const raw = JSON.parse(localStorage.getItem(SORT_KEY) ?? "null") as Record<string, unknown> | null;
   if (raw && typeof raw === "object") {
-    for (const k of ["all", "trending", "movers", "new", "pinrscore"] as Filter[]) {
+    for (const k of ["all", "trending", "movers", "new", "pinrindex"] as Filter[]) {
       const v = raw[k];
       if (v === "asc" || v === "desc") sorts[k] = v;
     }
@@ -49,7 +49,7 @@ export function setSort(f: Filter, d: SortDir): void {
   }
 }
 
-/** The PINRscore as a number, or null when the token has none (unscored, flagged, error): missing stays missing, never zero. */
+/** The PINR Index as a number, or null when the token has none (unscored, flagged, error): missing stays missing, never zero. */
 export function scoreOf(it: Pick<Item, "status" | "flagKind" | "coverage" | "value">): number | null {
   if (it.status === "flag" || it.flagKind || it.coverage <= 0) return null;
   const n = Number(it.value);
@@ -182,7 +182,7 @@ export function selectAndRank(filter: Filter, all: readonly Item[], limit: numbe
     const fresh = items.filter((it) => it.ageMin < NEW_LAUNCH_MIN);
     return byRank(sortBy(fresh, (it) => it.ageMin, dir, "asc", byId).slice(0, limit).map((it) => it.id));
   }
-  if (filter === "pinrscore") {
+  if (filter === "pinrindex") {
     // Only tokens with a real score: unscored, flagged and errored ones have no number to rank by, so they are not here.
     const scored = items.filter((it) => scoreOf(it) !== null);
     return byRank(sortBy(scored, scoreOf, dir, "desc", byId).slice(0, limit).map((it) => it.id));

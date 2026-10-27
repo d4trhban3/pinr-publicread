@@ -24,7 +24,7 @@ import { makeEarlyTag, makeSocialTag, setEarly, showsEarly, showsSocial } from "
  * PINRbot DeepScan: one token's page, laid out the way a stock page is on Robinhood, in our look.
  *   name and price, the change for the chosen range
  *   a line chart you can press and drag through, with range pills under it
- *   the PINRscore with what the engine found
+ *   the PINR Index with what the engine found
  *   Stats
  *   the checks (a word band each, never the numbers), the evidence facts, a written read and the token's own links, all from the cleaned dossier
  *   similar tokens (same chain, close in size and age)
@@ -196,7 +196,7 @@ export function createDeepScan(opts: DeepScanOptions): DeepScan {
     ranges.append(b);
   }
 
-  // --- the PINRscore ---
+  // --- the PINR Index ---
   const scoreSec = el("section", "dssec dsscore");
   const ringWrap = el("div", "dsring");
   const ringSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -215,7 +215,7 @@ export function createDeepScan(opts: DeepScanOptions): DeepScan {
   ringArc.setAttribute("transform", "rotate(-90 60 60)");
   ringSvg.append(ringTrack, ringArc);
   const ringNum = el("div", "dsringnum");
-  const ringWord = el("div", "dsringword", "PINRscore");
+  const ringWord = el("div", "dsringword", "PINR Index");
   ringWrap.append(ringSvg, ringNum, ringWord);
   const scoreSide = el("div", "dsscoreside");
   const covLine = el("div", "dscov");

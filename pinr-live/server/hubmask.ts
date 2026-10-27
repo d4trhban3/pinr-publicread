@@ -2,7 +2,7 @@ import { MAX_PRICE_USD, type WireToken } from "./translate.ts";
 import type { Dossier, ObservedWord } from "./dossier.ts";
 
 /**
- * PINR is the evidence hub, and the PINRscore is "no longer shown on pinr.io". The switch is the server's own setting
+ * PINR is the evidence hub, and the PINR Index is "no longer shown on pinr.io". The switch is the server's own setting
  * (`PINR_SHOW_SCORE=on` in the .env; off when absent), so no visitor can turn it on. While it is off, nothing served carries a score,
  * coverage-as-score, a score label (VAMP stays, as a fact about the coin) or a PINRbot field. The engine's files keep everything.
  */

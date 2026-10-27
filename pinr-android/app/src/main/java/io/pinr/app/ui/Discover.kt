@@ -146,7 +146,7 @@ fun DiscoverRoom(feed: FeedData, client: CoinClient, insets: PaddingValues, onOp
             cards.isEmpty() -> item {
                 Notice(if (query.isEmpty()) when (tab) {
                     DiscoverTab.Fresh -> "No coins under an hour old right now."
-                    DiscoverTab.PinrScore -> "No scored coins yet."
+                    DiscoverTab.PinrIndex -> "No scored coins yet."
                     DiscoverTab.BaseBnb -> "No Base or BNB Chain coins yet."
                     else -> "Nothing to show yet."
                 } else "No coin matches “$query”.", PaddingValues())

@@ -186,9 +186,9 @@
    "drpc": "dRPC",
    "helius_official": "Helius",
    "alchemy_official": "Alchemy",
-   "quicknode": "QuickNode",
-   "orbitflare": "OrbitFlare",
-   "vibestation": "Solana Vibe Station"
+   "rpc_a": "RPC provider A",
+   "rpc_b": "RPC provider B",
+   "rpc_c": "RPC provider C"
   }
  },
  "trade_feed": {

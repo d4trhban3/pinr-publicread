@@ -24,7 +24,7 @@ export const GUIDE_SECTIONS: GuideSection[] = [
       {
         kind: "p",
         lead: "Discover",
-        text: "is the search page and the market pulse: Trending, Top Movers, Fresh Launches and PINRscore lists, each card showing the coin, its market cap and all-time high, a small chart, and the score with its coverage.",
+        text: "is the search page and the market pulse: Trending, Top Movers, Fresh Launches and PINR Index lists, each card showing the coin, its market cap and all-time high, a small chart, and the score with its coverage.",
       },
       { kind: "p", lead: "PINR", text: "is the home page: every scored coin as a tile, biggest and most active first, so you see what the scanner is looking at." },
       {

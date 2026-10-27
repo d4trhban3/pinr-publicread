@@ -164,7 +164,7 @@ struct WireTape: Decodable, Sendable {
     }
 }
 
-/// The engine's PINRmetric for one coin (server/metrics.ts): the score over time, a smoothed companion line and the
+/// The engine's PINR Index line for one coin (server/metrics.ts): the score over time, a smoothed companion line and the
 /// gap between them. Nil when the engine has no file (the pane then says so).
 struct Metric: Equatable, Sendable {
     let timeframe: String

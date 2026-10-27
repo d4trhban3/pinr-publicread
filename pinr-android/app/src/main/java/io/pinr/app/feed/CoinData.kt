@@ -58,7 +58,7 @@ data class TradesView(
     val summary: Token.Flow?,
 )
 
-/** The engine's PINRmetric for one coin: the score over time, a smoothed companion line and the gap between them. */
+/** The engine's PINR Index line for one coin: the score over time, a smoothed companion line and the gap between them. */
 data class Metric(
     val timeframe: String,
     val series: List<Pair<Long, Double>>,

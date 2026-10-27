@@ -46,7 +46,7 @@ describe("the page follows the stream", () => {
     });
     const feed = new LiveFeed();
     await flush();
-    // the tiles' list only; the scored set waits until search, Discover or the PINRscore filter asks for it.
+    // the tiles' list only; the scored set waits until search, Discover or the PINR Index filter asks for it.
     expect(calls).toEqual(["/api/tokens?view=tile"]);
     expect(FakeES.last!.url).toBe("/api/stream?view=tile&boot=aaaaaaaa&since=3");
     FakeES.last!.readyState = 1;

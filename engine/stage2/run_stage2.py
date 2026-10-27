@@ -5,7 +5,7 @@ Social, website and the creator-wallet behaviour parts are Stage 3 (Grok / PINRb
 UNKNOWN here and lower coverage. Presence is unknown, so the presence cap never fires in Stage 2."""
 import csv, datetime, json, os, sys
 sys.path.insert(0, "../pinr-step2")
-sys.path.insert(0, "../pinr-score")
+sys.path.insert(0, "../pinr-index")
 sys.path.insert(0, "../stage3")
 from readers import *
 from curve_math_v1 import CurveKind, CurveState, curve_depth_inputs

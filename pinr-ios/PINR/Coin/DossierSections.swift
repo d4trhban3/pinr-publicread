@@ -307,7 +307,7 @@ private struct ScoreBlock: View {
                     } else {
                         Text(Format.dash).font(Typo.sans(34, .semibold)).foregroundStyle(Brand.mute)
                     }
-                    Text("PINRSCORE").font(Typo.mono(8.5, .medium)).tracking(1.2).foregroundStyle(Brand.mute)
+                    Text("PINR INDEX").font(Typo.mono(8.5, .medium)).tracking(1.2).foregroundStyle(Brand.mute)
                 }
             }
             .frame(width: 108, height: 108)

@@ -1,6 +1,6 @@
 """REDACTED PUBLIC COPY.
 
-The proprietary logic in this module (PINRscore rules, weights, caps, thresholds and their tuning) is withheld.
+The proprietary logic in this module (PINR Index rules, weights, caps, thresholds and their tuning) is withheld.
 Signatures and data types are kept so the surrounding code still imports; calling a stubbed
 function raises NotImplementedError."""
 from __future__ import annotations

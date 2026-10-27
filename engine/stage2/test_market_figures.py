@@ -5,7 +5,7 @@ tools/profiles/2026-10-13-dexscreener-pumpfun-pairs-one-read.json.
 Run: cd stage2 && python3 test_market_figures.py"""
 import json, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
-for p in ("stage2", "stage3", "stage4", "pinr-score", "index", "pinr-step2", "scanner", "feed"):
+for p in ("stage2", "stage3", "stage4", "pinr-index", "index", "pinr-step2", "scanner", "feed"):
     sys.path.insert(0, os.path.join(ROOT, p))
 import dexscreener as DX
 import feed_export as FE

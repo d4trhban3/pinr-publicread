@@ -28,7 +28,7 @@ function defaultGraph(){
   N("s_pp",0,350,"PumpPortal free stream","source","live",[],["coins:new coins"],"New Pump.fun and LetsBonk coins at creation, free, into the feed server's pool. Trades on it are paid: not used."),
   N("s_pump",0,465,"Pump.fun API","source","live",[],["token:coin record","chart:candles","token:holders"],"Coin records, holders, trades and candles are read when it answers; a refusal is counted and shows on its wires as NOT LIVE with the error."),
   N("s_jup",0,610,"Jupiter Tokens v2","source","live",[],["token:token data","media:picture"],"Picture, dev, launchpad, holders, launch time. 100 coins a call, free."),
-  N("s_rpc",0,740,"Solana nodes","source","live",[],["token:chain reads"],"Public node, Helius, Shyft; Mac workers on QuickNode, OrbitFlare, Solana Vibe Station (228)."),
+  N("s_rpc",0,740,"Solana nodes","source","live",[],["token:chain reads"],"Public node, Helius, Shyft; Mac workers on RPC provider A, RPC provider B, RPC provider C (228)."),
   N("s_ipfs",0,860,"Metadata files (IPFS)","source","live",[],["media:picture"],"The coin's own picture link. Some gateways never answer."),
   N("s_dex",0,970,"DexScreener","source","live",[],["trades:price, volume","token:links"],"Pairs, price, volume, launch links. Free."),
   N("s_ws",0,1100,"Solana public websocket","source","live",[],["trades:live trades"],"Real trades for the ribbon; Chainstack as overflow."),
@@ -52,7 +52,7 @@ function defaultGraph(){
 
   N("e_x",1120,0,"X check (social scan)","reader","live",["flow:run","token:launch links","social:posts"],["flow:then","social:social evidence"],"Who posts about the coin; ○ reported."),
   N("e_ai",1120,190,"PINRai","ai","building",["flow:run","evidence:evidence so far","ai:model"],["ai:reading + receipts"],"Reads developer intent for coins that passed the gate; every read has its receipts. Ask PINRai (header) questions it (245)."),
-  N("e_score",1120,380,"PINRscore engine","ai","live",["evidence:evidence","ai:reading"],["evidence:score"],"Shown on the PINR page, Discovery and DeepScan (244)."),
+  N("e_score",1120,380,"PINR Index engine","ai","live",["evidence:evidence","ai:reading"],["evidence:score"],"Shown on the PINR page, Discovery and DeepScan (244)."),
   N("e_build",1120,540,"Evidence builder (evidence/1)","store","live",["token:token data","media:picture","evidence:gate result","social:social","trades:prices","evidence:chain rows","ai:PINRai reading"],["evidence:evidence file"],"From, to, what, value, date, link. ● on chain, ○ reported. Missing stays missing."),
   N("e_store",1120,840,"Evidence store on the server","store","live",["evidence:evidence file"],["evidence:evidence"],"Kept for good, nothing deleted (232)."),
 

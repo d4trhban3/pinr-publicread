@@ -8,7 +8,7 @@
 // TickStore) and to the feed server at once (Pusher), with dollar figures (QuoteUsd).
 // Helius bills websockets by data (2 credits per 0.1 MB, its websocket page, read 2026-10-25), so a daily share in bytes
 // (`trades_logs_daily_mb`) is metered on a billing node (BILLED); past it every subscription closes and SQD carries the coins again. At most 1,000
-// coins a connection and 5 connections (Helius's free plan, its rate-limits page, read 2026-10-25). Its node is OrbitFlare's
+// coins a connection and 5 connections (Helius's free plan, its rate-limits page, read 2026-10-25). Its node is RPC provider B's
 // websocket on the operator's key (no data meter, about 0.55 s ahead of the public node, measured 2026-10-25), the public node
 // taking a socket that goes silent or keeps dropping. The coins this service
 // watches are in `frontend-feed/ticks/_logs_status.json`; the SQD service writes every other listed coin (one writer a coin; the curve-account feed is switched off).
@@ -37,7 +37,7 @@ const ZERO = "11111111111111111111111111111111";              // an unset pubkey
 const PUMP_DECIMALS = 6;                                       // Pump.fun's program makes every curve coin with six
 export const PER_SOCKET = 1000, MAX_SOCKETS = 5;               // Helius free plan: 1,000 subscriptions a connection, 5 connections
 export const LOGS_DEFAULTS = { trades_logs: "off", trades_logs_node: "helius_official", trades_logs_fallback: "public", trades_logs_daily_mb: 1000, trades_logs_max_coins: 1000 };
-export const NODES = ["orbitflare", "helius_official", "public"];
+export const NODES = ["rpc_b", "helius_official", "public"];
 export const BILLED = new Set(["helius_official"]);            // nodes that bill by data (Helius: 2 credits per 0.1 MB); the others are not metered
 export const SUBS_PER_S = 4;                                   // subscribe requests at most this fast
 export const STRIKES = 2;                                      // a node silent, or dropping within SHORT_MS of opening, this many times: the fallback takes the socket
@@ -64,7 +64,7 @@ export function logsSettings(path = SETTINGS) {
 
 export function logsNode(env, which) {
   if (which === "public") return PUBLIC_NODE.wss;
-  if (which === "orbitflare" && /^https:\/\//.test(env.ORBITFLARE_SOLANA_URL || "")) return env.ORBITFLARE_SOLANA_URL.replace(/^https:/, "wss:");   // the operator's key, in the address
+  if (which === "rpc_b" && /^https:\/\//.test(env.RPC_B_SOLANA_URL || "")) return env.RPC_B_SOLANA_URL.replace(/^https:/, "wss:");   // the operator's key, in the address
   if (which === "helius_official" && env.HELIUS_OFFICIAL_KEY) return "wss://mainnet.helius-rpc.com/?api-key=" + env.HELIUS_OFFICIAL_KEY;
   return null;
 }

@@ -1,5 +1,5 @@
 /**
- * PINR is the evidence hub. The PINRscore, its coverage, its labels (VAMP stays, as a fact), PINRbot's findings and the budget meter are HIDDEN on
+ * PINR is the evidence hub. The PINR Index, its coverage, its labels (VAMP stays, as a fact), PINRbot's findings and the budget meter are HIDDEN on
  * pinr.io, not deleted: the engine, its rules and the feed still carry them, and this one switch brings them back. The site says what was observed
  * ("observed", "not checked yet", "worth a closer look"), never a verdict.
  *

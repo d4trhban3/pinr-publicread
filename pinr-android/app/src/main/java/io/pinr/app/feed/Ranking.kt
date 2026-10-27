@@ -14,7 +14,7 @@ enum class PinrFilter(val label: String, val hint: String) {
     Trending("Trending", "Most active right now"),
     Movers("Movers", "Biggest score swings"),
     New("New Launches", "Under an hour old"),
-    PinrScore("PINRscore", "Real, scored projects by score"),
+    PinrIndex("PINR Index", "Real, scored projects by score"),
 }
 
 object Ranking {
@@ -63,7 +63,7 @@ object Ranking {
             }.map { tokens[it.first] }
 
         return when (filter) {
-            PinrFilter.PinrScore -> sorted(rows.filter { scoreOf(tokens[it]) != null }) { scoreOf(tokens[it])?.toDouble() }
+            PinrFilter.PinrIndex -> sorted(rows.filter { scoreOf(tokens[it]) != null }) { scoreOf(tokens[it])?.toDouble() }
             PinrFilter.New -> sorted(rows.filter { (ageMinutes(tokens[it], nowMs) ?: Double.MAX_VALUE) < NEW_LAUNCH_MINUTES }, ascending = true) {
                 ageMinutes(tokens[it], nowMs)
             }
@@ -91,7 +91,7 @@ object Ranking {
     fun recentAt(t: Token, nowMs: Long): Long? =
         (if (scoreOf(t) != null) t.asOfMs else (t.seenAtMs ?: t.launchedAtMs))?.takeIf { nowMs - it <= RECENT_MS && it <= nowMs + 60_000 }
 
-    /** The PINRscore as a number, or null (unscored, flagged, nothing loaded): never zero. */
+    /** The PINR Index as a number, or null (unscored, flagged, nothing loaded): never zero. */
     fun scoreOf(t: Token): Int? = if (t.label == null && t.coverage > 0) t.score else null
 
     /** True when PINR has read the token: a score, a label, or some coverage. */

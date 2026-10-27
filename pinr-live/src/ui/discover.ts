@@ -96,7 +96,7 @@ const TABS: { id: DiscoverTab; label: string; note: string }[] = [
   { id: "trending", label: "Trending", note: "Most active right now" },
   { id: "movers", label: "Top Movers", note: "Largest 24h moves" },
   { id: "fresh", label: "Fresh Launches", note: "Under an hour old" },
-  { id: "pinrscore", label: "PINRscore", note: "Scored tokens, by PINRscore" },
+  { id: "pinrindex", label: "PINR Index", note: "Scored tokens, by PINR Index" },
   { id: "chains", label: "Base/BNB", note: "New on Base and BNB Chain, newest first" },
 ];
 
@@ -218,7 +218,7 @@ export function createDiscover(opts: DiscoverOptions): Discover {
   // Tabs.
   const tabsEl = el("div", "dtabs");
   const tabBtns = new Map<DiscoverTab, HTMLButtonElement>();
-  for (const t of TABS.filter((x) => scoreShown() || x.id !== "pinrscore")) {
+  for (const t of TABS.filter((x) => scoreShown() || x.id !== "pinrindex")) {
     const b = el("button", "dtab", t.label);
     b.type = "button";
     b.addEventListener("click", () => {
@@ -765,7 +765,7 @@ export function createDiscover(opts: DiscoverOptions): Discover {
       // The "Live" line is the coin's own tracked line with the live price as its newest point (livefeed's withLiveHead); it redraws itself.
     },
     setFilter(f) {
-      tab = f === "movers" ? "movers" : f === "new" ? "fresh" : f === "pinrscore" ? "pinrscore" : "trending";
+      tab = f === "movers" ? "movers" : f === "new" ? "fresh" : f === "pinrindex" ? "pinrindex" : "trending";
       rerank();
     },
     refresh: () => rerank(),

@@ -11,7 +11,7 @@ EVM tokens (Stage 4): a failed sell simulation from an established checker is th
 from __future__ import annotations
 import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "stage2"))
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pinr-score"))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pinr-index"))
 import score_engine_v1 as E
 
 

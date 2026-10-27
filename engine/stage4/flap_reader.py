@@ -6,7 +6,7 @@ from __future__ import annotations
 import calendar, json, os, sys, time, urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "stage2"))
-sys.path.insert(0, os.path.join(HERE, "..", "pinr-score"))
+sys.path.insert(0, os.path.join(HERE, "..", "pinr-index"))
 from evm import rpc, call, selector, enc_address, enc_uint, words, dec, dec_string, topic
 from readers import Log
 import solana_rpc as _S

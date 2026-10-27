@@ -1,12 +1,12 @@
-"""the scoring workers on the operator's Mac.
+"""optional extra scoring workers on a second machine.
 
-The Mac asks the server for page coins (`scanner.py lease N` over the Mac's existing key to the server), scores them with the
-engine's own scorer, reading Solana ONLY through the operator's free sign-ups for the Mac (quicknode, orbitflare,
-vibestation: whichever has its line in the Mac's .env), and hands each result to the server (`scanner.py handin`), which
-writes everything the site reads. Before each batch it copies PINR's memory of labelled coins from the server.
-It writes no feed file of its own, calls no paid API, and stops when its Terminal tab is closed.
+The worker machine asks the server for page coins (`scanner.py lease N` over its SSH key to the server), scores them with the
+engine's own scorer, reading Solana only through the RPC providers configured in its own .env (RPC_A_SOLANA_URL,
+RPC_B_SOLANA_URL, RPC_C_SOLANA_URL: your RPC provider endpoints), and hands each result to the server (`scanner.py handin`),
+which writes everything the site reads. Before each batch it copies PINR's memory of labelled coins from the server.
+It writes no feed file of its own and stops when its process ends.
 
-Run on the Mac, from its own engine copy:  caffeinate -i python3 scanner/mac_worker.py [workers, 1 to 16; 4 when not given]
+Run from the worker machine's engine copy:  python3 scanner/extra_worker.py [workers, 1 to 16; 4 when not given]
 """
 from __future__ import annotations
 import json, os, re, subprocess, sys, time
@@ -14,26 +14,26 @@ from multiprocessing import get_context
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-for _p in ("stage2", "stage3", "pinr-score", "pinr-step2", "feed", "scanner"):
+for _p in ("stage2", "stage3", "pinr-index", "pinr-step2", "feed", "scanner"):
     sys.path.insert(0, os.path.join(ROOT, _p))
 
-AIR = os.environ.get("PINR_AIR", "pinr@10.0.0.44")
+AIR = os.environ.get("PINR_AIR", "user@your-server")
 AIR_KEY = os.path.expanduser(os.environ.get("PINR_AIR_KEY", "~/.ssh/pinr_server"))
 AIR_ENGINE = "~/pinr/engine"
-MAC_NODES = ("quicknode", "orbitflare", "vibestation",      # the Mac's own sign-ups; every other node stays on the server,
+EXTRA_NODES = ("rpc_a", "rpc_b", "rpc_c",      # your RPC providers for this machine; every other node stays on the server,
              "helius_official", "alchemy_official")         # except the operator's official keys
-WORKERS_DEFAULT, WORKERS_MAX = 4, 16                         # the team 2026-10-24: the ceiling 8 -> 16 (the Mac's 15 cores idle)
+WORKERS_DEFAULT, WORKERS_MAX = 4, 16                         # the most workers allowed
 IDLE_S = 20                                                  # nothing handed out: ask again after this
-PUMPFUN_SHARE = 1 / 3                                        # the Mac's share of Pump.fun's per-address budgets (one home address)
+PUMPFUN_SHARE = 1 / 3                                        # the worker machine's share of Pump.fun's per-address budgets 
 MEMORY = os.path.join(ROOT, "stage3", "memory", "labeled_tokens.json")
 _MINT_RE = re.compile(r"^[1-9A-HJ-NP-Za-km-z]{32,44}$")
 _REMEMBERED: list = []
 
 
-def mac_endpoints(env=None) -> list:
-    """The Mac's node list: its sign-ups and the official keys that have their line in the .env, in that order; [] when none has."""
+def extra_endpoints(env=None) -> list:
+    """the worker machine's node list: its configured RPC providers and the official keys that have their line in the .env, in that order; [] when none has."""
     import solana_rpc as R
-    return R.build_endpoints(list(MAC_NODES), R._ENV if env is None else env)
+    return R.build_endpoints(list(EXTRA_NODES), R._ENV if env is None else env)
 
 
 def workers(arg=None) -> int:
@@ -45,12 +45,12 @@ def workers(arg=None) -> int:
 
 
 def setup_scoring() -> None:
-    """In each scoring process: Solana through the Mac's nodes only; the server writes the feed (at hand-in), so no feed file
-    here; every label the scorer remembers is kept to hand to the server; Pump.fun's per-address budgets at the Mac's share."""
+    """In each scoring process: Solana through the worker machine's nodes only; the server writes the feed (at hand-in), so no feed file
+    here; every label the scorer remembers is kept to hand to the server; Pump.fun's per-address budgets at the worker machine's share."""
     os.chdir(os.path.join(ROOT, "stage2"))                   # as the scanner's own worker: Stage 2 reads and writes relative to its folder
     import solana_rpc as R
-    R.ENDPOINTS[:] = mac_endpoints()
-    R._node_route = lambda method: None                      # 243 phase 2: the node wires are the server's; the Mac keeps its own sign-ups (228)
+    R.ENDPOINTS[:] = extra_endpoints()
+    R._node_route = lambda method: None                      # the node wires are the server's; this machine keeps its own providers
     import pumpfun_api as P
     P.BUDGET = {h: (max(1, int(b * PUMPFUN_SHARE)), r * PUMPFUN_SHARE) for h, (b, r) in P.BUDGET.items()}
     import run_stage2, brakes
@@ -143,10 +143,10 @@ def stoppable() -> None:
 
 def main(argv) -> int:
     stoppable()
-    os.environ.setdefault("PINR_PUMPFUN_REST_FILE", os.path.join(ROOT, "index", "pumpfun_rest.json"))   # one Pump.fun rest on this Mac
-    nodes = mac_endpoints()
+    os.environ.setdefault("PINR_PUMPFUN_REST_FILE", os.path.join(ROOT, "index", "pumpfun_rest.json"))   # one Pump.fun rest on this machine
+    nodes = extra_endpoints()
     if not nodes:
-        print("No Mac node in this copy's .env yet (QUICKNODE_SOLANA_URL, ORBITFLARE_SOLANA_URL or VIBESTATION_SOLANA_URL): nothing started.")
+        print("No worker-machine node in this copy's .env yet (RPC_A_SOLANA_URL, RPC_B_SOLANA_URL or RPC_C_SOLANA_URL): nothing started.")
         return 2
     n = workers(argv[1] if len(argv) > 1 else None)
     import scanner
@@ -154,7 +154,7 @@ def main(argv) -> int:
     if engine is None:
         print("This copy's engine version cannot be read (git): nothing started.")
         return 2
-    print(f"{n} scoring workers on the Mac, reading Solana through: {', '.join(name for name, _u, _g in nodes)}")
+    print(f"{n} scoring workers on the worker machine, reading Solana through: {', '.join(name for name, _u, _g in nodes)}")
     with get_context("spawn").Pool(n, initializer=setup_scoring, maxtasksperchild=25) as pool:
         while True:
             try:

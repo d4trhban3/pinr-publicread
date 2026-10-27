@@ -3584,7 +3584,7 @@ a.dsvampopen {
   background: rgba(var(--live-rgb), 0.22);
 }
 
-/* The lite dossier under the PINRscore: the facts the card already has, as a small list. */
+/* The lite dossier under the PINR Index: the facts the card already has, as a small list. */
 .dscore {
   align-content: start;
 }

@@ -162,7 +162,7 @@ fun HideMenu(t: Token, onHide: () -> Unit, onClose: () -> Unit) {
 private fun emptyText(f: PinrFilter): String = when (f) {
     PinrFilter.New -> "No coins under an hour old right now."
     PinrFilter.Movers -> "No score has moved since the app opened."
-    PinrFilter.PinrScore -> "No scored coins yet."
+    PinrFilter.PinrIndex -> "No scored coins yet."
     PinrFilter.Trending -> "Nothing to show yet."
 }
 

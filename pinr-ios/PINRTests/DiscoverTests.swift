@@ -33,7 +33,7 @@ struct DiscoverTests {
     @Test("Thirty rows at most")
     func thirty() throws {
         let list = try (0..<50).map { try t(#"{"address":"A\#($0)","coverage":5,"score":50}"#) }
-        #expect(DiscoverRanking.rank(.pinrscore, list).count == 30)
+        #expect(DiscoverRanking.rank(.pinrindex, list).count == 30)
     }
 
     @Test("Search: name or ticker (a leading $ ignored), any case; biggest first")

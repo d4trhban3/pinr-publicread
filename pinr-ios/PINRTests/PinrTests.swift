@@ -26,13 +26,13 @@ private let now = Date(timeIntervalSince1970: 2_000_000_000)
 
 @Suite("The PINR page's ranking")
 struct RankingTests {
-    @Test("PINRscore: only real scores, highest first; flagged, unscored and no-coverage coins are not in it")
-    func pinrscore() throws {
+    @Test("PINR Index: only real scores, highest first; flagged, unscored and no-coverage coins are not in it")
+    func pinrindex() throws {
         let list = try [
             tok("A", score: 40), tok("B", score: 90), tok("C", label: "VAMP"),
             tok("D", coverage: 0), tok("E", score: 70, coverage: 0), tok("F", score: 90),
         ]
-        #expect(Ranking.rank(.pinrscore, list, now: now).map(\.address) == ["B", "F", "A"])
+        #expect(Ranking.rank(.pinrindex, list, now: now).map(\.address) == ["B", "F", "A"])
     }
 
     @Test("New Launches: under an hour old, newest first; an unknown age is not new")
@@ -119,7 +119,7 @@ struct RankingTests {
     @Test("The page shows the top 90, ties in the feed's own order")
     func limitAndTies() throws {
         let list = try (0..<120).map { try tok("T\($0)", score: 50) }
-        let ranked = Ranking.rank(.pinrscore, list, now: now)
+        let ranked = Ranking.rank(.pinrindex, list, now: now)
         #expect(ranked.count == 90)
         #expect(ranked.first?.address == "T0" && ranked.last?.address == "T89")
     }

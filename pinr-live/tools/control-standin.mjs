@@ -67,7 +67,7 @@ const catalog = {
   nodes: {
     owner: "engine", followed: true, words: "which Solana node answers each kind of read, top wire first",
     kinds: { largest_holders: { words: "a coin's largest holders" }, token_accounts: { words: "a wallet's token accounts" }, transactions: { words: "transactions and their signatures" }, other: { words: "every other read" } },
-    names: { public: "Solana's public node", publicnode: "PublicNode", shyft: "Shyft", chainstack: "Chainstack", helius_official: "Helius", quicknode: "QuickNode" },
+    names: { public: "Solana's public node", publicnode: "PublicNode", shyft: "Shyft", chainstack: "Chainstack", helius_official: "Helius", rpc_a: "RPC provider A" },
   },
   trade_feed: { owner: "engine", followed: true, words: "the live trade feed's websocket: its first node, the overflow, and how many coins it watches", names: { public: "Solana's public node", publicnode: "PublicNode", chainstack: "Chainstack" }, max_nodes: 2, coins: [1, 1000] },
 };

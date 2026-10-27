@@ -139,7 +139,7 @@ private fun spoken(t: Token): String {
     val parts = mutableListOf(Format.title(t), Format.ticker(t))
     when {
         t.label != null -> parts += "labelled ${t.label.text}, no score"
-        Format.corner(t).numeric -> parts += "PINRscore ${t.score}, coverage ${Format.coverage(t.coverage)}"
+        Format.corner(t).numeric -> parts += "PINR Index ${t.score}, coverage ${Format.coverage(t.coverage)}"
         else -> parts += if (t.coverage > 0) "no score" else "unscored"
     }
     if (t.label == null) {

@@ -5,7 +5,7 @@ balance BEFORE the payout; the dev group kept out; the read stopped at ten; the 
 live file. Run:  python3 test_fee_reason.py"""
 import json, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, "..", "pinr-score"))
+sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, "..", "pinr-index"))
 import readers as R
 import score_engine_v1 as E
 from b58 import b58e, b58d, oc, pda

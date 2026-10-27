@@ -34,7 +34,7 @@ from typing import Callable, Optional
 HERE = os.path.dirname(os.path.abspath(__file__))
 ENGINE = os.path.dirname(HERE)
 REPO = os.path.dirname(os.path.dirname(ENGINE))
-sys.path[:0] = [HERE, os.path.join(ENGINE, "pinr-score")]
+sys.path[:0] = [HERE, os.path.join(ENGINE, "pinr-index")]
 import score_engine_v1 as E
 import intent as I
 

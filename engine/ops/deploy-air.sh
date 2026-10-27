@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # PINR: deploy main to the server in one command.
-# Run on the Mac from the project:  bash engine/ops/deploy-air.sh [--dry-run] [--all]
+# Run on the worker machine from the project:  bash engine/ops/deploy-air.sh [--dry-run] [--all]
 #   --dry-run  show what would change and restart; change nothing
 #   --all      restart every service, whatever changed
 # What it does, and it stops LOUDLY at the first step that fails (nothing after it runs):
@@ -9,11 +9,11 @@
 #      provider list (the repo's, by rule), re-marks the settings file as the server's own; the live settings file is
 #      replaced in one rename and never holds the repo's values (the old swap stopped pinr-sqdlive at every deploy)
 #   3. installs only what changed: control/ and imagehash/ packages; the site (npm ci + build) when pinr-live/ changed
-#   4. restarts only what changed: engine Python or settings -> pinr-scanner (and the Mac workers are stopped first);
+#   4. restarts only what changed: engine Python or settings -> pinr-scanner (and the worker machine workers are stopped first);
 #      control/ -> pinr-control; livews/ -> pinr-trades; pinr-live/ -> one pinr-feed restart; chains/ or engine Python ->
 #      pinr-chains (CHAINS, 249: it imports the scanner's gate, evidence and quiet code), once its unit is installed
 #      (chains/install-chains.sh, run once)
-#   5. checks: every restarted service is active; the server's and the Mac's engine stamps match; no "database is locked"
+#   5. checks: every restarted service is active; the server's and the worker machine's engine stamps match; no "database is locked"
 #      in the scanner's log since the restart
 # One deploy at a time (two overlapped on 2026-10-25): a lock folder on the server, taken before anything
 # changes and given back at the end, failed or not; a lock older than LOCK_STALE_MIN minutes is said and taken over.
@@ -25,7 +25,7 @@ KEY="${PINR_AIR_KEY:-$HOME/.ssh/pinr_server}"
 ENGINE_REL="engine"
 AIR_ROOT="~/pinr"
 MAC_ROOT="${PINR_MAC_WORKER:-$HOME/pinr-worker}"
-MAC_WORKERS="${PINR_MAC_WORKERS:-12}"                     # scoring workers started again on the Mac after an engine change
+MAC_WORKERS="${PINR_MAC_WORKERS:-12}"                     # scoring workers started again on the worker machine after an engine change
 MAC_WAS=0                                                 # how many were running before the deploy stopped them
 DRY=0; ALL=0; SITE_NOW=0
 for a in "$@"; do
@@ -41,7 +41,7 @@ STEP="starting"
 LOCK="~/pinr-deploy.lock"; LOCK_STALE_MIN=30; HELD=0
 # the team's W1 on 06b71f88: said once, by this shell (with -E the trap also runs in each command substitution)
 trap '[ "${BASH_SUBSHELL:-0}" = 0 ] && { echo; echo "DEPLOY FAILED at: $STEP (nothing after this step ran)" >&2;
-  [ "$MAC_WAS" = 0 ] || echo "The Mac workers were stopped: start them again once the server is right (cd $MAC_ROOT/$ENGINE_REL && caffeinate -i python3 scanner/mac_worker.py $MAC_WORKERS)" >&2; }' ERR
+  [ "$MAC_WAS" = 0 ] || echo "The worker machine workers were stopped: start them again once the server is right (cd $MAC_ROOT/$ENGINE_REL && python3 scanner/extra_worker.py $MAC_WORKERS)" >&2; }' ERR
 # the team's W2 on 06b71f88: give back only our own lock (one a later run took over after 30 minutes is that run's)
 release() { if [ "$HELD" = 1 ]; then air "grep -qxF '$WHO' $LOCK/who 2>/dev/null && rm -rf $LOCK || true" || echo "could not give back the deploy lock on the server ($LOCK)" >&2; fi; }
 trap release EXIT
@@ -82,7 +82,7 @@ git merge-base --is-ancestor "$OLD" "$NEW" || { echo "the server's commit is not
 CHANGED="$(git diff --name-only "$OLD" "$NEW")"
 has() { [ "$ALL" = 1 ] || grep -qE "$1" <<<"$CHANGED"; }   # no pipe: grep -q stops at its first match, and with pipefail a long list's
                                                        # printf then dies of SIGPIPE and the match read as none (2026-10-26: chains missed)
-ENGINE_PY="^$ENGINE_REL/(scanner|stage2|stage3|stage4|feed|pinr-score)/.*\.py$|^$ENGINE_REL/scanner/settings\.json$|^$ENGINE_REL/control/routing-catalog\.json$"
+ENGINE_PY="^$ENGINE_REL/(scanner|stage2|stage3|stage4|feed|pinr-index)/.*\.py$|^$ENGINE_REL/scanner/settings\.json$|^$ENGINE_REL/control/routing-catalog\.json$"
 R_SCANNER=0; R_CONTROL=0; R_TRADES=0; R_SITE=0; R_CHAINS=0; R_SQDLIVE=0; R_WSLOGS=0; R_EVMLIVE=0; CI_CONTROL=0; CI_IMAGEHASH=0
 has "$ENGINE_PY" && R_SCANNER=1
 has "^$ENGINE_REL/chains/" && R_CHAINS=1
@@ -108,21 +108,21 @@ if [ "$R_SITE" = 1 ] && [ "$SITE_NOW" != 1 ]; then
 fi
 [ "$ALL" = 1 ] && { CI_CONTROL=1; CI_IMAGEHASH=1; }
 echo "files changed: $(printf '%s\n' "$CHANGED" | grep -c . || true)"
-echo "plan: scanner=$R_SCANNER (and the Mac workers) control=$R_CONTROL trades=$R_TRADES chains=$R_CHAINS sqdlive=$R_SQDLIVE evmlive=$R_EVMLIVE wslogs=$R_WSLOGS site=$R_SITE; installs: control=$CI_CONTROL imagehash=$CI_IMAGEHASH"
+echo "plan: scanner=$R_SCANNER (and the worker machine workers) control=$R_CONTROL trades=$R_TRADES chains=$R_CHAINS sqdlive=$R_SQDLIVE evmlive=$R_EVMLIVE wslogs=$R_WSLOGS site=$R_SITE; installs: control=$CI_CONTROL imagehash=$CI_IMAGEHASH"
 if [ "$DRY" = 1 ]; then echo "dry run: nothing changed"; exit 0; fi
 
 if [ "$R_SCANNER" = 1 ]; then
-  step "the Mac workers stopped (engine code changes)"
-  running() { { pgrep -f "scanner/mac_worker.py" || true; } | wc -l | tr -d ' '; }   # none running is an answer, not a failure
+  step "the worker machine workers stopped (engine code changes)"
+  running() { { pgrep -f "scanner/extra_worker.py" || true; } | wc -l | tr -d ' '; }   # none running is an answer, not a failure
   MAC_WAS="$(running)"                                   # started again at the end only when they were running (checklist 4)
-  pkill -INT -f "scanner/mac_worker.py" || true
+  pkill -INT -f "scanner/extra_worker.py" || true
   for _ in $(seq 1 30); do [ "$(running)" = 0 ] && break; sleep 1; done
   if [ "$(running)" != 0 ]; then                         # a worker that ignores Ctrl-C (one an earlier deploy started in the
-    echo "Mac workers ignored the stop request for 30 s: ending them"   # background before set -m below): end it, said so
-    pkill -TERM -f "scanner/mac_worker.py" || true
+    echo "worker-machine workers ignored the stop request for 30 s: ending them"   # background before set -m below): end it, said so
+    pkill -TERM -f "scanner/extra_worker.py" || true
     for _ in $(seq 1 15); do [ "$(running)" = 0 ] && break; sleep 1; done
   fi
-  [ "$(running)" = 0 ] || { echo "Mac workers still running after 45 s" >&2; false; }
+  [ "$(running)" = 0 ] || { echo "worker-machine workers still running after 45 s" >&2; false; }
 fi
 
 step "2. the server: fast-forward, its own settings kept"
@@ -155,7 +155,7 @@ PY
   rm -f \$T.repo
   git update-index --no-skip-worktree \$F
   git update-index --cacheinfo \"\$(git ls-tree $NEW -- \$F | awk '{print \$1\",\"\$3}'),\$F\"
-  git merge -q --ff-only $NEW                              # the commit checked on the Mac, not a newer one pushed since (2026-10-25)
+  git merge -q --ff-only $NEW                              # the commit checked on the worker machine, not a newer one pushed since (2026-10-25)
   mv -f \$T \$F
   git update-index --skip-worktree \$F
   [ \"\$(git rev-parse HEAD)\" = \"$NEW\" ]
@@ -243,11 +243,11 @@ fi
 STAMP_PY="import sys; sys.path[:0] = ['scanner', 'stage2', 'stage3']; import scanner; print(scanner.engine_stamp())"
 AIR_STAMP="$(air "cd $AIR_ROOT/$ENGINE_REL && python3 -c \"$STAMP_PY\"")"
 if [ -d "$MAC_ROOT/.git" ]; then
-  step "the Mac worker copy: pull and stamp"
+  step "the worker machine worker copy: pull and stamp"
   git -C "$MAC_ROOT" fetch -q origin && git -C "$MAC_ROOT" merge -q --ff-only "$NEW"   # the same commit as the server
   MAC_STAMP="$(cd "$MAC_ROOT/$ENGINE_REL" && python3 -c "$STAMP_PY")"
-  [ "$AIR_STAMP" = "$MAC_STAMP" ] || { echo "engine stamps differ: Air ${AIR_STAMP:0:12}, Mac ${MAC_STAMP:0:12}" >&2; false; }
-  echo "engine stamp ${AIR_STAMP:0:12} on the server and the Mac"
+  [ "$AIR_STAMP" = "$MAC_STAMP" ] || { echo "engine stamps differ: Air ${AIR_STAMP:0:12}, worker ${MAC_STAMP:0:12}" >&2; false; }
+  echo "engine stamp ${AIR_STAMP:0:12} on the server and the worker machine"
 fi
 if [ "$R_SCANNER" = 1 ]; then
   sleep 30                                               # a scoring pass or two before the log is read
@@ -257,18 +257,18 @@ if [ "$R_SCANNER" = 1 ]; then
   echo "no 'database is locked' since the restart"
 fi
 if [ "$MAC_WAS" != 0 ]; then                              # checklist 4: no hand step left after a deploy
-  step "the Mac workers started again"
+  step "the worker machine workers started again"
   # the whole subshell's output goes to the log and `exec` leaves no shell behind: with the redirect on the worker alone, the
   # backgrounded shell kept this script's output pipe open, so `deploy-air.sh | tail` never returned (2026-10-25, 235678a3)
   # job control on while it starts: a background command in a script otherwise ignores Ctrl-C, and the next deploy's stop
-  # request (SIGINT) would not reach it (2026-10-25: "Mac workers still running after 30 s")
+  # request (SIGINT) would not reach it (2026-10-25: "worker-machine workers still running after 30 s")
   set -m
-  ( cd "$MAC_ROOT/$ENGINE_REL" && exec nohup caffeinate -i python3 scanner/mac_worker.py "$MAC_WORKERS" ) \
-    >> "$MAC_ROOT/$ENGINE_REL/scanner/mac_worker.log" 2>&1 < /dev/null &
+  ( cd "$MAC_ROOT/$ENGINE_REL" && exec nohup python3 scanner/extra_worker.py "$MAC_WORKERS" ) \
+    >> "$MAC_ROOT/$ENGINE_REL/scanner/extra_worker.log" 2>&1 < /dev/null &
   set +m
   sleep 5
-  [ "$(running)" != 0 ] || { echo "the Mac workers did not start: see $MAC_ROOT/$ENGINE_REL/scanner/mac_worker.log" >&2; false; }
-  echo "Mac workers started again ($MAC_WORKERS workers; log $MAC_ROOT/$ENGINE_REL/scanner/mac_worker.log)"
+  [ "$(running)" != 0 ] || { echo "the worker machine workers did not start: see $MAC_ROOT/$ENGINE_REL/scanner/extra_worker.log" >&2; false; }
+  echo "worker-machine workers started again ($MAC_WORKERS workers; log $MAC_ROOT/$ENGINE_REL/scanner/extra_worker.log)"
 fi
 trap - ERR
 echo

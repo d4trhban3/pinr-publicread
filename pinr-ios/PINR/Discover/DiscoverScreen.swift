@@ -154,7 +154,7 @@ struct DiscoverRoom: View {
     private var emptyText: String {
         switch tab {
         case .fresh: "No coins under an hour old right now."
-        case .pinrscore: "No scored coins yet."
+        case .pinrindex: "No scored coins yet."
         case .basebnb: "No Base or BNB Chain coins yet."
         case .movers, .trending: "Nothing to show yet."
         }

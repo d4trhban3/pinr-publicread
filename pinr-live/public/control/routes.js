@@ -518,7 +518,7 @@
       const w = G.wires[+p.dataset.w];
       if (!w) continue;
       const m = wireMark(w.slice(0, 4).join("|"), routing, catalog());
-      // The operator's key: solid = a wire the server follows (a live route, a wire into a gate check, or a score wire while the site shows the PINRscore); dashed = drawing only or a route not in force;
+      // The operator's key: solid = a wire the server follows (a live route, a wire into a gate check, or a score wire while the site shows the PINR Index); dashed = drawing only or a route not in force;
       // faded = a route the feed does not follow yet; dotted and faint = it comes from a blocked, hidden or planned node; thick and glowing = selected.
       const gate = !!(window.PinrGate && window.PinrGate.isGateWire && window.PinrGate.isGateWire(w));
       const B = window.PinrBadges;
