@@ -8,7 +8,7 @@ import type { WireToken } from "./translate.ts";
 // One real answer saved from GeckoTerminal (2026-10-15 00:53 UTC): the 20 newest Solana pools, 14 of them on the exchange "pump-fun".
 const SAVED = JSON.parse(readFileSync(new URL("./fixtures/geckoterminal-new-pools.json", import.meta.url), "utf8"));
 const NOW = Date.parse("2026-10-15T00:54:00Z");
-const M1 = "EuQq6eT3nGU2pH6RAxksVkXaGs4xpnrH3qz4o4jrpump";
+const M1 = "HZxJMctfeVPK4PpFUGBLeSYNQFuQPSTYhF4pdYkMpump";
 
 describe("the pool of new coins, read from a saved GeckoTerminal answer", () => {
   const coins = parseNewPools(SAVED, NOW);
@@ -94,7 +94,7 @@ describe("the reader", () => {
   });
   it("a pool refresh never overwrites the figures Pump.fun's own record gave: they keep their source and read time", async () => {
     let now = 2_000_000_000_000;
-    const rec = JSON.parse(readFileSync(new URL("./fixtures/CdgYz6aBCtUm2Fy5j4vbhBsDLRadEGJmuuTH6MMpump.fresh.json", import.meta.url), "utf8")).pumpfun_coin;
+    const rec = JSON.parse(readFileSync(new URL("./fixtures/8jZ3AVk9WriTkw3nEB5Z2RnSQe3eUKoDp1xQyDMpump.fresh.json", import.meta.url), "utf8")).pumpfun_coin;
     const u = new PumpfunUniverse(async () => ({ status: 200, json: async () => rec }), () => now);
     const mint = rec.mint as string;
     const poolCoin = { ...cleanCoin(rec, now)!, figSource: "GeckoTerminal" as const, figAtMs: now, capUsd: 1111, priceUsd: 0.000001, athCapUsd: null, creator: null };
@@ -116,7 +116,7 @@ describe("the reader", () => {
   });
   it("a pool refresh never throws away what the coin's own record gave", async () => {
     let now = 2_000_000_000_000;
-    const rec = JSON.parse(readFileSync(new URL("./fixtures/CdgYz6aBCtUm2Fy5j4vbhBsDLRadEGJmuuTH6MMpump.fresh.json", import.meta.url), "utf8")).pumpfun_coin;
+    const rec = JSON.parse(readFileSync(new URL("./fixtures/8jZ3AVk9WriTkw3nEB5Z2RnSQe3eUKoDp1xQyDMpump.fresh.json", import.meta.url), "utf8")).pumpfun_coin;
     const get: PumpFetch = async () => ({ status: 200, json: async () => rec });
     const u = new PumpfunUniverse(get, () => now);
     // the coin arrives from a pool page, bare
@@ -135,7 +135,7 @@ describe("the reader", () => {
 });
 
 describe("a coin's own record (creator, links, picture, all-time high), one at a time", () => {
-  const record = JSON.parse(readFileSync(new URL("./fixtures/CdgYz6aBCtUm2Fy5j4vbhBsDLRadEGJmuuTH6MMpump.fresh.json", import.meta.url), "utf8")).pumpfun_coin;
+  const record = JSON.parse(readFileSync(new URL("./fixtures/8jZ3AVk9WriTkw3nEB5Z2RnSQe3eUKoDp1xQyDMpump.fresh.json", import.meta.url), "utf8")).pumpfun_coin;
   it("is read for the coins on screen first, at most every 10 seconds, and fills the all-time high with its receipt", async () => {
     let now = 2_000_000_000_000;
     const asked: string[] = [];
@@ -163,7 +163,7 @@ describe("a coin's own record (creator, links, picture, all-time high), one at a
     const asked: string[] = [];
     const get: PumpFetch = async (u) => (asked.push(u), { status, json: async () => ({}) });
     const uni = new PumpfunUniverse(get, () => now);
-    uni.want(["CdgYz6aBCtUm2Fy5j4vbhBsDLRadEGJmuuTH6MMpump", "3BhS4YSoWjqyqmiKrbpZv7pyQx3Xok7HHxeaG6zBpump"]);
+    uni.want(["8jZ3AVk9WriTkw3nEB5Z2RnSQe3eUKoDp1xQyDMpump", "3BhS4YSoWjqyqmiKrbpZv7pyQx3Xok7HHxeaG6zBpump"]);
     await uni.tick();
     now += RECORD_EVERY_MS + 1;
     status = 429;
@@ -172,7 +172,7 @@ describe("a coin's own record (creator, links, picture, all-time high), one at a
     now += RECORD_EVERY_MS + 1; // inside the minute's rest
     await uni.tick();
     expect(asked).toHaveLength(2);
-    const tok = { chain: "solana", address: "CdgYz6aBCtUm2Fy5j4vbhBsDLRadEGJmuuTH6MMpump", priceUsd: null, imageUrl: null } as unknown as WireToken;
+    const tok = { chain: "solana", address: "8jZ3AVk9WriTkw3nEB5Z2RnSQe3eUKoDp1xQyDMpump", priceUsd: null, imageUrl: null } as unknown as WireToken;
     expect(uni.fill([tok])[0]!.athUsd).toBeUndefined();
     expect(cleanCoin({}, 1)).toBeNull();
   });

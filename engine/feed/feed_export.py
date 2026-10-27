@@ -20,7 +20,7 @@ from __future__ import annotations
 import glob, json, os, sys, time, urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-for p in ("stage2", "stage3", "stage4", "pinr-score", "feed"):
+for p in ("stage2", "stage3", "stage4", "pinr-index", "feed"):
     sys.path.insert(0, os.path.join(ROOT, p))
 FEED_DIR = os.path.join(ROOT, "frontend-feed")
 CACHE = os.path.join(HERE, "meta_cache.json")
@@ -735,7 +735,7 @@ def export_one(o: dict, cache: dict | None = None) -> str | None:
     except Exception:
         pass                                                 # events are optional; the result file is already written
     try:
-        from metric import record as metric_record           # PINRmetric: the score over time
+        from metric import record as metric_record           # PINR Index line: the score over time
         metric_record(rec, NO_SCORE_LABELS, FEED_DIR)
     except Exception:
         pass                                                 # optional too
@@ -758,7 +758,7 @@ def export_early(o: dict) -> str | None:
     """An early score's file: the same contract record plus the one optional field `early`, built
     with no look-up. Name, ticker and launch time come from the result's own receipts (the coin's creation record); the
     picture is not read yet, so `image_url` is absent. Never replaces a full score's file. No chart event and no
-    PINRmetric point is written for an early score."""
+    PINR Index line point is written for an early score."""
     meta = _early_meta(o)
     rec = to_feed(o, meta)
     if rec is None or not counts(rec):                       # checklist 7: a failed early score writes nothing either

@@ -237,9 +237,9 @@ struct SiteStyleCoinTests {
         #expect(Chip.tone(.clear) == .clear && Chip.tone(.notRead) == .none && Chip.tone(.noData) == .none)
     }
 
-    @Test("PINRmetric: drawn only with two or more points; otherwise not available")
+    @Test("PINR Index line: drawn only with two or more points; otherwise not available")
     func metric() throws {
-        let m = try JSONDecoder().decode(WireMetric.self, from: Data(#"{"metric":{"name":"PINRmetric","timeframe":"scan","asOf":"","series":[[2,60],[1,50]],"signal":[[1,55],[2,57]],"histogram":[[1,-5],[2,3]],"levels":[30,70]}}"#.utf8)).metric
+        let m = try JSONDecoder().decode(WireMetric.self, from: Data(#"{"metric":{"name":"PINR Index line","timeframe":"scan","asOf":"","series":[[2,60],[1,50]],"signal":[[1,55],[2,57]],"histogram":[[1,-5],[2,3]],"levels":[30,70]}}"#.utf8)).metric
         #expect(m?.series.map(\.v) == [50, 60] && m?.levels == [30, 70])
         #expect(try JSONDecoder().decode(WireMetric.self, from: Data(#"{"metric":null}"#.utf8)).metric == nil)
         #expect(try JSONDecoder().decode(WireMetric.self, from: Data(#"{"metric":{"series":[[1,50]]}}"#.utf8)).metric == nil)

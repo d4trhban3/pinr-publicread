@@ -6,7 +6,7 @@
 export const NEW_MS = 24 * 3600_000;
 
 export interface FirstPageFacts {
-  /** the coin has a PINRscore (a number) */
+  /** the coin has a PINR Index (a number) */
   scored: boolean;
   /** when it was last scored (ms) */
   scoredAtMs?: number | null;

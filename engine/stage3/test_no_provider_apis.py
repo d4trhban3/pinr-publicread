@@ -153,7 +153,7 @@ def c5():
     alchemy = re.compile(r"alchemy_getAssetTransfers|alchemy_prices_usd|api\.g\.alchemy\.com/prices")
     words_only = {"stage2/solana_rpc.py"}                     # its credit table and host labels name methods and hosts; it calls none of them
     found, alc = [], set()
-    for d in ("stage2", "stage3", "stage4", "feed", "scanner", "pinr-score"):
+    for d in ("stage2", "stage3", "stage4", "feed", "scanner", "pinr-index"):
         for f in sorted(os.listdir(os.path.join(ROOT, d))):
             rel = f"{d}/{f}"
             if not f.endswith(".py") or f.startswith("test_"):

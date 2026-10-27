@@ -145,7 +145,7 @@ describe("live Pump.fun view", () => {
   });
 });
 
-describe("PINRscore filter and sorting", () => {
+describe("PINR Index filter and sorting", () => {
   const scored = (): Item[] => [
     item(1, { value: "40" }),
     item(2, { value: "85" }),
@@ -158,12 +158,12 @@ describe("PINRscore filter and sorting", () => {
     expect(scoreOf(item(1, { status: "flag", flagKind: "BOT/RUG" }))).toBeNull();
     expect(scoreOf(item(1, { value: "73" }))).toBe(73);
   });
-  it("PINRscore lists only scored tokens, highest first by default", () => {
-    expect(selectAndRank("pinrscore", scored(), 90, 0, "default").map((r) => r.id)).toEqual([2, 3, 1]);
+  it("PINR Index lists only scored tokens, highest first by default", () => {
+    expect(selectAndRank("pinrindex", scored(), 90, 0, "default").map((r) => r.id)).toEqual([2, 3, 1]);
   });
   it("ascending and descending run the number both ways", () => {
-    expect(selectAndRank("pinrscore", scored(), 90, 0, "asc").map((r) => r.id)).toEqual([1, 3, 2]);
-    expect(selectAndRank("pinrscore", scored(), 90, 0, "desc").map((r) => r.id)).toEqual([2, 3, 1]);
+    expect(selectAndRank("pinrindex", scored(), 90, 0, "asc").map((r) => r.id)).toEqual([1, 3, 2]);
+    expect(selectAndRank("pinrindex", scored(), 90, 0, "desc").map((r) => r.id)).toEqual([2, 3, 1]);
   });
   it("every filter honours the direction", () => {
     const items = crowd(120);

@@ -55,7 +55,7 @@ const MENU_ITEMS: { id: PageId | "map" | "guide"; label: string; icon: string; p
 const FILTER_ICONS: Record<string, string> = {
   trending: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>',
   movers: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 20V5M8 5l-4 4M8 5l4 4M16 4v15M16 19l-4-4M16 19l4-4"/></svg>',
-  pinrscore: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V10M10 19V5M16 19v-7M22 19H2"/></svg>',
+  pinrindex: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V10M10 19V5M16 19v-7M22 19H2"/></svg>',
   new: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg>',
 };
 
@@ -185,7 +185,7 @@ export function createHeader(opts: HeaderOptions): Header {
   const filterSec = el("div", "psec");
   filterSec.append(el("div", "ptitle pfiltitle", "Filter"));
   const rows = new Map<Filter, HTMLButtonElement>();
-  for (const f of FILTERS.filter((x) => scoreShown() || x.id !== "pinrscore")) {
+  for (const f of FILTERS.filter((x) => scoreShown() || x.id !== "pinrindex")) {
     const row = el("button", "row", `${FILTER_ICONS[f.id]}<span class="rt"><b>${f.label}</b><i>${f.hint}</i></span><span class="tick"></span>`);
     row.setAttribute("role", "menuitemradio");
     row.addEventListener("click", () => {

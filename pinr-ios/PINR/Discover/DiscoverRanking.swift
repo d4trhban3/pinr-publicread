@@ -2,7 +2,7 @@ import Foundation
 
 /// The Discover tabs, as on the site (pinr-live/src/world/discoverlist.ts).
 enum DiscoverTab: String, CaseIterable, Identifiable, Sendable {
-    case trending, movers, fresh, pinrscore, basebnb
+    case trending, movers, fresh, pinrindex, basebnb
 
     var id: String { rawValue }
 
@@ -11,7 +11,7 @@ enum DiscoverTab: String, CaseIterable, Identifiable, Sendable {
         case .movers: "Top Movers"
         case .trending: "Trending"
         case .fresh: "Fresh Launches"
-        case .pinrscore: "PINRscore"
+        case .pinrindex: "PINR Index"
         case .basebnb: "Base/BNB"
         }
     }
@@ -21,7 +21,7 @@ enum DiscoverTab: String, CaseIterable, Identifiable, Sendable {
         case .movers: "Largest 24h moves"
         case .trending: "Most active right now"
         case .fresh: "Under an hour old"
-        case .pinrscore: "Scored tokens, by PINRscore"
+        case .pinrindex: "Scored tokens, by PINR Index"
         case .basebnb: "Base and BNB Chain coins, newest first"
         }
     }
@@ -62,7 +62,7 @@ enum DiscoverRanking {
                 .map(\.element)
         case .trending: return Ranking.rank(.trending, tokens, now: now, limit: rows)
         case .fresh: return Ranking.rank(.new, tokens, now: now, limit: rows)
-        case .pinrscore: return Ranking.rank(.pinrscore, tokens, now: now, limit: rows)
+        case .pinrindex: return Ranking.rank(.pinrindex, tokens, now: now, limit: rows)
         case .basebnb: return baseBnb(tokens)
         }
     }

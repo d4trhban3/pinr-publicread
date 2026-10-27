@@ -17,7 +17,7 @@ export interface Item {
   /** URL of the token's picture. Null until there is one: the card then shows a plain circle with the initial. */
   image: string | null;
   detail: string;
-  /** PINRscore 1..99. */
+  /** PINR Index 1..99. */
   value: string;
   /** Share of readings that loaded, 0..100. */
   coverage: number;

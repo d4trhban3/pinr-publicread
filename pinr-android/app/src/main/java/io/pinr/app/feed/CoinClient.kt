@@ -5,7 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * Reads one coin's chart, tape, events, PINRmetric and dossier from the feed server. Read-only, and only for a coin the
+ * Reads one coin's chart, tape, events, PINR Index line and dossier from the feed server. Read-only, and only for a coin the
  * feed lists (the server refuses any other address). Each call throws [Failure] when there is no answer to show.
  */
 class CoinClient(private val baseUrl: String?, private val http: Http = UrlHttp) {

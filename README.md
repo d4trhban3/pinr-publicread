@@ -25,7 +25,7 @@ This is a redacted public copy of the PINR source.
 
 ### What is withheld
 
-- **PINR's scoring.** The rules, weights, caps, thresholds and tuning behind the PINRscore and the related grading, bot-detection and social checks are proprietary and are not included. The affected functions keep their names and signatures, but their bodies raise `NotImplementedError("redacted: …")` and their settings are blanked. Files and functions touched this way say so at the top.
+- **PINR's proprietary analysis rules.** The rules, weights, thresholds and tuning behind PINR's analysis, including its bot-detection and social checks, are not included. The affected functions keep their names and signatures, but their bodies raise `NotImplementedError("redacted: …")` and their settings are blanked. Files and functions touched this way say so at the top.
 - **Model prompts and calibration** for PINR's AI readers.
 - **Internal documents**: planning notes, decision logs, data contracts, handover notes and team instructions.
 - **Secrets and private configuration**: API keys, node URLs, access settings and signing material. Use the `.env.example` files as a template for your own.

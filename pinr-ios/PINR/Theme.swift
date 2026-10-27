@@ -25,7 +25,7 @@ enum Brand {
     /// Kept for older call sites: the glass the cards sit on.
     static let card = glass
 
-    /// The PINRscore colour scale: mandarin at 25 and below, lime at 95 and above, a smooth blend between (scorecolor.ts).
+    /// The PINR Index colour scale: mandarin at 25 and below, lime at 95 and above, a smooth blend between (scorecolor.ts).
     static func score(_ s: Int) -> Color {
         let t = min(1, max(0, (Double(s) - 25) / 70))
         return Color(UIColor { tr in

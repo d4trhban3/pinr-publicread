@@ -74,7 +74,7 @@ object Brand {
     /** Mismatch is the one red the site uses for the feed status. */
     val alarm = Color(0xFFFF4D4D)
 
-    /** The PINRscore colour scale: mandarin at 25 and below, lime at 95 and above, a smooth blend between (scorecolor.ts). */
+    /** The PINR Index colour scale: mandarin at 25 and below, lime at 95 and above, a smooth blend between (scorecolor.ts). */
     fun score(s: Int): Color {
         val t = min(1f, max(0f, (s - 25) / 70f))
         val light = ThemeState.light

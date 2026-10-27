@@ -595,7 +595,7 @@ def threads(feed_dir: str, say=print, passes=None, fetch=None, post=None, get=No
             return {k: v for k, v in out.items() if v}
         return mq
     def make_score():
-        import score as SC                                     # PINRscore for Base/BNB coins, one at a time
+        import score as SC                                     # PINR Index for Base/BNB coins, one at a time
         c, g = store(), scanner_db()
         return lambda now: SC.one_pass(c, g, now, scorer=scorer, results_dir=results_dir)
     out = [_loop("discovery", PASS_S, make_disc, say, passes), _loop("docs", PASS_S, make_docs, say, passes),

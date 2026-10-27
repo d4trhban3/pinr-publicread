@@ -277,7 +277,7 @@ describe("the node badges from the live status", () => {
     expect(S("e_ai", ctx({ status: { engine: { sources: {} }, control: { pinrai: { on: false } } } }))).toMatchObject({ text: "hidden" });
     expect(S("e_ai", ctx({ status: { engine: { sources: {} }, control: {} } }))).toBeNull();
   });
-  it("follows the site's own flag for the PINRscore engine (hidden before 244, shown after)", () => {
+  it("follows the site's own flag for the PINR Index engine (hidden before 244, shown after)", () => {
     expect(S("e_score", ctx())).toMatchObject({ text: "live" });
     expect(S("e_score", ctx({ feed: { scoreShown: false, tokens: 5 } }))).toMatchObject({ text: "hidden" });
     expect(S("e_score", ctx({ feed: null }))).toBeNull();
@@ -675,7 +675,7 @@ describe("the team's map: every pin wired, and new wires added to a saved map on
     expect(saved.wires.some((w: string[]) => w.join("|") === "e_score|score|w_coin|score shown")).toBe(false);
     expect(M.addNewDefaults(M.defaultGraph())).toBe(0); // the map of now already has them
   });
-  it("draws the score wires solid only while the site shows the PINRscore, and a wire from an off node by its live badge", () => {
+  it("draws the score wires solid only while the site shows the PINR Index, and a wire from an off node by its live badge", () => {
     const routes = readFileSync(join(dir, "routes.js"), "utf8");
     expect(routes).toMatch(/scoreLive = \(w\[0\] === "e_score" \|\| w\[2\] === "e_score"\) && .*B\.scoreLive\(\)/);
     const badges = readFileSync(join(dir, "badges.js"), "utf8");

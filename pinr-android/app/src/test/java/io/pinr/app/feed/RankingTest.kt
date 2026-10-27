@@ -16,12 +16,12 @@ class RankingTest {
     @Test fun featuredPumpCoinsComeFirstThenOtherLaunchpadsFillTheRoomLeft() {
         fun pad(a: String, score: Int, launchpad: String) = t(a, score).copy(launchpad = launchpad)
         val all = listOf(pad("c1", 99, "Raydium LaunchLab"), pad("p1", 60, "Pump.fun"), pad("p2", 70, "PumpSwap (graduated)"), pad("b1", 80, "Bankr"))
-        assertEquals(listOf("p2", "p1", "c1", "b1"), Ranking.rankFeatured(PinrFilter.PinrScore, all, nowMs = now, limit = 10).map { it.address })
-        assertEquals(listOf("p2", "p1"), Ranking.rankFeatured(PinrFilter.PinrScore, all, nowMs = now, limit = 2).map { it.address })
+        assertEquals(listOf("p2", "p1", "c1", "b1"), Ranking.rankFeatured(PinrFilter.PinrIndex, all, nowMs = now, limit = 10).map { it.address })
+        assertEquals(listOf("p2", "p1"), Ranking.rankFeatured(PinrFilter.PinrIndex, all, nowMs = now, limit = 2).map { it.address })
     }
 
-    @Test fun pinrscoreShowsOnlyRealScoresBestFirst() {
-        val r = Ranking.rank(PinrFilter.PinrScore, listOf(t("a", 40), t("b", 90), t("c", null), t("d", 70, label = NoScoreLabel.Vamp), t("e", 60, cov = 0.0)), nowMs = now)
+    @Test fun pinrindexShowsOnlyRealScoresBestFirst() {
+        val r = Ranking.rank(PinrFilter.PinrIndex, listOf(t("a", 40), t("b", 90), t("c", null), t("d", 70, label = NoScoreLabel.Vamp), t("e", 60, cov = 0.0)), nowMs = now)
         assertEquals(listOf("b", "a"), r.map { it.address })
     }
 

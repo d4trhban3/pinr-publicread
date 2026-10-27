@@ -82,7 +82,7 @@ struct PinrRoom: View {
         switch prefs.filter {
         case .new: "No coins under an hour old right now."
         case .movers: "No score has moved since the app opened."
-        case .pinrscore: "No scored coins yet."
+        case .pinrindex: "No scored coins yet."
         case .trending: "Nothing to show yet."
         }
     }

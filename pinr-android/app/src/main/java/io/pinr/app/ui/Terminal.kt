@@ -63,7 +63,7 @@ import kotlinx.coroutines.launch
 /**
  * The PINRterminal + DeepScan room for one coin, in the site's look at phone width (ui/terminal.ts and ui/deepscan.ts,
  * one page since a design decision), as the iPhone app draws it: the token bar, the timeframes, the candle chart with its
- * price axis and last-price tag, volume, the PINRmetric pane, then "DeepScan ↓" and the dossier below it. Every figure
+ * price axis and last-price tag, volume, the PINR Index line pane, then "DeepScan ↓" and the dossier below it. Every figure
  * is a measured reading or a dash.
  */
 @Composable
@@ -290,7 +290,7 @@ private fun TerminalChart(t: Token, client: CoinClient, onCandles: (List<io.pinr
                     androidx.compose.foundation.layout.FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Row { BasicText("Vol ", style = mono(10.sp, Brand.mute)); BasicText(Format.money(k.volume), style = mono(10.sp, Brand.paper)) }
                         metric?.let { m ->
-                            Row { BasicText("PINRmetric ", style = mono(10.sp, Brand.mute)); BasicText(Format.fixed(m.series.last().second, 1), style = mono(10.sp, Brand.lime)) }
+                            Row { BasicText("PINR Index line ", style = mono(10.sp, Brand.mute)); BasicText(Format.fixed(m.series.last().second, 1), style = mono(10.sp, Brand.lime)) }
                             m.signal.lastOrNull()?.let { sg -> Row { BasicText("signal ", style = mono(10.sp, Brand.mute)); BasicText(Format.fixed(sg.second, 1), style = mono(10.sp, SIGNAL_PURPLE)) } }
                         }
                         // Every switched-on indicator's latest value, in its colour (the site's legend).
@@ -389,8 +389,8 @@ private fun TerminalChart(t: Token, client: CoinClient, onCandles: (List<io.pinr
             }
         }
         }
-        // The PINRmetric says so when the engine has no series for this coin yet.
-        if (metric == null) BasicText(if (metricRead) "PINRmetric not available for this token yet" else "PINRmetric loading…", style = mono(10.sp, Brand.mute))
+        // The PINR Index line says so when the engine has no series for this coin yet.
+        if (metric == null) BasicText(if (metricRead) "PINR Index line not available for this token yet" else "PINR Index line loading…", style = mono(10.sp, Brand.mute))
         Row {
             Spacer(Modifier.weight(1f))
             if (ok) s?.source?.let { BasicText("${tf.code} · $it", style = mono(9.sp, Brand.mute)) }

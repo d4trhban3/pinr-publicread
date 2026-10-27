@@ -4,7 +4,7 @@ Numbers are made up, except the public Pump.fun launch settings
 (1,073,000,000 virtual tokens and 30 virtual SOL), which every standard curve starts from."""
 import sys
 from curve_math_v1 import *
-sys.path.insert(0, "../pinr-score")
+sys.path.insert(0, "../pinr-index")
 
 results = []
 def case(n, title, should, fn):

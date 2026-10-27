@@ -3,7 +3,7 @@ import SwiftUI
 
 /// The PINRterminal + DeepScan room for one coin, in the site's look at phone width (ui/terminal.ts and
 /// ui/deepscan.ts): the token bar, the timeframes, the candle chart with its price axis and last-price tag, volume,
-/// the PINRmetric pane, then "DeepScan ↓" and the dossier below it. Every figure is a measured reading or a dash.
+/// the PINR Index line pane, then "DeepScan ↓" and the dossier below it. Every figure is a measured reading or a dash.
 struct CoinPage: View {
     let token: Token
     let insets: RoomInsets
@@ -140,7 +140,7 @@ private struct TokenBar: View {
 
 /// The site's terminal chart at phone width: timeframes and the style switch, the O/H/L/C readout of the newest
 /// candle, candles (lime up, mandarin down) with the price axis on the right and a lime tag at the last price,
-/// volume below, the PINRmetric pane, and the score and flag events as dashed lines.
+/// volume below, the PINR Index line pane, and the score and flag events as dashed lines.
 private struct TerminalChart: View {
     let token: Token
     let client: CoinClient
@@ -283,7 +283,7 @@ private struct TerminalChart: View {
     @ViewBuilder private var metricPane: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 8) {
-                Text("PINRmetric").font(Typo.mono(11, .bold)).foregroundStyle(Brand.lime)
+                Text("PINR Index line").font(Typo.mono(11, .bold)).foregroundStyle(Brand.lime)
                 if metric == nil { Text(metricRead ? "not available for this token yet" : "loading…").font(Typo.mono(11)).foregroundStyle(Brand.mute) }
                 else if let m = metric, !m.timeframe.isEmpty { Text(m.timeframe).font(Typo.mono(10)).foregroundStyle(Brand.mute) }
             }

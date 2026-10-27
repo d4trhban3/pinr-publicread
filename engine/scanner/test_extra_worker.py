@@ -1,9 +1,9 @@
-"""the Mac's scoring workers, with made-up coins.
+"""the worker machine's scoring workers, with made-up coins.
 A temporary database, settings, result and memory folders; no network, no ssh, no chain read, no live file touched.
-Run:  python3 test_mac_worker.py"""
+Run:  python3 test_extra_worker.py"""
 import json, os, sys, tempfile, time
 import scanner as S
-import mac_worker as M
+import extra_worker as M
 
 TMP = tempfile.mkdtemp()
 S.DB = os.path.join(TMP, "scanner.sqlite")
@@ -61,37 +61,37 @@ def relay_dirs(folder):
 
 def c1():
     import solana_rpc as R
-    env = {"QUICKNODE_SOLANA_URL": " https://made-up.quiknode.pro/k/ ", "ORBITFLARE_SOLANA_URL": "http://not-https.example",
-           "VIBESTATION_SOLANA_URL": "", "SHYFT_API_KEY": "s", "HELIUS_API_KEY": "h", "CHAINSTACK_SOLANA_URL": "https://made-up.chainstack"}
-    built = R.build_endpoints(["quicknode", "orbitflare", "vibestation"], env)
-    gaps = {n: R._KNOWN[n][1] for n in ("quicknode", "orbitflare", "vibestation")}
-    all3 = R.build_endpoints(["quicknode", "orbitflare", "vibestation"], {"QUICKNODE_SOLANA_URL": "https://a", "ORBITFLARE_SOLANA_URL": "https://b", "VIBESTATION_SOLANA_URL": "https://c"})
+    env = {"RPC_A_SOLANA_URL": " https://made-up.rpc-a.example/k/ ", "RPC_B_SOLANA_URL": "http://not-https.example",
+           "RPC_C_SOLANA_URL": "", "SHYFT_API_KEY": "s", "HELIUS_API_KEY": "h", "CHAINSTACK_SOLANA_URL": "https://made-up.chainstack"}
+    built = R.build_endpoints(["rpc_a", "rpc_b", "rpc_c"], env)
+    gaps = {n: R._KNOWN[n][1] for n in ("rpc_a", "rpc_b", "rpc_c")}
+    all3 = R.build_endpoints(["rpc_a", "rpc_b", "rpc_c"], {"RPC_A_SOLANA_URL": "https://a", "RPC_B_SOLANA_URL": "https://b", "RPC_C_SOLANA_URL": "https://c"})
     repo = json.load(open(os.path.join(os.path.dirname(S.__file__), "settings.json")))["solana_providers"]
-    official = [n for n, _u, _g in M.mac_endpoints({"QUICKNODE_SOLANA_URL": "https://a", "HELIUS_OFFICIAL_KEY": "h", "ALCHEMY_OFFICIAL_KEY": "a"})]   # a design decision
-    folder = tempfile.mkdtemp(); p = os.path.join(folder, "s.json"); json.dump({"solana_providers": ["shyft", "quicknode"]}, open(p, "w"))
-    ok = (built == [("quicknode", "https://made-up.quiknode.pro/k/", gaps["quicknode"])] and gaps["quicknode"] >= 1 / 15 and gaps["orbitflare"] >= 1 / 10
-          and gaps["vibestation"] == 0.5 and [n for n, _u, _g in all3] == ["quicknode", "orbitflare", "vibestation"]
-          and not set(repo) & set(M.MAC_NODES[:3]) and set(M.MAC_NODES[3:]) == {"helius_official", "alchemy_official"}
-          and official == ["quicknode", "helius_official", "alchemy_official"] and R.provider_order(p) == ["shyft", "quicknode"])
+    official = [n for n, _u, _g in M.extra_endpoints({"RPC_A_SOLANA_URL": "https://a", "HELIUS_OFFICIAL_KEY": "h", "ALCHEMY_OFFICIAL_KEY": "a"})]   # a design decision
+    folder = tempfile.mkdtemp(); p = os.path.join(folder, "s.json"); json.dump({"solana_providers": ["shyft", "rpc_a"]}, open(p, "w"))
+    ok = (built == [("rpc_a", "https://made-up.rpc-a.example/k/", gaps["rpc_a"])] and gaps["rpc_a"] >= 1 / 15 and gaps["rpc_b"] >= 1 / 10
+          and gaps["rpc_c"] == 0.5 and [n for n, _u, _g in all3] == ["rpc_a", "rpc_b", "rpc_c"]
+          and not set(repo) & set(M.EXTRA_NODES[:3]) and set(M.EXTRA_NODES[3:]) == {"helius_official", "alchemy_official"}
+          and official == ["rpc_a", "helius_official", "alchemy_official"] and R.provider_order(p) == ["shyft", "rpc_a"])
     return ok, f"built from a made-up .env: {[n for n, _u, _g in built]} (http and blank lines left out); with the official keys' lines too: {official}; gaps {gaps}; the repo's (the server's) order {repo}; a listed name accepted by the settings check"
-case(1, "The three free nodes in the request module", "each used only with an https address in the .env, paced at or under its published free limit (Quicknode's trial 15 a second, OrbitFlare's 10) and Solana Vibe Station at a polite two a second; none of them in the server's list", c1)
+case(1, "The three free nodes in the request module", "each used only with an https address in the .env, paced at or under its published free limit (RPC provider A's trial 15 a second, RPC provider B's 10) and RPC provider C at a polite two a second; none of them in the server's list", c1)
 
 
 def c2():
-    env = {"SHYFT_API_KEY": "s", "HELIUS_API_KEY": "h", "CHAINSTACK_SOLANA_URL": "https://made-up.chainstack", "ORBITFLARE_SOLANA_URL": "https://made-up.orbitflare"}
-    one = [n for n, _u, _g in M.mac_endpoints(env)]
-    none = M.mac_endpoints({"SHYFT_API_KEY": "s", "HELIUS_API_KEY": "h", "CHAINSTACK_SOLANA_URL": "https://made-up.chainstack"})
+    env = {"SHYFT_API_KEY": "s", "HELIUS_API_KEY": "h", "CHAINSTACK_SOLANA_URL": "https://made-up.chainstack", "RPC_B_SOLANA_URL": "https://made-up.rpc_b"}
+    one = [n for n, _u, _g in M.extra_endpoints(env)]
+    none = M.extra_endpoints({"SHYFT_API_KEY": "s", "HELIUS_API_KEY": "h", "CHAINSTACK_SOLANA_URL": "https://made-up.chainstack"})
     import io, contextlib
-    real = M.mac_endpoints; M.mac_endpoints = lambda env=None: []
+    real = M.extra_endpoints; M.extra_endpoints = lambda env=None: []
     buf = io.StringIO()
     try:
         with contextlib.redirect_stdout(buf):
-            code = M.main(["mac_worker.py"])
+            code = M.main(["extra_worker.py"])
     finally:
-        M.mac_endpoints = real
+        M.extra_endpoints = real
     ws = [M.workers(x) for x in (None, "6", "0", "17", "six")]   # 17: past the ceiling (16 since 2026-10-24)
-    return one == ["orbitflare"] and none == [] and code == 2 and "nothing started" in buf.getvalue() and ws == [4, 6, 4, 4, 4], f"with the server's keys and OrbitFlare's line: {one}; with the server's keys only: {none}, so the worker stops with code {code}: '{buf.getvalue().strip()[:60]}...'; workers asked for: {ws}"
-case(2, "The Mac reads Solana only through its own sign-ups", "the server's nodes (Shyft, Helius, Chainstack, the public node) are never in the Mac's list even when their keys are present; with no Mac node the worker starts nothing; 1 to 16 workers, 4 otherwise", c2)
+    return one == ["rpc_b"] and none == [] and code == 2 and "nothing started" in buf.getvalue() and ws == [4, 6, 4, 4, 4], f"with the server's keys and RPC provider B's line: {one}; with the server's keys only: {none}, so the worker stops with code {code}: '{buf.getvalue().strip()[:60]}...'; workers asked for: {ws}"
+case(2, "The worker machine reads Solana only through its own sign-ups", "the server's nodes (Shyft, Helius, Chainstack, the public node) are never in the worker machine's list even when their keys are present; with no Mac node the worker starts nothing; 1 to 16 workers, 4 otherwise", c2)
 
 
 
@@ -128,7 +128,7 @@ def c5():
     a, b = coin("A"), coin("B")
     lists([(a, now - 100), (b, now - 400)])
     try:
-        S.lease(c, 1, now=now)                                                                                     # a is the Mac's now
+        S.lease(c, 1, now=now)                                                                                     # a is the worker machine's now
         pool = _Pool(); S.dispatch(c, pool)
         took = [t for _c, t, _l in pool.sent]
         airheld = c.execute("SELECT held_by FROM tokens WHERE token=?", (b,)).fetchone()
@@ -142,8 +142,8 @@ def c5():
         back = [t for _c, t, _l in pool2.sent]
     finally:
         lists()
-    return took == [b] and airheld == ("air",) and mac_now == [] and a in back, f"the server's page lane took {['B' if t == b else 'A' for t in took]} (A is the Mac's) and held B as the server's ({airheld}); the Mac asked again: {mac_now}; after the hold the server takes A: {a in back}"
-case(5, "The server's own page lane and the Mac never start the same coin", "the server skips a coin handed to the Mac until its hold ends, and holds the coin it starts so it is never handed out meanwhile", c5)
+    return took == [b] and airheld == ("air",) and mac_now == [] and a in back, f"the server's page lane took {['B' if t == b else 'A' for t in took]} (A is the worker machine's) and held B as the server's ({airheld}); the worker machine asked again: {mac_now}; after the hold the server takes A: {a in back}"
+case(5, "The server's own page lane and the worker machine never start the same coin", "the server skips a coin handed to the worker machine until its hold ends, and holds the coin it starts so it is never handed out meanwhile", c5)
 
 
 def c6():
@@ -169,11 +169,11 @@ def c6():
     saved = json.load(open(os.path.join(rdir, a + ".json")))
     ok = (said[0].endswith("handed in, 46") and row[0] == 1 and row[1] == 1 and row[2] is None and '"by": "mac"' in row[3]
           and fed == [out] and rem and rem[0][0] == a and saved == out
-          and said[1].startswith("refused: not a Solana") and "not handed to the Mac" in said[2] and "scorer's shape" in said[3] and "scorer's shape" in said[4]
+          and said[1].startswith("refused: not a Solana") and "not handed to the worker machine" in said[2] and "scorer's shape" in said[3] and "scorer's shape" in said[4]
           and "recorded as a failed try" in said[5] and fail[0] == 1 and fail[1] is None and fail[2] == 1 and fail[3] is None
           and "scored on the server meanwhile" in said[6] and len(fed) == 1)
     return ok, f"accepted: '{said[0][-20:]}', result file written, feed written once, label remembered, the record {row[:3]}; refused: {[s.split(':', 1)[-1].strip()[:28] for s in said[1:5]]}; a failure: fails {fail[0]}, a retry set {bool(fail[2])}; a late one: '{said[6][-26:]}'"
-case(6, "The server takes a result back", "exactly as its own score: the result file, the feed (chart event, score history), the label in PINR's memory, the scanner's record marked 'by mac', the hold cleared; refused: not a Solana coin, not handed to the Mac, another coin's result, a result not in the scorer's shape, a coin scored on the server meanwhile; a failure the Mac reports is a failed try with the usual retry", c6)
+case(6, "The server takes a result back", "exactly as its own score: the result file, the feed (chart event, score history), the label in PINR's memory, the scanner's record marked 'by mac', the hold cleared; refused: not a Solana coin, not handed to the worker machine, another coin's result, a result not in the scorer's shape, a coin scored on the server meanwhile; a failure the worker machine reports is a failed try with the usual retry", c6)
 
 
 def c7():
@@ -207,7 +207,7 @@ def c7():
         M.MEMORY = real_mem
     ok = n == 2 and ins == [a, b] and stamped == {"E1"} and copied == {"labeled": {a: "x"}} and empty == 0 and calls == ["python3 scanner/scanner.py lease 2"] and bad and unread == 1 and "could not be copied" in said[0]
     return ok, f"one batch: {n} leased, the memory copied first, {len(ins)} handed in; nothing to do: {empty} with only the lease asked; an answer that is not a list of coins: '{bad}'; the memory unreadable: '{said[0][:52]}...' and the batch still runs"
-case(7, "The Mac's batch", "ask the server for work, copy PINR's memory, score, hand each result in; nothing handed out means nothing else asked; an answer that is not a list of coins stops the batch; an unreadable memory keeps the last copy and says so", c7)
+case(7, "the worker machine's batch", "ask the server for work, copy PINR's memory, score, hand each result in; nothing handed out means nothing else asked; an answer that is not a list of coins stops the batch; an unreadable memory keeps the last copy and says so", c7)
 
 
 def c8():
@@ -222,7 +222,7 @@ def c8():
     bad = M.score_one(a, score=broken)
     return (good["result"] == {"mint": a, "score": 25} and good["remember"][0] == a and "error" not in good
             and bad.get("error", "").startswith("RuntimeError: made-up") and "result" not in bad), f"a score: result and the label to remember for this coin ({good['remember'][:2]}); a failure: '{bad.get('error')}'"
-case(8, "One coin scored on the Mac", "the result with this coin's remembered label only; a failure handed in as a failure, never as a result", c8)
+case(8, "One coin scored on the worker machine", "the result with this coin's remembered label only; a failure handed in as a failure, never as a result", c8)
 
 
 def c9():
@@ -248,7 +248,7 @@ def c9():
     missing = S.hand_in(c, {"mint": a, "result": out}, stamp=lambda: "NEW", **kw)
     unreadable = S.hand_in(c, {"mint": a, "result": out, "engine": None}, stamp=lambda: None, **kw)
     still = c.execute("SELECT held_by, last_ok FROM tokens WHERE token=?", (a,)).fetchone()
-    secret = "https://made-up.quiknode.pro/SECRETTOKEN123/"
+    secret = "https://made-up.rpc-a.example/SECRETTOKEN123/"
     q = S.quiet(f"URLError: <urlopen error {secret} timed out> then http://x.example/?api_key=K2")
     err = M.score_one(a, score=lambda m: (_ for _ in ()).throw(OSError(f"refused by {secret}")))
     S.hand_in(c, {"mint": a, "error": f"OSError: refused by {secret}", "engine": "NEW"}, stamp=lambda: "NEW", **kw)
@@ -257,8 +257,8 @@ def c9():
           and all("not the server's" in x for x in (old, missing, unreadable)) and still == ("mac", None)
           and "SECRETTOKEN" not in q and "K2" not in q and q.count("<address>") == 2
           and "SECRETTOKEN" not in err["error"] and "<address>" in err["error"] and "SECRETTOKEN" not in stored)
-    return ok, f"the stamp: same after a document and a data file changed {docs == first}, same with an edit not committed {uncommitted == first}, new after a code commit {code != first}, none outside git {none}; a result from another copy, without a stamp or with the server's unreadable: refused ('{old[-62:]}'), the coin still held for the Mac; an error with a node address: '{q}', and none reaches the server's record"
-case(9, "the team's W1 and W4 on 228: the engine copy and the error text", "the server takes a result only from a Mac copy whose committed code is its own (the stamp over every .py file in the code folders, unchanged by documents, data or edits not committed); no address, so no key, in any error the Mac prints, hands in or the server records", c9)
+    return ok, f"the stamp: same after a document and a data file changed {docs == first}, same with an edit not committed {uncommitted == first}, new after a code commit {code != first}, none outside git {none}; a result from another copy, without a stamp or with the server's unreadable: refused ('{old[-62:]}'), the coin still held for the worker machine; an error with a node address: '{q}', and none reaches the server's record"
+case(9, "the team's W1 and W4 on 228: the engine copy and the error text", "the server takes a result only from a worker-machine copy whose committed code is its own (the stamp over every .py file in the code folders, unchanged by documents, data or edits not committed); no address, so no key, in any error the worker machine prints, hands in or the server records", c9)
 
 
 def c10():
@@ -282,9 +282,9 @@ def c10():
         lists()
     return (plain == [a, d, q, b] and air[0] == b and mac == [b, a, d, q]), \
         (f"no gate result kept: {['A' if m == a else 'D' if m == d else 'Q' if m == q else 'B' for m in plain]} (newest first); "
-         f"with B passed, D passed then held, A held, Q not read: the server's lane starts {'B' if air[0] == b else air[0]}, the Mac gets "
+         f"with B passed, D passed then held, A held, Q not read: the server's lane starts {'B' if air[0] == b else air[0]}, the worker machine gets "
          f"{['A' if m == a else 'D' if m == d else 'Q' if m == q else 'B' for m in mac]}")
-case(10, "the team 2026-10-24: gate-passed coins scored first", "on the server's page lane and in the Mac's lease, the site's coins the gate passed (its latest result) come first, newest first, then every other coin newest first; with no gate result kept the order is the design's, unchanged", c10)
+case(10, "the team 2026-10-24: gate-passed coins scored first", "on the server's page lane and in the worker machine's lease, the site's coins the gate passed (its latest result) come first, newest first, then every other coin newest first; with no gate result kept the order is the design's, unchanged", c10)
 
 def c_stop():
     """2026-10-25: a worker started in the background ignored Ctrl-C; ended, its pool kept scoring."""
@@ -295,7 +295,7 @@ def c_stop():
         "import signal, sys, time\n"
         "signal.signal(signal.SIGINT, signal.SIG_IGN)          # as a background start leaves it\n"
         f"sys.path.insert(0, {os.path.dirname(os.path.abspath(M.__file__))!r})\n"
-        "import mac_worker as M\n"
+        "import extra_worker as M\n"
         "from multiprocessing import get_context\n"
         "if __name__ == '__main__':\n"
         "    M.stoppable()\n"
@@ -329,7 +329,7 @@ case(11, "The workers stop on Ctrl-C or SIGTERM, pool and all, however they were
 
 
 def c12():
-    """the team's F1 on 2bf68510: the holders read runs in scoring workers, so (1) the server's pool worker names its meter file, (2) a Mac worker hands its
+    """the team's F1 on 2bf68510: the holders read runs in scoring workers, so (1) the server's pool worker names its meter file, (2) a worker-machine worker hands its
     Pump.fun tally in with the result, and (3) the server's hand-in counts it on the two Pump.fun wires and nothing else."""
     import signal, wires as W
     import pumpfun_api as PF
@@ -363,7 +363,7 @@ def c12():
           and bool(h and sum(h["buckets"].values()) == 1 and h["sample"] == {"coin": a}) and bool(r and "403" in r["error"] and not r["buckets"])
           and sorted(W._wires) == ["s_pump|coin record|a_token|Pump.fun", "s_pump|holders|a_token|Pump.fun"])
     return ok, f"worker meter named {named}; Mac result carries {sorted(got['pump'])[:2]}; the server counted {sorted(W._wires)}"
-case(12, "the team's F1 on 2bf68510: Pump.fun reads in scoring workers reach /control", "the server's pool worker names its meter file; a Mac worker hands its tally in with each result (taken, so the next coin carries only its own); the hand-in counts it on the two Pump.fun wires and ignores anything else", c12)
+case(12, "the team's F1 on 2bf68510: Pump.fun reads in scoring workers reach /control", "the server's pool worker names its meter file; a worker-machine worker hands its tally in with each result (taken, so the next coin carries only its own); the hand-in counts it on the two Pump.fun wires and ignores anything else", c12)
 
 
 print(f"\n{sum(results)}/{len(results)} passed")

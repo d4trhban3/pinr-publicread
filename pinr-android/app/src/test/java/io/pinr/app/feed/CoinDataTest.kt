@@ -6,7 +6,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** The per-coin answers (candles, tape, events, PINRmetric, dossier) read as the site and the iPhone app read them. */
+/** The per-coin answers (candles, tape, events, PINR Index line, dossier) read as the site and the iPhone app read them. */
 class CoinDataTest {
     @Test fun candlesKeepOnlyWholeRowsOldestFirst() {
         val s = CoinWire.candles(

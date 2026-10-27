@@ -225,7 +225,7 @@ private fun SourceLine(source: String?, atMs: Long?, link: String?) {
 }
 
 /**
- * The score (deepscan.ts): the ring in the score's colour with the number inside and "PINRSCORE" under it (a flagged
+ * The score (deepscan.ts): the ring in the score's colour with the number inside and "PINR INDEX" under it (a flagged
  * coin: the ring full in mandarin and its label); beside it what it rests on, the notice under a number, and the
  * engine's findings as chips.
  */
@@ -251,7 +251,7 @@ private fun ScoreBlock(t: Token) {
                     c.numeric -> BasicText(c.score, style = sans(34.sp, Brand.score(c.score.toInt()), FontWeight.SemiBold).copy(fontFeatureSettings = "tnum"))
                     else -> BasicText(c.score, style = sans(34.sp, Brand.mute, FontWeight.SemiBold))
                 }
-                BasicText("PINRSCORE", style = mono(8.5.sp, Brand.mute, FontWeight.Medium).copy(letterSpacing = 0.12.em))
+                BasicText("PINR INDEX", style = mono(8.5.sp, Brand.mute, FontWeight.Medium).copy(letterSpacing = 0.12.em))
             }
         }
         Spacer(Modifier.width(18.dp))

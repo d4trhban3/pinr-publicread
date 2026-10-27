@@ -296,10 +296,10 @@ describe("the rest of the scored set", () => {
     applySnapshot(store, by, snap([A]), 1_800_000_000_000 + GONE_AFTER_MS * 5);
     expect(by.has(T1.address.toLowerCase())).toBe(false);
   });
-  it("the PINRscore filter ranks across the whole set, the rest included", () => {
+  it("the PINR Index filter ranks across the whole set, the rest included", () => {
     const { store, by } = load([A]);
     applyTailPage(store, by, [A], [T1, T2], 1_800_000_000_000);
-    const ids = selectAndRank("pinrscore", store.items, 90, 0, "desc").map((r) => store.items.find((i) => i.id === r.id)!.value);
+    const ids = selectAndRank("pinrindex", store.items, 90, 0, "desc").map((r) => store.items.find((i) => i.id === r.id)!.value);
     expect(ids).toEqual(["61", "35", "20"].sort((a, b) => Number(b) - Number(a)));
   });
 

@@ -1,6 +1,6 @@
 """REDACTED PUBLIC COPY.
 
-The proprietary logic in this module (PINRscore rules, weights, caps, thresholds and their tuning) is withheld.
+The proprietary logic in this module (PINR Index rules, weights, caps, thresholds and their tuning) is withheld.
 Signatures and data types are kept so the surrounding code still imports; calling a stubbed
 function raises NotImplementedError."""
 from __future__ import annotations
@@ -200,6 +200,6 @@ def _brake_points(brakes: list[Brake], depth: Reading, steps: list, flags: list,
     raise NotImplementedError('redacted: proprietary PINR logic is not included in the public copy')
 NO_SCORE_LABELS = ()
 
-def pinr_score(*, pair: Combined, social: Combined, creator: Combined, site: Combined, has_real_home: Optional[bool], dev_conduct: Reading, proven_label: Optional[str]=None, label_receipts: tuple[Receipt, ...]=(), intent_down: Optional[str]=None, intent_up: list[IntentUp]=(), brakes: list[Brake]=(), depth_reading: Reading=UNKNOWN, pump: Optional['PumpHistory']=None, dev_launch_count: Optional[int]=None, serial_cap_released_by_review: bool=False, duplicate_relaunches: int=0, duplicate_receipts: tuple[Receipt, ...]=(), dev_hidden: bool=False, dev_hidden_receipts: tuple[Receipt, ...]=(), high_fee: bool=False) -> Result:
+def pinr_index(*, pair: Combined, social: Combined, creator: Combined, site: Combined, has_real_home: Optional[bool], dev_conduct: Reading, proven_label: Optional[str]=None, label_receipts: tuple[Receipt, ...]=(), intent_down: Optional[str]=None, intent_up: list[IntentUp]=(), brakes: list[Brake]=(), depth_reading: Reading=UNKNOWN, pump: Optional['PumpHistory']=None, dev_launch_count: Optional[int]=None, serial_cap_released_by_review: bool=False, duplicate_relaunches: int=0, duplicate_receipts: tuple[Receipt, ...]=(), dev_hidden: bool=False, dev_hidden_receipts: tuple[Receipt, ...]=(), high_fee: bool=False) -> Result:
     """Redacted in the public copy."""
     raise NotImplementedError('redacted: proprietary PINR logic is not included in the public copy')

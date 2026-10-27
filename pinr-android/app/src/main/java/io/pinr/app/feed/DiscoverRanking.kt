@@ -7,7 +7,7 @@ enum class DiscoverTab(val label: String, val hint: String) {
     Trending("Trending", "Most active right now"),
     Movers("Top Movers", "Largest 24h moves"),
     Fresh("Fresh Launches", "Under an hour old"),
-    PinrScore("PINRscore", "Scored tokens, by PINRscore"),
+    PinrIndex("PINR Index", "Scored tokens, by PINR Index"),
     BaseBnb("Base/BNB", "Base and BNB Chain coins, newest first"),
 }
 
@@ -40,7 +40,7 @@ object DiscoverRanking {
             }.take(ROWS).map { tokens[it] }
             DiscoverTab.Trending -> Ranking.rank(PinrFilter.Trending, tokens, nowMs = nowMs, limit = ROWS)
             DiscoverTab.Fresh -> Ranking.rank(PinrFilter.New, tokens, nowMs = nowMs, limit = ROWS)
-            DiscoverTab.PinrScore -> Ranking.rank(PinrFilter.PinrScore, tokens, nowMs = nowMs, limit = ROWS)
+            DiscoverTab.PinrIndex -> Ranking.rank(PinrFilter.PinrIndex, tokens, nowMs = nowMs, limit = ROWS)
             DiscoverTab.BaseBnb -> baseBnb(tokens)
         }
     }

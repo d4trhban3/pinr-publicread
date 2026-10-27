@@ -7,12 +7,12 @@ import { visibleText } from "./visibletext";
  *   movers   the largest 24h price moves, up or down
  *   trending the most active right now (same ranking as the PINR filter)
  *   fresh    launched under an hour ago, newest first
- *   pinrscore the scored tokens, highest PINRscore first
+ *   pinrindex the scored tokens, highest PINR Index first
  * Each can be ordered default, ascending or descending (the header's sort choice).
  * A search looks through every token, not just the tab's, and ranks the heaviest first.
  * The list is a snapshot: it is re-ranked only when a tab is chosen, the search changes, or Refresh is pressed.
  */
-export type DiscoverTab = "movers" | "trending" | "fresh" | "pinrscore" | "chains";
+export type DiscoverTab = "movers" | "trending" | "fresh" | "pinrindex" | "chains";
 /** the Base/BNB tab lists coins on these chains. */
 export const TAB_CHAINS = ["base", "bsc"];
 export const DISCOVER_ROWS = 30;
@@ -38,7 +38,7 @@ export function rankDiscover(tab: DiscoverTab, all: readonly Item[], query: stri
     const newAt = (it: Item): number => it.seenAtMs ?? (Number.isFinite(it.ageMin) ? nowMs - it.ageMin * 60_000 : -Infinity);
     list = items.filter((it) => TAB_CHAINS.includes((it.chain ?? "").toLowerCase())).sort((a, b) => newAt(b) - newAt(a) || a.id - b.id);
   } else if (tab === "movers") list = sortBy(items, moveSize, dir, "desc", (a, b) => a.id - b.id);
-  else list = selectAndRank(tab === "trending" ? "trending" : tab === "pinrscore" ? "pinrscore" : "new", items, DISCOVER_ROWS, Date.now(), dir).map((r) => byId.get(r.id)!);
+  else list = selectAndRank(tab === "trending" ? "trending" : tab === "pinrindex" ? "pinrindex" : "new", items, DISCOVER_ROWS, Date.now(), dir).map((r) => byId.get(r.id)!);
   return list.slice(0, DISCOVER_ROWS);
 }
 

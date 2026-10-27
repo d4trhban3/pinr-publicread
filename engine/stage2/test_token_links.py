@@ -4,7 +4,7 @@ a document that cannot be read is unknown (None), never "none published". The ne
 Run: cd stage2 && python3 test_token_links.py"""
 import json, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
-for p in ("stage2", "stage3", "pinr-score", "index", "scanner"):
+for p in ("stage2", "stage3", "pinr-index", "index", "scanner"):
     sys.path.insert(0, os.path.join(ROOT, p))
 import readers as R
 import pumpfun_api as PF

@@ -261,9 +261,9 @@ struct FeaturedTests {
     func featuredFirst() throws {
         let all = [try token("C1", "Raydium LaunchLab", score: 99), try token("P1", "Pump.fun curve", score: 50), try token("P2", "PumpSwap (graduated)", score: 70),
                    try token("B1", nil, score: 80)]
-        #expect(Ranking.rankFeatured(.pinrscore, all, limit: 10).map(\.address) == ["P2", "P1", "C1", "B1"])
-        #expect(Ranking.rankFeatured(.pinrscore, all, limit: 2).map(\.address) == ["P2", "P1"])
-        #expect(Ranking.rankFeatured(.pinrscore, all, limit: 3).map(\.address) == ["P2", "P1", "C1"])
+        #expect(Ranking.rankFeatured(.pinrindex, all, limit: 10).map(\.address) == ["P2", "P1", "C1", "B1"])
+        #expect(Ranking.rankFeatured(.pinrindex, all, limit: 2).map(\.address) == ["P2", "P1"])
+        #expect(Ranking.rankFeatured(.pinrindex, all, limit: 3).map(\.address) == ["P2", "P1", "C1"])
     }
 
     @Test("A chart takes the candle size the feed gave (bucketSec), not the one asked")

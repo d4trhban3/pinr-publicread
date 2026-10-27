@@ -22,7 +22,7 @@ import json, os, signal, sqlite3, sys, time, traceback
 from multiprocessing import get_context
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-for p in ("stage2", "stage3", "stage4", "pinr-score", "index", "pinr-step2", "scanner"):
+for p in ("stage2", "stage3", "stage4", "pinr-index", "index", "pinr-step2", "scanner"):
     sys.path.insert(0, os.path.join(ROOT, p))
 
 DB = os.path.join(HERE, "scanner.sqlite")
@@ -402,7 +402,7 @@ def _when_scored(c, chain: str) -> str:
 
 
 def _meter_pump(res) -> None:
-    """The Pump.fun record and holders reads a Mac worker made for one coin (it hands its tally in with the result), counted on the server's
+    """The Pump.fun record and holders reads a worker-machine worker made for one coin (it hands its tally in with the result), counted on the server's
     /control wires; only those two wires, only counts and a short refusal text. Never in the way of the hand-in."""
     try:
         import wires as _W
@@ -1144,19 +1144,19 @@ def _page_next(c, busy):
             c.commit()
             return mint, "pumpfun"
         if r[2] and r[2] > now and r[3] == "mac":
-            continue                                              # handed to the Mac's workers: theirs until the hold ends
+            continue                                              # handed to the worker machine's workers: theirs until the hold ends
         if r[0] is None:
             return mint, r[1] or "pumpfun"
     return None
 
 
-# ------------------------------------------------------------------ the Mac's scoring workers (ops/PLAN-228-MAC-WORKERS.md)
+# ------------------------------------------------------------------ the worker machine's scoring workers (ops/PLAN-228-MAC-WORKERS.md)
 HOLD_S = 600                         # a coin handed out is not started by the other machine for 10 minutes; then it goes back
-LEASE_MAX = 16                       # coins lent to the Mac in one ask: as many as it may run (mac_worker.WORKERS_MAX)
+LEASE_MAX = 16                       # coins lent to the worker machine in one ask: as many as it may run (extra_worker.WORKERS_MAX)
 _MINT_RE = __import__("re").compile(r"^[1-9A-HJ-NP-Za-km-z]{32,44}$")
 RESULT_KEYS = ("mint", "frame", "score", "display", "coverage", "readings", "receipts")
 RESULTS_DIR = os.path.join(ROOT, "stage2", "results")
-CODE_DIRS = ("stage2", "stage3", "stage4", "pinr-score", "pinr-step2", "feed", "scanner")
+CODE_DIRS = ("stage2", "stage3", "stage4", "pinr-index", "pinr-step2", "feed", "scanner")
 _URL_RE = __import__("re").compile(r"[A-Za-z][A-Za-z0-9+.-]*://\S+")
 
 
@@ -1191,7 +1191,7 @@ def _has_relay(mint: str) -> bool:
 
 
 def lease(c, n, now=None) -> list:
-    """Up to n coins for the Mac's workers: the never-scored coins on the site's first page, newest launch first (decision
+    """Up to n coins for the worker machine's workers: the never-scored coins on the site's first page, newest launch first (decision
     224's order), each held for HOLD_S. Never a hand request, a coin on the wanted list, a coin with a relay reading, one
     younger than SITE_MIN_AGE, one already started or scored, or one held already: those stay with the server."""
     now = now or time.time()
@@ -1226,28 +1226,28 @@ def _remember(*args):
 
 
 def hand_in(c, payload, now=None, results_dir=None, feed=None, remember=None, stamp=None) -> str:
-    """One result from the Mac's workers, handled exactly as the server's own score: the result file, the coin's feed file (with
+    """One result from the worker machine's workers, handled exactly as the server's own score: the result file, the coin's feed file (with
     its chart event and score history), a new label in PINR's memory, the scanner's record. Only for a coin handed to the
     Mac and not scored on the server since, from an engine copy whose code is the server's own (W1); a result for another coin
     or not in the result's own shape is refused. A failure
-    the Mac reports is recorded as a failed try, so the coin goes to the retries it already has."""
+    the worker machine reports is recorded as a failed try, so the coin goes to the retries it already has."""
     now = now or time.time()
     mint = payload.get("mint") if isinstance(payload, dict) else None
     if not isinstance(mint, str) or not _MINT_RE.match(mint):
         return "refused: not a Solana coin"
     r = c.execute("SELECT held_by, last_ok FROM tokens WHERE chain='solana' AND token=?", (mint,)).fetchone()
     if r is None or r[0] != "mac":
-        return f"refused {mint}: not handed to the Mac"
+        return f"refused {mint}: not handed to the worker machine"
     if r[1] is not None:
         c.execute("UPDATE tokens SET held_until=NULL, held_by=NULL WHERE chain='solana' AND token=?", (mint,)); c.commit()
         return f"refused {mint}: scored on the server meanwhile"
     mine = (stamp or engine_stamp)()
     if mine is None or payload.get("engine") != mine:
-        return f"refused {mint}: the Mac's engine copy is not the server's (pull it); the coin goes back to the server when its hold ends"
+        return f"refused {mint}: the worker machine's engine copy is not the server's (pull it); the coin goes back to the server when its hold ends"
     if payload.get("error") is not None:
-        _record(c, "solana", mint, {"error": "Mac worker: " + quiet(payload["error"])[:200], "by": "mac"})
+        _record(c, "solana", mint, {"error": "worker-machine workers: " + quiet(payload["error"])[:200], "by": "mac"})
         c.execute("UPDATE tokens SET held_until=NULL, held_by=NULL WHERE chain='solana' AND token=?", (mint,)); c.commit()
-        return f"{mint}: the Mac's score failed; recorded as a failed try"
+        return f"{mint}: the worker machine's score failed; recorded as a failed try"
     out = payload.get("result")
     if not isinstance(out, dict) or out.get("mint") != mint or any(k not in out for k in RESULT_KEYS) or not isinstance(out.get("receipts"), list):
         return f"refused {mint}: not a result in the scorer's shape"
@@ -1511,7 +1511,7 @@ def dispatch(c, pool, wait=False):
                 key = ("solana", nxt[0], nxt[1])
                 _RUNNING[key] = pool.apply_async(_score, (key,))
                 c.execute("UPDATE tokens SET held_until=?, held_by='air' WHERE chain='solana' AND token=?", (time.time() + HOLD_S, nxt[0]))
-                c.commit()                                        # never handed to the Mac while the server scores it
+                c.commit()                                        # never handed to the worker machine while the server scores it
                 busy.add(("solana", nxt[0]))
                 free -= 1
                 sol_free -= 1
@@ -1670,7 +1670,7 @@ if __name__ == "__main__":
         request(sys.argv[2], sys.argv[3])
     elif cmd == "status":
         status()
-    elif cmd == "lease":                                       # python3 scanner/scanner.py lease N (the Mac's workers)
+    elif cmd == "lease":                                       # python3 scanner/scanner.py lease N (the worker machine's workers)
         import wires as _W
         _W.name("mac-lease")
         got = lease(db(), int(sys.argv[2]))

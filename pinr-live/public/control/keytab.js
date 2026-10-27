@@ -10,7 +10,7 @@
     ["lwbuild", "", "Dashed: BUILDING. Not measured yet: an engine wire whose meter is still being built, or a source the visitor’s browser reads itself."],
     ["lwnot", "NOT LIVE", "Dotted, marked “NOT LIVE”: measured and nothing crossed lately, or its source refused, or its node is planned, blocked or hidden. Click it for the reason."],
     ["rtlive", "live", "Before the meters are read: solid and thicker, marked “live”: a route the server follows now (it changes what the server reads)."],
-    ["rtlive", "", "Solid: a wire into a gate check (taking it away stages that check off: Preview and Apply), or a PINRscore wire while the site shows the score."],
+    ["rtlive", "", "Solid: a wire into a gate check (taking it away stages that check off: Preview and Apply), or a PINR Index wire while the site shows the score."],
     ["dash", "", "Dashed, marked “not routed”: a route wire whose source is out of that field’s order."],
     ["dash rtgrey", "", "Dashed and faded: a route the server cannot follow yet; it cannot be changed."],
     ["dash", "", "Dashed: drawing only. Saved in your browser; nothing on the server changes."],

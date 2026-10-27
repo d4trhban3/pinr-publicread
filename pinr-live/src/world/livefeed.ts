@@ -497,7 +497,7 @@ export class LiveFeed implements Feed {
 
   /**
    * a design decision, round 1: the scored set (44,158 rows, about 2.4 MB, on 2026-10-21) is read only once something needs it: search,
-   * Discover or the PINRscore filter. The tiles draw from the first page alone. From then on the stream keeps it current.
+   * Discover or the PINR Index filter. The tiles draw from the first page alone. From then on the stream keeps it current.
    */
   /** look one coin up by its exact address (a coin on no list, such as one quiet for 24 hours). True when the server knows it; the coin joins the store on the next frame. */
   async find(address: string): Promise<boolean> {

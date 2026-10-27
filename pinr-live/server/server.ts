@@ -1027,11 +1027,11 @@ createServer(async (req, res) => {
     return send(200, JSON.stringify({ symbol: sym ?? null }));
   }
   if (url === "/api/metric") {
-    // The engine's finished PINRmetric series for ONE token that is in the feed. No file = {"metric":null}.
+    // The engine's finished PINR Index line series for ONE token that is in the feed. No file = {"metric":null}.
     const address = (full.searchParams.get("address") ?? "").toLowerCase();
     const token = findToken(address);
     if (!token) return send(404, '{"error":"unknown token"}');
-    // the PINRmetric is the score over time; while the score is off it answers null.
+    // the PINR Index line is the score over time; while the score is off it answers null.
     return send(200, JSON.stringify({ metric: scoreServed() ? readMetric(token.address) : null }));
   }
   if (url === "/api/pinrbot/budget") {

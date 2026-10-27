@@ -1,6 +1,6 @@
 import { onLook, palette } from "../ui/theme";
 /**
- * The colour of a PINRscore: mandarin orange at 25 and below, lime at 95 and above, and a smooth blend in between.
+ * The colour of a PINR Index: mandarin orange at 25 and below, lime at 95 and above, and a smooth blend in between.
  * One scale for the whole interface, so a glance at the colour says roughly how the token reads.
  */
 export const SCORE_LOW = 25;

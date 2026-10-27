@@ -1,7 +1,7 @@
 """Figures PINR SHOWS but never scores: Jupiter's token data, Stonk.fun's own ledger, DexScreener's paid
 orders. Read once a score (first scores and follow-ups: the coins PINR shows), returned as finished contract facts with
 their receipt (`source`, `read_at`, `link`), kept in the result as `shown` and written by the exporter beside the score's
-own facts. Nothing here reaches `pinr_score`: scoring from these needs a rules version first.
+own facts. Nothing here reaches `pinr_index`: scoring from these needs a rules version first.
 
 Shapes are the ones read on 2026-10-18 (one sample per endpoint on the operator's yes;
 `tools/profiles/2026-10-18-shown-facts-samples.json`), plus Stonk.fun's documented row fields where the sample coin had
