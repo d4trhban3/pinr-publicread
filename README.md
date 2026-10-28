@@ -62,7 +62,7 @@ PINR is a work in progress. The site at https://pinr.io is live, but it is early
 
 Full coverage needs paid data streams: RPC nodes and indexers that can scan every coin, not just a few a minute. Community funding is what pays for those.
 
-If you want to help fund the data streams, reach out via [@PINRofficial](https://x.com/PINRofficial) on X. Founder: d4rthban3.
+If you want to help fund the data streams, reach out via [@PINRofficial](https://x.com/PINRofficial) on X. Founders: @d4rthban3(d4rthban3). @MehMintMake(Coozin)
 
 ## Feedback
 
